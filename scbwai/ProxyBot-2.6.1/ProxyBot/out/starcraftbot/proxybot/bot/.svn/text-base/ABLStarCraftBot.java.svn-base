@@ -1,0 +1,86 @@
+package starcraftbot.proxybot.bot;
+
+import javax.swing.JPanel;
+
+import starcraftbot.proxybot.Game;
+import starcraftbot.proxybot.ProxyBot;
+import starcraftbot.proxybot.command.CommandQueue;
+import starcraftbot.proxybot.wmes.unit.PlayerUnitWME;
+import abl.runtime.BehavingEntity;
+/**
+ * ABL implementation of a StarCraft bot.
+ */
+public class ABLStarCraftBot implements StarCraftBot {
+
+	/** static reference to the current game object */
+	private static Game game;
+
+	/** the behaving entity */
+	private static BehavingEntity ablBot;
+
+	private ABTViewer viewer;
+	
+	public ABLStarCraftBot() {
+		
+		ablBot = new starcraftbot.abl.java.StarCraftBot();
+
+		try {
+			ablBot = (BehavingEntity)Class.forName("starcraftbot.abl.java." + 
+				System.getProperty("ABLBotName")).newInstance();
+		}
+		catch (Exception e) {}
+		
+		if (ProxyBot.showGUI){ 
+			viewer = new ABTViewer();
+		}
+	}
+	
+	/** 
+	 * Provides a static way to access the command queue, for the ABL actions.
+	 */
+	public static CommandQueue getQueue() {
+		return game.getCommandQueue();
+	}
+
+	public static BehavingEntity getBehavingEntity() {
+		return ablBot;
+	}
+	
+	public JPanel getPanel() {
+		return viewer;
+	}
+	
+	/** 
+	 * Provides a static way to the game object, for the ABL sensors.
+	 */
+	public static Game getGame() {
+		return game;
+	}
+	
+	/**
+	 * Starts ABL.
+	 */
+	public void start(Game game) {
+		PlayerUnitWME.init();		
+		ABLStarCraftBot.game = game;
+		
+		if (ProxyBot.showGUI){ 
+			ablBot.addBehavingListener(viewer);
+		}
+
+		
+		ablBot.setUseSynchrousSensors();
+		ablBot.startBehaving();
+	}
+
+	/**
+	 * Stops ABL.
+	 */
+	public void stop() {
+		ablBot.stopBehaving();
+		
+		if (viewer != null) {
+			viewer.stop();
+		}
+	}
+}
