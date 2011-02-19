@@ -9,5 +9,5 @@ public:
   virtual void onEnd(bool isWinner);
   virtual void onAddUnit(BWAPI::Unit* unit);
   virtual void onRemove(BWAPI::Unit* unit);
-  virtual bool onSendText(std::string text);
+  virtual void onSendText(std::string text);
 };
