@@ -84,23 +84,29 @@ public class Game {
 	 * The game object will not have units until update is called.
 	 */
 	public Game(String playerData, String locationData, String mapData, String chokesData, String basesData, String regionData) {
+		System.out.println(locationData);
     	String[] playerDatas = playerData.split(":");
     	playerID = Integer.parseInt(playerDatas[0].split(";")[1]);
 		players = PlayerWME.getPlayers(playerData);
-
+		System.out.println("PlayerID: "+ playerID + "  Players: "+players);
 		for (PlayerWME p : players) {
+			System.out.println("At: Player# "+p.getPlayerID() + "Of: " + players.size());
 			if (playerID == p.getPlayerID()) {
 				player = p;
 		    	playerRace = Race.valueOf(p.getRace()).ordinal();
 			}
 			else if (enemy == null) {
 				enemy = p;
+			}else{
+				
 			}
 
-			playerArray[p.getPlayerID()] = p;
+			if(p.getPlayerID() > -1)
+			  playerArray[p.getPlayerID()] = p;
 		}
-
+		System.out.println("MapData: " + mapData );
 		map = new MapWME(mapData);
+		map.print();
 		startingLocations = StartingLocationWME.getLocations(locationData);
 		baseLocations = BaseLocationWME.getLocations(basesData);
 		regions = RegionWME.getRegions(regionData);

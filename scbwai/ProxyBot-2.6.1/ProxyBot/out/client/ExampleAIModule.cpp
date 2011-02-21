@@ -129,7 +129,7 @@ void ExampleAIModule::onStart()
 		int id = (*i)->getID();
 		std::string race = (*i)->getRace().getName();
 		std::string name = (*i)->getName();
-		int type = (*i)->playerType().getID();
+		int type = (*i)->getType().getID();
 		bool ally = Broodwar->self()->isAlly(*i);
 
 		ack += ":" + toString(id)
@@ -221,7 +221,7 @@ void ExampleAIModule::onStart()
 */
 
 			regions += ";outline";
-			for (int j=0; j<(*i)->getPolygon().size(); j++) {
+			for (unsigned j=0; j<(*i)->getPolygon().size(); j++) {
 				Position position = (*i)->getPolygon()[j];
 				regions += ";" + toString(position.x()) + ";" + toString(position.y());
 			}
@@ -742,7 +742,7 @@ void handleCommand(int command, int unitID, int arg0, int arg1, int arg2)
 		// virtual bool setRallyPosition(Position target) = 0;
 		case 14:
 			if (logCommands) Broodwar->sendText("Unit:%d setRallyPosition(%d, %d)", unitID, arg0, arg1);
-			unit->setRallyPosition(getPosition(arg0, arg1));
+			unit->setRallyPoint(getPosition(arg0, arg1));
 			break;
 		// virtual bool setRallyUnit(Unit* target) = 0;
 		case 15:
@@ -751,7 +751,7 @@ void handleCommand(int command, int unitID, int arg0, int arg1, int arg2)
 			}
 			else {
 				if (logCommands) Broodwar->sendText("Unit:%d setRallyUnit(%d)", unitID, arg0);
-				unit->setRallyUnit(getUnit(arg0));
+				unit->setRallyPoint(getUnit(arg0));
 			}
 			break;
 		// virtual bool repair(Unit* target) = 0;
@@ -953,9 +953,9 @@ void ExampleAIModule::onRemove(BWAPI::Unit* unit)
 	unitIDMap.erase(key);
 }
 
-bool ExampleAIModule::onSendText(std::string text)
+void ExampleAIModule::onSendText(std::string text)
 {
-	return true;
+	
 }
 
 /**
@@ -1095,16 +1095,16 @@ void exportStaticData() {
 	  int supplyRequired = i->supplyRequired();
 	  int supplyProvided = i->supplyProvided();
 	  int sightRange = i->sightRange();
-	  int groundMaxRange = i->groundWeapon()->maxRange();
-	  int groundMinRange = i->groundWeapon()->minRange();
-	  int groundDamage = i->groundWeapon()->damageAmount();
-	  int airRange = i->airWeapon()->maxRange();
-	  int airDamage = i->airWeapon()->damageAmount();
+	  int groundMaxRange = i->groundWeapon().maxRange();
+	  int groundMinRange = i->groundWeapon().minRange();
+	  int groundDamage = i->groundWeapon().damageAmount();
+	  int airRange = i->airWeapon().maxRange();
+	  int airDamage = i->airWeapon().damageAmount();
 	  bool isBuilding = i->isBuilding();
 	  bool isFlyer = i->isFlyer();
 	  bool isSpellCaster = i->isSpellcaster();
 	  bool isWorker = i->isWorker();
-	  int whatBuilds = i->whatBuilds().first->getID();
+	  int whatBuilds = i->whatBuilds().first.getID();
 
 	  std::string unitType(" UnitType");
 	  unitType += ":" + toString(id)
@@ -1146,7 +1146,7 @@ void exportStaticData() {
   {
 	  int id = i->getID();
 	  std::string name = i->getName();
-	  int whatResearchesID = i->whatResearches()->getID(); 
+	  int whatResearchesID = i->whatResearches().getID(); 
 	  int mins = i->mineralPrice();
 	  int gas = i->gasPrice();
 
@@ -1169,7 +1169,7 @@ void exportStaticData() {
   {
 	  int id = i->getID();
 	  std::string name = i->getName();
-	  int whatUpgradesID = i->whatUpgrades()->getID(); // unit type id of what researches it
+	  int whatUpgradesID = i->whatUpgrades().getID(); // unit type id of what researches it
 	  int repeats = i->maxRepeats();
 	  int minBase = i->mineralPriceBase();
 	  int minFactor = i->mineralPriceFactor();

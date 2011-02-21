@@ -99,9 +99,10 @@ public class MapWME extends WME {
 	 *  which specific height, buildable, walkable.
 	 */
 	public MapWME(String mapData) {
+		// MapName:Width:Height:
 		String[] map = mapData.split(":");
 		String data = map[3];
-
+		
 		mapName = map[0];
 		mapWidth = Integer.parseInt(map[1]);
 		mapHeight = Integer.parseInt(map[2]);

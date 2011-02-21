@@ -37,14 +37,14 @@ public class RegionWME extends WME {
 			region.id = Integer.parseInt(coords[0]);
 			region.centerX = Integer.parseInt(coords[1]);
 			region.centerY = Integer.parseInt(coords[2]);
-			region.numPoints = Integer.parseInt(coords[3]);
-			region.x = new int[region.numPoints];
+			//region.numPoints = Integer.parseInt(coords[3]);
+			/*region.x = new int[region.numPoints];
 			region.y = new int[region.numPoints];
 			
 			for (int i=0; i<region.numPoints; i++) {
 				region.x[i] = Integer.parseInt(coords[5 + 2*i]);
 				region.y[i] = Integer.parseInt(coords[6 + 2*i]);
-			}
+			}*/
 			
 			locations.add(region);
 		}

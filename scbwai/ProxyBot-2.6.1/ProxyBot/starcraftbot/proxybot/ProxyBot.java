@@ -50,7 +50,8 @@ public class ProxyBot {
 		    while (true) {
 			    System.out.println("Waiting for client connection");
 
-			    Socket clientSocket = serverSocket.accept();			
+			    Socket clientSocket = serverSocket.accept();	
+			    System.out.println("Received a client connection");
 			    runGame(clientSocket);
 		    }
 		}
