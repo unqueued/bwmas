@@ -211,6 +211,7 @@ void ExampleAIModule::onStart()
 	*/
 	//END TODO
 	// 7. Send unit type data
+	/*
 	  std::set<UnitType> types = UnitTypes::allUnitTypes();
 	  for(std::set<UnitType>::iterator i=types.begin();i!=types.end();i++)
 	  {
@@ -241,7 +242,9 @@ void ExampleAIModule::onStart()
 		  bool isWorker = i->isWorker();
 		  int whatBuilds = i->whatBuilds().first.getID();
 
-		  std::string unitType("UnitType");
+		  std::string unitType("UnitType"); 
+		  // UserID - Race - Name - Minerals - Gas - hitPoints - shields - energy - buildTime - canAttack - canMov - width - height - supplyRequired - 
+		  // supplyProvided - sightRange - groundMaxRange - groundMinRange - groundDamage - airRange - airDamage - isBuilding 
 		  unitType += ":" + toString(id)
 				  + ";" + race
 				  + ";" + name
@@ -272,7 +275,7 @@ void ExampleAIModule::onStart()
 		  unitType += "\n";
 		char *subuf = (char*)unitType.c_str();
 		send(proxyBotSocket, subuf, unitType.size(), 0);
-	  }
+	  }*/
 	  
 }
 

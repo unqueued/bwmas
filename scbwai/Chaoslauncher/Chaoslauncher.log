@@ -1,18 +1,18 @@
-2/21/2011 12:50:43 PM 1620 Logging started
-2/21/2011 12:50:43 PM 1620 Already running
-2/21/2011 12:50:43 PM 1620 Logging ended
-2/21/2011 12:50:47 PM 3400 Startbutton
-2/21/2011 12:50:47 PM 3400 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\\StarCraft.exe
-2/21/2011 12:50:47 PM 3400 BWAPI Injector (1.16.1) RELEASE Version  Compatible
-2/21/2011 12:50:47 PM 3400 W-MODE 1.02 Version 1.0.2 Compatible
-2/21/2011 12:50:47 PM 3400 Obtained DebugPrivilege
-2/21/2011 12:50:47 PM 3400 CreateProcess
-2/21/2011 12:50:47 PM 3400 Call ScSuspended for all active Plugins
-2/21/2011 12:50:47 PM 3400 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
-2/21/2011 12:50:48 PM 3400 ApplyPatchSuspended for W-MODE 1.02
-2/21/2011 12:50:48 PM 3400 ResumeThread
-2/21/2011 12:50:48 PM 3400 WaitForInputIdle
-2/21/2011 12:50:48 PM 3400 Call ScWindowCreated for all active Plugins
-2/21/2011 12:50:48 PM 3400 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
-2/21/2011 12:50:48 PM 3400 ApplyPatch for W-MODE 1.02
-2/21/2011 12:50:48 PM 3400 Starting Starcraft completed
+2/22/2011 9:06:12 PM 5672 Logging started
+2/22/2011 9:06:12 PM 5672 Already running
+2/22/2011 9:06:12 PM 5672 Logging ended
+2/22/2011 9:06:16 PM 3400 Startbutton
+2/22/2011 9:06:16 PM 3400 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\\StarCraft.exe
+2/22/2011 9:06:16 PM 3400 BWAPI Injector (1.16.1) RELEASE Version  Compatible
+2/22/2011 9:06:16 PM 3400 W-MODE 1.02 Version 1.0.2 Compatible
+2/22/2011 9:06:16 PM 3400 Obtained DebugPrivilege
+2/22/2011 9:06:16 PM 3400 CreateProcess
+2/22/2011 9:06:16 PM 3400 Call ScSuspended for all active Plugins
+2/22/2011 9:06:16 PM 3400 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
+2/22/2011 9:06:16 PM 3400 ApplyPatchSuspended for W-MODE 1.02
+2/22/2011 9:06:16 PM 3400 ResumeThread
+2/22/2011 9:06:16 PM 3400 WaitForInputIdle
+2/22/2011 9:06:17 PM 3400 Call ScWindowCreated for all active Plugins
+2/22/2011 9:06:17 PM 3400 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
+2/22/2011 9:06:17 PM 3400 ApplyPatch for W-MODE 1.02
+2/22/2011 9:06:17 PM 3400 Starting Starcraft completed

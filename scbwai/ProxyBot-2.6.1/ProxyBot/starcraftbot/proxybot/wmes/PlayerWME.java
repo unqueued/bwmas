@@ -85,6 +85,12 @@ public class PlayerWME extends WME {
 	public void update(String playerData, PlayerWME enemy) {		
 		String[] attributes = playerData.split(":")[0].split(";");
 		
+		System.out.println(playerData);
+		for(String s : attributes){
+			System.out.print("["+s+"]");
+		
+		}
+		System.out.println( );
 		minerals = Integer.parseInt(attributes[1]);
 		gas = Integer.parseInt(attributes[2]);
 		supplyUsed = Integer.parseInt(attributes[3]);
