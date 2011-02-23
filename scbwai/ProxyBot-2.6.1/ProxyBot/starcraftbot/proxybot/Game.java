@@ -97,8 +97,6 @@ public class Game {
 			}
 			else if (enemy == null) {
 				enemy = p;
-			}else{
-				
 			}
 
 			if(p.getPlayerID() > -1)

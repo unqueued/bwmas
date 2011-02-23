@@ -243,11 +243,6 @@ void ExampleAIModule::onStart()
 
 		  std::string unitType("UnitType");
 		  unitType += ":" + toString(id)
-				  + ";" + toString(30)
-				  + ";" + toString(30)
-				  + ";" + toString(0)
-				  + ";" + toString(0)
-				  + ";" + toString(0)
 				  + ";" + race
 				  + ";" + name
 				  + ";" + toString(minerals)
