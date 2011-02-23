@@ -8,43 +8,44 @@ import starcraftbot.proxybot.wmes.PlayerWME;
 import starcraftbot.proxybot.wmes.UnitTypeWME;
 import starcraftbot.proxybot.wmes.WME;
 import starcraftbot.proxybot.wmes.UnitTypeWME.UnitType;
+
 /**
  * Represents a unit in StarCraft.
  */
 public class UnitWME extends WME {
-	
+
 	/** a unique identifier for referencing the unit */
 	protected int ID = 0;
-	
+
 	/** the player the unit belongs too */
 	private int playerID;
 
 	/** the unit type */
 	private UnitTypeWME type;
-	
+
 	/** x tile position */
 	private int x;
 	private int realX;
-	
+
 	/** y tile position */
 	private int y;
 	private int realY;
-	
+
 	/** unit hit points */
 	private int hitPoints;
-	
+
 	/** unit shields */
 	private int shields;
-	
+
 	/** unit energy */
 	private int energy;
-	
+
 	/** an internal timer used in StarCraft */
 	private int orderTimer;
 
 	/** for vultures only */
 	protected int mineCount = 0;
-	
+
 	private int buildTimer;
 	private int trainTimer;
 	private int researchTimer;
@@ -52,41 +53,46 @@ public class UnitWME extends WME {
 
 	/**
 	 * Order type currently being executed by the unit.
+	 * 
 	 * @See the Order enum in Constants.java
 	 */
 	private int order;
-	
-	/** Whether or not the unit is lifted (if it's a building that can lift; it's false otherwise) */
+
+	/**
+	 * Whether or not the unit is lifted (if it's a building that can lift; it's
+	 * false otherwise)
+	 */
 	private boolean lifted;
 
-	/** resources remaining, mineral count for patches, and gas for geysers */ 
+	/** resources remaining, mineral count for patches, and gas for geysers */
 	private int resources;
-	
+
 	private int addonID;
 
 	/**
 	 * Parses the unit data.
 	 */
-	public static ArrayList<UnitWME> getUnits(Game game, String unitData, HashMap<Integer, UnitTypeWME> types, 
-			int playerID, PlayerWME[] players) {
-		
-		ArrayList<UnitWME> units = new ArrayList<UnitWME>();		
+	public static ArrayList<UnitWME> getUnits(Game game, String unitData,
+			HashMap<Integer, UnitTypeWME> types, int playerID,
+			PlayerWME[] players) {
+
+		ArrayList<UnitWME> units = new ArrayList<UnitWME>();
 		String[] unitDatas = unitData.split(":");
 		boolean first = true;
-		
+
 		for (String data : unitDatas) {
 			if (first) {
 				first = false;
 				continue;
 			}
-			
+
 			String[] attributes = data.split(";");
 
 			//System.out.println("UnitWME.getUnits:: attribute.length==["+attributes.length+"]");
 			
 			int ID = Integer.parseInt(attributes[0]);
-			UnitWME unit = game.getUnitByID(ID);			
-						
+			UnitWME unit = game.getUnitByID(ID);
+
 			int pID = Integer.parseInt(attributes[1]);
 			int type = Integer.parseInt(attributes[2]);
 
@@ -94,28 +100,25 @@ public class UnitWME extends WME {
 			if (unit != null && unit.getTypeID() != type) {
 				unit = null;
 			}
-			
+
 			if (unit == null) {
 				if (pID == playerID) {
 					unit = new PlayerUnitWME();
-				}
-				else if (type == UnitType.Resource_Mineral_Field.ordinal()) {
+				} else if (type == UnitType.Resource_Mineral_Field.ordinal()) {
 					unit = new MineralWME();
-				}
-				else if (type == UnitType.Resource_Vespene_Geyser.ordinal()) {
+				} else if (type == UnitType.Resource_Vespene_Geyser.ordinal()) {
 					unit = new GeyserWME();
-				}
-				else if(pID != playerID && pID != 11 && !players[pID].isAlly()) {
+				} else if (pID != playerID && pID != 11
+						&& !players[pID].isAlly()) {
 					unit = new EnemyUnitWME();
-				}
-				else if(pID != playerID && pID != 11 && players[pID].isAlly()) {
+				} else if (pID != playerID && pID != 11
+						&& players[pID].isAlly()) {
 					unit = new AllyUnitWME();
-				}
-				else {
+				} else {
 					unit = new UnitWME();
 				}
 			}
-			
+
 			unit.ID = ID;
 			unit.playerID = pID;
 			unit.type = types.get(type);
@@ -135,18 +138,18 @@ public class UnitWME extends WME {
 			unit.addonID = Integer.parseInt(attributes[15]);
 			unit.mineCount = Integer.parseInt(attributes[16]);
 			units.add(unit);
-			
-			unit.x = unit.realX/32;
-			unit.y = unit.realY/32;
-		}		
+
+			unit.x = unit.realX / 32;
+			unit.y = unit.realY / 32;
+		}
 
 		return units;
 	}
-		
+
 	public boolean getIsBuilding() {
 		return type.isBuilding();
 	}
-	
+
 	public int getMineCount() {
 		return mineCount;
 	}
@@ -154,39 +157,39 @@ public class UnitWME extends WME {
 	public int getAddonID() {
 		return addonID;
 	}
-	
+
 	public boolean getIsBuilt() {
 		return buildTimer == 0;
 	}
-	
+
 	public double distance(double x, double y) {
 		return Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2));
 	}
-	
+
 	/**
 	 * Returns the Euclidian distance to the specified unit.
 	 */
 	public double distance(UnitWME unit) {
 		double dx = unit.x - x;
 		double dy = unit.y - y;
-		
-		return Math.sqrt(dx*dx + dy*dy);
+
+		return Math.sqrt(dx * dx + dy * dy);
 	}
-	
+
 	/**
 	 * Returns the unit ID.
 	 */
 	public int getID() {
 		return ID;
 	}
-	
+
 	/**
 	 * Returns if the unit is a worker type.
 	 */
 	public boolean getIsWorker() {
 		return type.isWorker();
 	}
-	
+
 	/**
 	 * Returns whether the unit is a center type.
 	 */
@@ -202,7 +205,8 @@ public class UnitWME extends WME {
 	}
 
 	public boolean getIsAirborne() {
-		return this.getIsFlyer() || (this.getIsBuilding() && this.getIsLifted());
+		return this.getIsFlyer()
+				|| (this.getIsBuilding() && this.getIsLifted());
 	}
 
 	public boolean getIsFlyer() {
@@ -215,6 +219,7 @@ public class UnitWME extends WME {
 
 	/**
 	 * Returns the id of the player controlling the unit.
+	 * 
 	 * @return
 	 */
 	public int getPlayerID() {
@@ -248,7 +253,7 @@ public class UnitWME extends WME {
 
 	/**
 	 * Returns the units y position (tile coordinates)
-	 */	
+	 */
 	public int getY() {
 		return y;
 	}
@@ -284,49 +289,43 @@ public class UnitWME extends WME {
 	public int getOrder() {
 		return order;
 	}
-	
+
 	public void setOrder(int order) {
 		this.order = order;
 	}
-	
+
 	public int getOrderTimer() {
 		return orderTimer;
 	}
 
 	public int getBuildTimer() {
-		return buildTimer;	
+		return buildTimer;
 	}
+
 	public int getTrainTimer() {
 		return trainTimer;
 	}
-	
+
 	public int getResearchTimer() {
 		return researchTimer;
 	}
-	
+
 	public int getUpgradeTimer() {
 		return upgradeTimer;
 	}
-	
+
 	/**
-	 * Specifies the amount of resources remaining (for mineral patches and geysers)
+	 * Specifies the amount of resources remaining (for mineral patches and
+	 * geysers)
 	 */
 	public int getResources() {
 		return resources;
 	}
-	
+
 	public String toString() {
-		return 
-			"ID:" + ID +
-			" player:" + playerID +
-			" type:" + type.getName() +
-			" x:" + x +
-			" y:" + y +
-			" hitPoints:" + hitPoints +
-			" shields:" + shields +
-			" enemy:" + energy +
-			" orderTimer:" + orderTimer +
-			" order:" + order + 
-			" resource:" + resources;
+		return "ID:" + ID + " player:" + playerID + " type:" + type.getName()
+				+ " x:" + x + " y:" + y + " hitPoints:" + hitPoints
+				+ " shields:" + shields + " enemy:" + energy + " orderTimer:"
+				+ orderTimer + " order:" + order + " resource:" + resources;
 	}
 }

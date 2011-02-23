@@ -20,11 +20,12 @@ import starcraftbot.proxybot.wmes.unit.GeyserWME;
 import starcraftbot.proxybot.wmes.unit.MineralWME;
 import starcraftbot.proxybot.wmes.unit.PlayerUnitWME;
 import starcraftbot.proxybot.wmes.unit.UnitWME;
+
 /**
  * StarCraft AI Interface.
- *
+ * 
  * Maintains StarCraft state and provides hooks for StarCraft commands.
- *
+ * 
  * Note: all coordinates are specified in tile coordinates.
  */
 public class Game {
@@ -54,13 +55,15 @@ public class Game {
 	private HashMap<Integer, UnitWME> unitMap = new HashMap<Integer, UnitWME>();
 
 	/** StarCraft unit types */
-	private HashMap<Integer, UnitTypeWME> unitTypes = UnitTypeWME.getUnitTypeMap();
+	private HashMap<Integer, UnitTypeWME> unitTypes = UnitTypeWME
+			.getUnitTypeMap();
 
 	/** list of tech types */
 	private ArrayList<TechTypeWME> techTypes = TechTypeWME.getTechTypes();
 
 	/** list of upgrade types */
-	private ArrayList<UpgradeTypeWME> upgradeTypes = UpgradeTypeWME.getUpgradeTypes();
+	private ArrayList<UpgradeTypeWME> upgradeTypes = UpgradeTypeWME
+			.getUpgradeTypes();
 
 	/** queue of commands to execute */
 	private CommandQueue commandQueue = new CommandQueue();
@@ -79,28 +82,29 @@ public class Game {
 	private String update;
 
 	/**
-	 * Constructs a game object from the initial information sent from StarCraft.
-	 *
+	 * Constructs a game object from the initial information sent from
+	 * StarCraft.
+	 * 
 	 * The game object will not have units until update is called.
 	 */
-	public Game(String playerData, String locationData, String mapData, String chokesData, String basesData, String regionData) {
+	public Game(String playerData, String locationData, String mapData,
 		//System.out.println(locationData);
-    	String[] playerDatas = playerData.split(":");
-    	playerID = Integer.parseInt(playerDatas[0].split(";")[1]);
+		String[] playerDatas = playerData.split(":");
+		playerID = Integer.parseInt(playerDatas[0].split(";")[1]);
 		players = PlayerWME.getPlayers(playerData);
 		//System.out.println("PlayerID: "+ playerID + "  Players: "+players);
 		for (PlayerWME p : players) {
 			//System.out.println("At: Player# "+p.getPlayerID() + "Of: " + players.size());
+					+ players.size());
 			if (playerID == p.getPlayerID()) {
 				player = p;
-		    	playerRace = Race.valueOf(p.getRace()).ordinal();
-			}
-			else if (enemy == null) {
+				playerRace = Race.valueOf(p.getRace()).ordinal();
+			} else if (enemy == null) {
 				enemy = p;
 			}
 
-			if(p.getPlayerID() > -1)
-			  playerArray[p.getPlayerID()] = p;
+			if (p.getPlayerID() > -1)
+				playerArray[p.getPlayerID()] = p;
 		}
 		//System.out.println("MapData: " + mapData );
 		map = new MapWME(mapData);
@@ -113,7 +117,7 @@ public class Game {
 		new Thread() {
 			public void run() {
 				while (true) {
-					synchronized(Game.this) {
+					synchronized (Game.this) {
 						try {
 							Game.this.wait();
 							if (update == null) {
@@ -121,8 +125,8 @@ public class Game {
 							}
 
 							updateData(update);
+						} catch (Exception e) {
 						}
-						catch (Exception e) {}
 					}
 				}
 			}
@@ -133,7 +137,7 @@ public class Game {
 	 * Wake up the game thread with a null update.
 	 */
 	public void stop() {
-		synchronized(this) {
+		synchronized (this) {
 			update = null;
 			this.notify();
 		}
@@ -153,7 +157,7 @@ public class Game {
 	public void update(String updateData) {
 		this.update = updateData;
 
-		synchronized(this) {
+		synchronized (this) {
 			this.notify();
 		}
 	}
@@ -164,7 +168,8 @@ public class Game {
 	public void updateData(String updateData) {
 		frame++;
 		player.update(updateData, enemy);
-		units = UnitWME.getUnits(this, updateData, unitTypes, playerID, playerArray);
+		units = UnitWME.getUnits(this, updateData, unitTypes, playerID,
+				playerArray);
 		lastGameUpdate = System.currentTimeMillis();
 
 		HashMap<Integer, UnitWME> newMap = new HashMap<Integer, UnitWME>();
@@ -188,7 +193,7 @@ public class Game {
 	public PlayerWME getPlayer() {
 		return player;
 	}
-	
+
 	public PlayerWME getEnemy() {
 		return enemy;
 	}
@@ -201,7 +206,8 @@ public class Game {
 	}
 
 	/**
-	 * Returns a PlayerWME with the given PlayerID. Crashes if no such player exists.
+	 * Returns a PlayerWME with the given PlayerID. Crashes if no such player
+	 * exists.
 	 */
 	public PlayerWME getPlayerByID(int id) {
 		return playerArray[id];
@@ -234,13 +240,15 @@ public class Game {
 	public StartingLocationWME getPlayerStart() {
 		int i;
 		ArrayList<PlayerUnitWME> playerUnits = this.getPlayerUnits();
-		ArrayList<StartingLocationWME> startingLocations = this.getStartingLocations();
+		ArrayList<StartingLocationWME> startingLocations = this
+				.getStartingLocations();
 
-		for (PlayerUnitWME unit:playerUnits) {
+		for (PlayerUnitWME unit : playerUnits) {
 			if (unit.getIsCenter()) {
 				i = 0;
-				for (StartingLocationWME start:startingLocations) {
-					if (start.getX() == unit.getX() && start.getY() == unit.getY()) {
+				for (StartingLocationWME start : startingLocations) {
+					if (start.getX() == unit.getX()
+							&& start.getY() == unit.getY()) {
 						return start;
 					}
 					i++;
@@ -251,19 +259,22 @@ public class Game {
 	}
 
 	/**
-	 * Returns the enemy's starting location, or null if it's unknown.
-	 * If there are multiple enemy sides, it returns the start location of an arbitrary enemy.
+	 * Returns the enemy's starting location, or null if it's unknown. If there
+	 * are multiple enemy sides, it returns the start location of an arbitrary
+	 * enemy.
 	 */
 	public StartingLocationWME getEnemyStart() {
 		int i;
 		ArrayList<EnemyUnitWME> enemyUnits = this.getEnemyUnits();
-		ArrayList<StartingLocationWME> startingLocations = this.getStartingLocations();
+		ArrayList<StartingLocationWME> startingLocations = this
+				.getStartingLocations();
 
-		for (EnemyUnitWME unit:enemyUnits) {
+		for (EnemyUnitWME unit : enemyUnits) {
 			if (unit.getIsCenter()) {
 				i = 0;
-				for (StartingLocationWME start:startingLocations) {
-					if (start.getX() == unit.getX() && start.getY() == unit.getY()) {
+				for (StartingLocationWME start : startingLocations) {
+					if (start.getX() == unit.getX()
+							&& start.getY() == unit.getY()) {
 						return start;
 					}
 					i++;
@@ -299,7 +310,7 @@ public class Game {
 		ArrayList<PlayerUnitWME> playerUnits = new ArrayList<PlayerUnitWME>();
 		for (UnitWME unit : units) {
 			if (unit instanceof PlayerUnitWME) {
-				playerUnits.add((PlayerUnitWME)unit);
+				playerUnits.add((PlayerUnitWME) unit);
 			}
 		}
 
@@ -317,7 +328,7 @@ public class Game {
 		ArrayList<EnemyUnitWME> enemyUnits = new ArrayList<EnemyUnitWME>();
 		for (UnitWME unit : units) {
 			if (unit instanceof EnemyUnitWME) {
-				enemyUnits.add((EnemyUnitWME)unit);
+				enemyUnits.add((EnemyUnitWME) unit);
 			}
 		}
 
@@ -331,7 +342,7 @@ public class Game {
 		ArrayList<AllyUnitWME> allyUnits = new ArrayList<AllyUnitWME>();
 		for (UnitWME unit : units) {
 			if (unit instanceof AllyUnitWME) {
-				allyUnits.add((AllyUnitWME)unit);
+				allyUnits.add((AllyUnitWME) unit);
 			}
 		}
 
@@ -342,10 +353,10 @@ public class Game {
 	 * Returns the mineral patches.
 	 */
 	public ArrayList<MineralWME> getMinerals() {
-		ArrayList<MineralWME> minerals= new ArrayList<MineralWME>();
+		ArrayList<MineralWME> minerals = new ArrayList<MineralWME>();
 		for (UnitWME unit : units) {
 			if (unit instanceof MineralWME) {
-				minerals.add((MineralWME)unit);
+				minerals.add((MineralWME) unit);
 			}
 		}
 
@@ -359,7 +370,7 @@ public class Game {
 		ArrayList<GeyserWME> gas = new ArrayList<GeyserWME>();
 		for (UnitWME unit : units) {
 			if (unit instanceof GeyserWME) {
-				gas.add((GeyserWME)unit);
+				gas.add((GeyserWME) unit);
 			}
 		}
 

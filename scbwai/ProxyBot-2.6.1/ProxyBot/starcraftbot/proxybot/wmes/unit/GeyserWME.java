@@ -1,4 +1,5 @@
 package starcraftbot.proxybot.wmes.unit;
+
 /**
  * Represents a geyser.
  */

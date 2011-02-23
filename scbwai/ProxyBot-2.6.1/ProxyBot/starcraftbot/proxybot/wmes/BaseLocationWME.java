@@ -1,6 +1,7 @@
 package starcraftbot.proxybot.wmes;
 
 import java.util.ArrayList;
+
 /**
  * Represents a starting location in StarCraft.
  * 
@@ -9,9 +10,9 @@ import java.util.ArrayList;
 public class BaseLocationWME extends WME {
 
 	private int x;
-	
+
 	private int y;
-		
+
 	/**
 	 * Parses the starting locations.
 	 */
@@ -20,13 +21,13 @@ public class BaseLocationWME extends WME {
 		//System.out.println(locationData);
 		String[] locs = locationData.split(":");
 		boolean first = true;
-		
+
 		for (String location : locs) {
 			if (first) {
 				first = false;
 				continue;
 			}
-			
+
 			String[] coords = location.split(";");
 			//System.out.println(location);
 			BaseLocationWME loc = new BaseLocationWME();
@@ -34,10 +35,10 @@ public class BaseLocationWME extends WME {
 			loc.y = Integer.parseInt(coords[1]);
 			locations.add(loc);
 		}
-		
-		return locations;		
+
+		return locations;
 	}
-	
+
 	/**
 	 * Returns the x coordinate of the starting location (tile coordinates).
 	 */
@@ -51,7 +52,7 @@ public class BaseLocationWME extends WME {
 	public int getY() {
 		return y;
 	}
-	
+
 	public String toString() {
 		return x + "," + y;
 	}

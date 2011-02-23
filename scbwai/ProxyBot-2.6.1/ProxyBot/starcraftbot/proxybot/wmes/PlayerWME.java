@@ -9,8 +9,8 @@ import starcraftbot.proxybot.wmes.UpgradeTypeWME.UpgradeType;
 /**
  * Stores information about a player
  * 
- * Note: the supply used and supply total variables are double what you would expect, because
- *       small units are represented as 1 supply in StarCraft.
+ * Note: the supply used and supply total variables are double what you would
+ * expect, because small units are represented as 1 supply in StarCraft.
  */
 public class PlayerWME extends WME {
 
@@ -19,24 +19,24 @@ public class PlayerWME extends WME {
 
 	/** current mineral supply */
 	private int minerals;
-	
+
 	/** current gas supply */
 	private int gas;
-	
+
 	/** amount of supply used by the player */
 	private int supplyUsed;
 
 	/** amount of supply provided by the player */
 	private int supplyTotal;
-	
+
 	/** the players name */
 	private String name;
-	
+
 	/** the players race */
 	private Race race;
 
 	private int raceID;
-	
+
 	/** the players type, see http://code.google.com/p/bwapi/wiki/PlayerTypes */
 	private int type;
 
@@ -53,10 +53,10 @@ public class PlayerWME extends WME {
 	 */
 	public static ArrayList<PlayerWME> getPlayers(String playerData) {
 		ArrayList<PlayerWME> players = new ArrayList<PlayerWME>();
-		
+
 		String[] playerDatas = playerData.split(":");
 		boolean first = true;
-		
+
 		for (String data : playerDatas) {
 			if (first) {
 				first = false;
@@ -65,14 +65,14 @@ public class PlayerWME extends WME {
 
 			String[] attributes = data.split(";");
 			PlayerWME player = new PlayerWME();
-			player.playerID = Integer.parseInt(attributes[0]);			
-			player.race = Race.valueOf(attributes[1]);		
+			player.playerID = Integer.parseInt(attributes[0]);
+			player.race = Race.valueOf(attributes[1]);
 			player.raceID = player.race.ordinal();
-			player.name= attributes[2];			
-			player.type = Integer.parseInt(attributes[3]);			
-			player.ally = attributes[4].equals("1");						
+			player.name = attributes[2];
+			player.type = Integer.parseInt(attributes[3]);
+			player.ally = attributes[4].equals("1");
 			players.add(player);
-		}		
+		}
 
 		return players;
 	}
@@ -80,11 +80,12 @@ public class PlayerWME extends WME {
 	/**
 	 * Updates the players attributes given the command data.
 	 * 
-	 * Expects a message of the form "status;minerals;gas;supplyUsed;SupplyTotal:..."
+	 * Expects a message of the form
+	 * "status;minerals;gas;supplyUsed;SupplyTotal:..."
 	 */
-	public void update(String playerData, PlayerWME enemy) {		
+	public void update(String playerData, PlayerWME enemy) {
 		String[] attributes = playerData.split(":")[0].split(";");
-		
+
 		/*System.out.println(playerData);
 		for(String s : attributes){
 			System.out.print("["+s+"]");
@@ -107,7 +108,7 @@ public class PlayerWME extends WME {
 		//System.out.println("hasResearched.length==["+hasResearched.length+"] || isResearching.length==["+isResearching.length+"]|| researchUpdate.length==["+researchUpdate.length()+"]");
 		char t;
 		int v;
-		for (int i=0; i<r; i++) {
+		for (int i = 0; i < r; i++) {
 			t = researchUpdate.charAt(i);
 			v = Integer.parseInt(""+t);
 			hasResearched[i] = v > 3;
@@ -117,20 +118,20 @@ public class PlayerWME extends WME {
 		//for (int i=0; i<r; i++) {
 		//	isResearching[i] = Integer.parseInt("" + researchUpdate.charAt(r)) > 0 && Integer.parseInt(""+ researchUpdate.charAt(r)) < 3;
 		//}
-		
+
 		/*for (int i=0; i<r; i++) {
-			enemy.hasResearched[i] = Integer.parseInt("" + researchUpdate.charAt(2*r + i)) > 0;
+			enemy.hasResearched[i] = Integer.parseInt(""
 		}*/		
 
 		// upgrades
 		final int u = upgradeLevel.length;
-		for (int i=0; i<u; i++) {
+		for (int i = 0; i < u; i++) {
 			t = upgradeUpdate.charAt(i);
 			v = Integer.parseInt("" + t);
 			upgradeLevel[i] = v;
 			isUpgrading[i] = v > 0;
 		}
-		
+
 		/*for (int i=0; i<u; i++) {
 	
 		}*/
@@ -139,7 +140,7 @@ public class PlayerWME extends WME {
 			enemy.upgradeLevel[i] = Integer.parseInt("" + upgradeUpdate.charAt(2*u + i));
 		}*/
 	}
-	
+
 	public boolean[] getResearched() {
 		return hasResearched;
 	}
@@ -179,7 +180,7 @@ public class PlayerWME extends WME {
 	public int getVehicleArmorLevel() {
 		return upgradeLevel[UpgradeType.Terran_Vehicle_Plating.ordinal()];
 	}
-	
+
 	public boolean getIsResearchingSiege() {
 		return isResearching[TechType.Tank_Siege_Mode.ordinal()];
 	}
@@ -195,14 +196,14 @@ public class PlayerWME extends WME {
 	public boolean getHasResearchedMines() {
 		return hasResearched[TechType.Spider_Mines.ordinal()];
 	}
-	
+
 	/**
 	 * Returns if the player is an ally.
 	 */
 	public boolean isAlly() {
 		return ally;
 	}
-	
+
 	/**
 	 * Returns the player's mineral count, only accurate for the bot player.
 	 */
@@ -231,7 +232,7 @@ public class PlayerWME extends WME {
 		return supplyTotal;
 	}
 
-	/** 
+	/**
 	 * Returns a unique id for the player.
 	 */
 	public int getPlayerID() {
@@ -244,11 +245,11 @@ public class PlayerWME extends WME {
 	public String getRace() {
 		return race.toString();
 	}
-	
+
 	public Race getPlayerRace() {
 		return race;
 	}
-	
+
 	/**
 	 * Returns the players race ID.
 	 */
@@ -257,10 +258,7 @@ public class PlayerWME extends WME {
 	}
 
 	public String toString() {
-		return 
-			"mins:" + minerals +
-			" gas:" + gas +
-			" supplyUsed:" + supplyUsed +
-			" supplyTotal:" + supplyTotal;
+		return "mins:" + minerals + " gas:" + gas + " supplyUsed:" + supplyUsed
+				+ " supplyTotal:" + supplyTotal;
 	}
 }
