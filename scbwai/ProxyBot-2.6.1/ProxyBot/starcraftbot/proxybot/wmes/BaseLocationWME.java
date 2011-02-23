@@ -17,7 +17,7 @@ public class BaseLocationWME extends WME {
 	 */
 	public static ArrayList<BaseLocationWME> getLocations(String locationData) {
 		ArrayList<BaseLocationWME> locations = new ArrayList<BaseLocationWME>();
-		System.out.println(locationData);
+		//System.out.println(locationData);
 		String[] locs = locationData.split(":");
 		boolean first = true;
 		
@@ -28,7 +28,7 @@ public class BaseLocationWME extends WME {
 			}
 			
 			String[] coords = location.split(";");
-			System.out.println(location);
+			//System.out.println(location);
 			BaseLocationWME loc = new BaseLocationWME();
 			loc.x = Integer.parseInt(coords[0]);
 			loc.y = Integer.parseInt(coords[1]);

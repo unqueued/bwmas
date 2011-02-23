@@ -1,196 +1,136 @@
-2/22/2011 9:14:41 PM 6572 Logging started
-2/22/2011 9:14:42 PM 6572 Begin Startup
-2/22/2011 9:14:42 PM 6572 Chaosauncher 0.5.4.4 on NT 6.0.6002 Service Pack 2 at C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\Chaoslauncher.exe
-2/22/2011 9:14:42 PM 6572 Load Settings
-2/22/2011 9:14:42 PM 6572 GamePath: C:\Program Files (x86)\StarCraft\
-2/22/2011 9:14:42 PM 6572 Load Plugins
-2/22/2011 9:14:42 PM 6572 AdvLoaderPluginPath: \Plugins\
-2/22/2011 9:14:42 PM 6572 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\APMAlert.bwl
-2/22/2011 9:14:42 PM 6572 Plugin loaded APMAlert (1.16.1)
-2/22/2011 9:14:42 PM 6572 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\BWAPI_ChaosLauncherInjector.bwl
-2/22/2011 9:14:42 PM 6572 Plugin loaded BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:14:42 PM 6572 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\BWAPI_ChaosLauncherInjectord.bwl
-2/22/2011 9:14:42 PM 6572 Plugin loaded BWAPI Injector (1.16.1) DEBUG
-2/22/2011 9:14:42 PM 6572 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\Chaosplugin.bwl
-2/22/2011 9:14:42 PM 6572 Plugin loaded Chaosplugin for 1.16.1
-2/22/2011 9:14:42 PM 6572 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\iccscbn.icc
-2/22/2011 9:14:42 PM 6572 Plugin loaded ICCup
-2/22/2011 9:14:42 PM 6572 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\icctv.bwl
-2/22/2011 9:14:42 PM 6572 Plugin loaded ICCup TV Streamer
-2/22/2011 9:14:42 PM 6572 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\icctvp.bwl
-2/22/2011 9:14:42 PM 6572 Plugin loaded ICCup TV Player
-2/22/2011 9:14:42 PM 6572 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\LatencyChanger.bwl
-2/22/2011 9:14:42 PM 6572 Plugin loaded LatencyChanger for 1.16.1
-2/22/2011 9:14:42 PM 6572 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\repfix.bwl
-2/22/2011 9:14:42 PM 6572 Plugin loaded RepFix
-2/22/2011 9:14:42 PM 6572 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\Stormplugin.bwl
-2/22/2011 9:14:42 PM 6572 Plugin loaded Stormplugin for 1.16.1
-2/22/2011 9:14:42 PM 6572 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\wmode.bwl
-2/22/2011 9:14:42 PM 6572 Plugin loaded W-MODE 1.02
-2/22/2011 9:14:42 PM 6572 Load Tools
-2/22/2011 9:14:42 PM 6572 Init GUI
-2/22/2011 9:14:42 PM 6572 Get Starcraftversions
-2/22/2011 9:14:42 PM 6572 Init complete
-2/22/2011 9:16:01 PM 6572 Startbutton
-2/22/2011 9:16:01 PM 6572 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
-2/22/2011 9:16:01 PM 6572 BWAPI Injector (1.16.1) RELEASE Version  Compatible
-2/22/2011 9:16:01 PM 6572 W-MODE 1.02 Version 1.0.2 Compatible
-2/22/2011 9:16:01 PM 6572 Obtained DebugPrivilege
-2/22/2011 9:16:01 PM 6572 CreateProcess
-2/22/2011 9:16:01 PM 6572 Call ScSuspended for all active Plugins
-2/22/2011 9:16:01 PM 6572 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:16:01 PM 6572 ApplyPatchSuspended for W-MODE 1.02
-2/22/2011 9:16:01 PM 6572 ResumeThread
-2/22/2011 9:16:01 PM 6572 WaitForInputIdle
-2/22/2011 9:16:02 PM 6572 Call ScWindowCreated for all active Plugins
-2/22/2011 9:16:02 PM 6572 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:16:02 PM 6572 ApplyPatch for W-MODE 1.02
-2/22/2011 9:16:02 PM 6572 Starting Starcraft completed
-2/22/2011 9:20:37 PM 6572 Startbutton
-2/22/2011 9:20:37 PM 6572 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
-2/22/2011 9:20:37 PM 6572 BWAPI Injector (1.16.1) RELEASE Version  Compatible
-2/22/2011 9:20:37 PM 6572 W-MODE 1.02 Version 1.0.2 Compatible
-2/22/2011 9:20:37 PM 6572 Obtained DebugPrivilege
-2/22/2011 9:20:37 PM 6572 CreateProcess
-2/22/2011 9:20:37 PM 6572 Call ScSuspended for all active Plugins
-2/22/2011 9:20:37 PM 6572 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:20:38 PM 6572 ApplyPatchSuspended for W-MODE 1.02
-2/22/2011 9:20:38 PM 6572 ResumeThread
-2/22/2011 9:20:38 PM 6572 WaitForInputIdle
-2/22/2011 9:20:38 PM 6572 Call ScWindowCreated for all active Plugins
-2/22/2011 9:20:38 PM 6572 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:20:38 PM 6572 ApplyPatch for W-MODE 1.02
-2/22/2011 9:20:38 PM 6572 Starting Starcraft completed
-2/22/2011 9:28:18 PM 6572 Startbutton
-2/22/2011 9:28:18 PM 6572 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
-2/22/2011 9:28:18 PM 6572 BWAPI Injector (1.16.1) RELEASE Version  Compatible
-2/22/2011 9:28:18 PM 6572 W-MODE 1.02 Version 1.0.2 Compatible
-2/22/2011 9:28:18 PM 6572 Obtained DebugPrivilege
-2/22/2011 9:28:18 PM 6572 CreateProcess
-2/22/2011 9:28:18 PM 6572 Call ScSuspended for all active Plugins
-2/22/2011 9:28:18 PM 6572 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:28:18 PM 6572 ApplyPatchSuspended for W-MODE 1.02
-2/22/2011 9:28:18 PM 6572 ResumeThread
-2/22/2011 9:28:18 PM 6572 WaitForInputIdle
-2/22/2011 9:28:18 PM 6572 Call ScWindowCreated for all active Plugins
-2/22/2011 9:28:18 PM 6572 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:28:18 PM 6572 ApplyPatch for W-MODE 1.02
-2/22/2011 9:28:18 PM 6572 Starting Starcraft completed
-2/22/2011 9:32:44 PM 6572 Startbutton
-2/22/2011 9:32:44 PM 6572 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
-2/22/2011 9:32:44 PM 6572 BWAPI Injector (1.16.1) RELEASE Version  Compatible
-2/22/2011 9:32:44 PM 6572 W-MODE 1.02 Version 1.0.2 Compatible
-2/22/2011 9:32:44 PM 6572 Obtained DebugPrivilege
-2/22/2011 9:32:44 PM 6572 CreateProcess
-2/22/2011 9:32:44 PM 6572 Call ScSuspended for all active Plugins
-2/22/2011 9:32:44 PM 6572 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:32:44 PM 6572 ApplyPatchSuspended for W-MODE 1.02
-2/22/2011 9:32:44 PM 6572 ResumeThread
-2/22/2011 9:32:44 PM 6572 WaitForInputIdle
-2/22/2011 9:32:44 PM 6572 Call ScWindowCreated for all active Plugins
-2/22/2011 9:32:44 PM 6572 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:32:44 PM 6572 ApplyPatch for W-MODE 1.02
-2/22/2011 9:32:44 PM 6572 Starting Starcraft completed
-2/22/2011 9:35:01 PM 6572 Startbutton
-2/22/2011 9:35:01 PM 6572 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
-2/22/2011 9:35:01 PM 6572 BWAPI Injector (1.16.1) RELEASE Version  Compatible
-2/22/2011 9:35:01 PM 6572 W-MODE 1.02 Version 1.0.2 Compatible
-2/22/2011 9:35:01 PM 6572 Obtained DebugPrivilege
-2/22/2011 9:35:01 PM 6572 CreateProcess
-2/22/2011 9:35:01 PM 6572 Call ScSuspended for all active Plugins
-2/22/2011 9:35:01 PM 6572 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:35:01 PM 6572 ApplyPatchSuspended for W-MODE 1.02
-2/22/2011 9:35:01 PM 6572 ResumeThread
-2/22/2011 9:35:01 PM 6572 WaitForInputIdle
-2/22/2011 9:35:01 PM 6572 Call ScWindowCreated for all active Plugins
-2/22/2011 9:35:01 PM 6572 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:35:01 PM 6572 ApplyPatch for W-MODE 1.02
-2/22/2011 9:35:01 PM 6572 Starting Starcraft completed
-2/22/2011 9:37:49 PM 6572 Startbutton
-2/22/2011 9:37:49 PM 6572 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
-2/22/2011 9:37:49 PM 6572 BWAPI Injector (1.16.1) RELEASE Version  Compatible
-2/22/2011 9:37:49 PM 6572 W-MODE 1.02 Version 1.0.2 Compatible
-2/22/2011 9:37:49 PM 6572 Obtained DebugPrivilege
-2/22/2011 9:37:49 PM 6572 CreateProcess
-2/22/2011 9:37:49 PM 6572 Call ScSuspended for all active Plugins
-2/22/2011 9:37:49 PM 6572 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:37:49 PM 6572 ApplyPatchSuspended for W-MODE 1.02
-2/22/2011 9:37:49 PM 6572 ResumeThread
-2/22/2011 9:37:49 PM 6572 WaitForInputIdle
-2/22/2011 9:37:50 PM 6572 Call ScWindowCreated for all active Plugins
-2/22/2011 9:37:50 PM 6572 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:37:50 PM 6572 ApplyPatch for W-MODE 1.02
-2/22/2011 9:37:50 PM 6572 Starting Starcraft completed
-2/22/2011 9:41:00 PM 6572 Startbutton
-2/22/2011 9:41:00 PM 6572 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
-2/22/2011 9:41:00 PM 6572 BWAPI Injector (1.16.1) RELEASE Version  Compatible
-2/22/2011 9:41:00 PM 6572 W-MODE 1.02 Version 1.0.2 Compatible
-2/22/2011 9:41:00 PM 6572 Obtained DebugPrivilege
-2/22/2011 9:41:00 PM 6572 CreateProcess
-2/22/2011 9:41:00 PM 6572 Call ScSuspended for all active Plugins
-2/22/2011 9:41:00 PM 6572 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:41:00 PM 6572 ApplyPatchSuspended for W-MODE 1.02
-2/22/2011 9:41:00 PM 6572 ResumeThread
-2/22/2011 9:41:00 PM 6572 WaitForInputIdle
-2/22/2011 9:41:00 PM 6572 Call ScWindowCreated for all active Plugins
-2/22/2011 9:41:00 PM 6572 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:41:00 PM 6572 ApplyPatch for W-MODE 1.02
-2/22/2011 9:41:00 PM 6572 Starting Starcraft completed
-2/22/2011 9:43:00 PM 6572 Startbutton
-2/22/2011 9:43:00 PM 6572 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
-2/22/2011 9:43:00 PM 6572 BWAPI Injector (1.16.1) RELEASE Version  Compatible
-2/22/2011 9:43:00 PM 6572 W-MODE 1.02 Version 1.0.2 Compatible
-2/22/2011 9:43:00 PM 6572 Obtained DebugPrivilege
-2/22/2011 9:43:00 PM 6572 CreateProcess
-2/22/2011 9:43:00 PM 6572 Call ScSuspended for all active Plugins
-2/22/2011 9:43:00 PM 6572 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:43:00 PM 6572 ApplyPatchSuspended for W-MODE 1.02
-2/22/2011 9:43:00 PM 6572 ResumeThread
-2/22/2011 9:43:00 PM 6572 WaitForInputIdle
-2/22/2011 9:43:00 PM 6572 Call ScWindowCreated for all active Plugins
-2/22/2011 9:43:00 PM 6572 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:43:00 PM 6572 ApplyPatch for W-MODE 1.02
-2/22/2011 9:43:00 PM 6572 Starting Starcraft completed
-2/22/2011 9:45:35 PM 6572 Startbutton
-2/22/2011 9:45:35 PM 6572 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
-2/22/2011 9:45:35 PM 6572 BWAPI Injector (1.16.1) RELEASE Version  Compatible
-2/22/2011 9:45:35 PM 6572 W-MODE 1.02 Version 1.0.2 Compatible
-2/22/2011 9:45:35 PM 6572 Obtained DebugPrivilege
-2/22/2011 9:45:35 PM 6572 CreateProcess
-2/22/2011 9:45:35 PM 6572 Call ScSuspended for all active Plugins
-2/22/2011 9:45:35 PM 6572 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:45:36 PM 6572 ApplyPatchSuspended for W-MODE 1.02
-2/22/2011 9:45:36 PM 6572 ResumeThread
-2/22/2011 9:45:36 PM 6572 WaitForInputIdle
-2/22/2011 9:45:36 PM 6572 Call ScWindowCreated for all active Plugins
-2/22/2011 9:45:36 PM 6572 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:45:36 PM 6572 ApplyPatch for W-MODE 1.02
-2/22/2011 9:45:36 PM 6572 Starting Starcraft completed
-2/22/2011 9:57:18 PM 6572 Startbutton
-2/22/2011 9:57:18 PM 6572 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
-2/22/2011 9:57:18 PM 6572 BWAPI Injector (1.16.1) RELEASE Version  Compatible
-2/22/2011 9:57:18 PM 6572 W-MODE 1.02 Version 1.0.2 Compatible
-2/22/2011 9:57:18 PM 6572 Obtained DebugPrivilege
-2/22/2011 9:57:18 PM 6572 CreateProcess
-2/22/2011 9:57:18 PM 6572 Call ScSuspended for all active Plugins
-2/22/2011 9:57:18 PM 6572 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:57:18 PM 6572 ApplyPatchSuspended for W-MODE 1.02
-2/22/2011 9:57:18 PM 6572 ResumeThread
-2/22/2011 9:57:18 PM 6572 WaitForInputIdle
-2/22/2011 9:57:18 PM 6572 Call ScWindowCreated for all active Plugins
-2/22/2011 9:57:18 PM 6572 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:57:18 PM 6572 ApplyPatch for W-MODE 1.02
-2/22/2011 9:57:18 PM 6572 Starting Starcraft completed
-2/22/2011 9:58:58 PM 6572 Finishing
-2/22/2011 9:58:58 PM 6572 Unloading Plugin APMAlert (1.16.1)
-2/22/2011 9:58:58 PM 6572 Unloading Plugin BWAPI Injector (1.16.1) RELEASE
-2/22/2011 9:58:58 PM 6572 Unloading Plugin BWAPI Injector (1.16.1) DEBUG
-2/22/2011 9:58:58 PM 6572 Unloading Plugin Chaosplugin for 1.16.1
-2/22/2011 9:58:58 PM 6572 Unloading Plugin ICCup
-2/22/2011 9:58:58 PM 6572 Unloading Plugin ICCup TV Streamer
-2/22/2011 9:58:58 PM 6572 Unloading Plugin ICCup TV Player
-2/22/2011 9:58:58 PM 6572 Unloading Plugin LatencyChanger for 1.16.1
-2/22/2011 9:58:58 PM 6572 Unloading Plugin RepFix
-2/22/2011 9:58:58 PM 6572 Unloading Plugin Stormplugin for 1.16.1
-2/22/2011 9:58:58 PM 6572 Unloading Plugin W-MODE 1.02
-2/22/2011 9:58:58 PM 6572 Logging ended
+2/23/2011 1:10:12 PM 1844 Logging started
+2/23/2011 1:10:12 PM 1844 Begin Startup
+2/23/2011 1:10:12 PM 1844 Chaosauncher 0.5.4.4 on NT 6.0.6002 Service Pack 2 at C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\Chaoslauncher.exe
+2/23/2011 1:10:12 PM 1844 Load Settings
+2/23/2011 1:10:12 PM 1844 GamePath: C:\Program Files (x86)\StarCraft\
+2/23/2011 1:10:12 PM 1844 Load Plugins
+2/23/2011 1:10:12 PM 1844 AdvLoaderPluginPath: \Plugins\
+2/23/2011 1:10:12 PM 1844 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\APMAlert.bwl
+2/23/2011 1:10:13 PM 1844 Plugin loaded APMAlert (1.16.1)
+2/23/2011 1:10:13 PM 1844 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\BWAPI_ChaosLauncherInjector.bwl
+2/23/2011 1:10:13 PM 1844 Plugin loaded BWAPI Injector (1.16.1) RELEASE
+2/23/2011 1:10:13 PM 1844 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\BWAPI_ChaosLauncherInjectord.bwl
+2/23/2011 1:10:13 PM 1844 Plugin loaded BWAPI Injector (1.16.1) DEBUG
+2/23/2011 1:10:13 PM 1844 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\Chaosplugin.bwl
+2/23/2011 1:10:13 PM 1844 Plugin loaded Chaosplugin for 1.16.1
+2/23/2011 1:10:13 PM 1844 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\iccscbn.icc
+2/23/2011 1:10:19 PM 1844 Plugin loaded ICCup
+2/23/2011 1:10:19 PM 1844 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\icctv.bwl
+2/23/2011 1:10:19 PM 1844 Plugin loaded ICCup TV Streamer
+2/23/2011 1:10:19 PM 1844 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\icctvp.bwl
+2/23/2011 1:10:19 PM 1844 Plugin loaded ICCup TV Player
+2/23/2011 1:10:19 PM 1844 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\LatencyChanger.bwl
+2/23/2011 1:10:19 PM 1844 Plugin loaded LatencyChanger for 1.16.1
+2/23/2011 1:10:19 PM 1844 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\repfix.bwl
+2/23/2011 1:10:19 PM 1844 Plugin loaded RepFix
+2/23/2011 1:10:19 PM 1844 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\Stormplugin.bwl
+2/23/2011 1:10:19 PM 1844 Plugin loaded Stormplugin for 1.16.1
+2/23/2011 1:10:19 PM 1844 Loading BWL4-Plugin C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\Chaoslauncher\wmode.bwl
+2/23/2011 1:10:19 PM 1844 Plugin loaded W-MODE 1.02
+2/23/2011 1:10:19 PM 1844 Load Tools
+2/23/2011 1:10:19 PM 1844 Init GUI
+2/23/2011 1:10:19 PM 1844 Get Starcraftversions
+2/23/2011 1:10:20 PM 1844 Init complete
+2/23/2011 1:10:33 PM 1844 Startbutton
+2/23/2011 1:10:33 PM 1844 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
+2/23/2011 1:10:33 PM 1844 BWAPI Injector (1.16.1) RELEASE Version  Compatible
+2/23/2011 1:10:33 PM 1844 W-MODE 1.02 Version 1.0.2 Compatible
+2/23/2011 1:10:33 PM 1844 Obtained DebugPrivilege
+2/23/2011 1:10:33 PM 1844 CreateProcess
+2/23/2011 1:10:33 PM 1844 Call ScSuspended for all active Plugins
+2/23/2011 1:10:33 PM 1844 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
+2/23/2011 1:10:34 PM 1844 ApplyPatchSuspended for W-MODE 1.02
+2/23/2011 1:10:34 PM 1844 ResumeThread
+2/23/2011 1:10:34 PM 1844 WaitForInputIdle
+2/23/2011 1:10:34 PM 1844 Call ScWindowCreated for all active Plugins
+2/23/2011 1:10:34 PM 1844 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
+2/23/2011 1:10:34 PM 1844 ApplyPatch for W-MODE 1.02
+2/23/2011 1:10:34 PM 1844 Starting Starcraft completed
+2/23/2011 1:18:53 PM 1844 Startbutton
+2/23/2011 1:18:53 PM 1844 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
+2/23/2011 1:18:53 PM 1844 BWAPI Injector (1.16.1) RELEASE Version  Compatible
+2/23/2011 1:18:53 PM 1844 W-MODE 1.02 Version 1.0.2 Compatible
+2/23/2011 1:18:53 PM 1844 Obtained DebugPrivilege
+2/23/2011 1:18:53 PM 1844 CreateProcess
+2/23/2011 1:18:53 PM 1844 Call ScSuspended for all active Plugins
+2/23/2011 1:18:53 PM 1844 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
+2/23/2011 1:18:53 PM 1844 ApplyPatchSuspended for W-MODE 1.02
+2/23/2011 1:18:53 PM 1844 ResumeThread
+2/23/2011 1:18:53 PM 1844 WaitForInputIdle
+2/23/2011 1:18:53 PM 1844 Call ScWindowCreated for all active Plugins
+2/23/2011 1:18:53 PM 1844 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
+2/23/2011 1:18:53 PM 1844 ApplyPatch for W-MODE 1.02
+2/23/2011 1:18:53 PM 1844 Starting Starcraft completed
+2/23/2011 1:21:45 PM 1844 Startbutton
+2/23/2011 1:21:45 PM 1844 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
+2/23/2011 1:21:45 PM 1844 BWAPI Injector (1.16.1) RELEASE Version  Compatible
+2/23/2011 1:21:45 PM 1844 W-MODE 1.02 Version 1.0.2 Compatible
+2/23/2011 1:21:45 PM 1844 Obtained DebugPrivilege
+2/23/2011 1:21:45 PM 1844 CreateProcess
+2/23/2011 1:21:45 PM 1844 Call ScSuspended for all active Plugins
+2/23/2011 1:21:45 PM 1844 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
+2/23/2011 1:21:45 PM 1844 ApplyPatchSuspended for W-MODE 1.02
+2/23/2011 1:21:45 PM 1844 ResumeThread
+2/23/2011 1:21:45 PM 1844 WaitForInputIdle
+2/23/2011 1:21:45 PM 1844 Call ScWindowCreated for all active Plugins
+2/23/2011 1:21:45 PM 1844 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
+2/23/2011 1:21:45 PM 1844 ApplyPatch for W-MODE 1.02
+2/23/2011 1:21:45 PM 1844 Starting Starcraft completed
+2/23/2011 1:27:31 PM 1844 Startbutton
+2/23/2011 1:27:31 PM 1844 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
+2/23/2011 1:27:31 PM 1844 BWAPI Injector (1.16.1) RELEASE Version  Compatible
+2/23/2011 1:27:31 PM 1844 W-MODE 1.02 Version 1.0.2 Compatible
+2/23/2011 1:27:31 PM 1844 Obtained DebugPrivilege
+2/23/2011 1:27:31 PM 1844 CreateProcess
+2/23/2011 1:27:31 PM 1844 Call ScSuspended for all active Plugins
+2/23/2011 1:27:31 PM 1844 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
+2/23/2011 1:27:31 PM 1844 ApplyPatchSuspended for W-MODE 1.02
+2/23/2011 1:27:31 PM 1844 ResumeThread
+2/23/2011 1:27:31 PM 1844 WaitForInputIdle
+2/23/2011 1:27:32 PM 1844 Call ScWindowCreated for all active Plugins
+2/23/2011 1:27:32 PM 1844 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
+2/23/2011 1:27:32 PM 1844 ApplyPatch for W-MODE 1.02
+2/23/2011 1:27:32 PM 1844 Starting Starcraft completed
+2/23/2011 1:50:02 PM 1844 Startbutton
+2/23/2011 1:50:02 PM 1844 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
+2/23/2011 1:50:02 PM 1844 BWAPI Injector (1.16.1) RELEASE Version  Compatible
+2/23/2011 1:50:02 PM 1844 W-MODE 1.02 Version 1.0.2 Compatible
+2/23/2011 1:50:02 PM 1844 Obtained DebugPrivilege
+2/23/2011 1:50:02 PM 1844 CreateProcess
+2/23/2011 1:50:02 PM 1844 Call ScSuspended for all active Plugins
+2/23/2011 1:50:02 PM 1844 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
+2/23/2011 1:50:03 PM 1844 ApplyPatchSuspended for W-MODE 1.02
+2/23/2011 1:50:03 PM 1844 ResumeThread
+2/23/2011 1:50:03 PM 1844 WaitForInputIdle
+2/23/2011 1:50:03 PM 1844 Call ScWindowCreated for all active Plugins
+2/23/2011 1:50:03 PM 1844 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
+2/23/2011 1:50:03 PM 1844 ApplyPatch for W-MODE 1.02
+2/23/2011 1:50:03 PM 1844 Starting Starcraft completed
+2/23/2011 1:55:20 PM 1844 Startbutton
+2/23/2011 1:55:20 PM 1844 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\StarCraft.exe
+2/23/2011 1:55:20 PM 1844 BWAPI Injector (1.16.1) RELEASE Version  Compatible
+2/23/2011 1:55:20 PM 1844 W-MODE 1.02 Version 1.0.2 Compatible
+2/23/2011 1:55:20 PM 1844 Obtained DebugPrivilege
+2/23/2011 1:55:20 PM 1844 CreateProcess
+2/23/2011 1:55:20 PM 1844 Call ScSuspended for all active Plugins
+2/23/2011 1:55:20 PM 1844 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
+2/23/2011 1:55:20 PM 1844 ApplyPatchSuspended for W-MODE 1.02
+2/23/2011 1:55:20 PM 1844 ResumeThread
+2/23/2011 1:55:20 PM 1844 WaitForInputIdle
+2/23/2011 1:55:21 PM 1844 Call ScWindowCreated for all active Plugins
+2/23/2011 1:55:21 PM 1844 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
+2/23/2011 1:55:21 PM 1844 ApplyPatch for W-MODE 1.02
+2/23/2011 1:55:21 PM 1844 Starting Starcraft completed
+2/23/2011 1:59:58 PM 1844 Finishing
+2/23/2011 1:59:58 PM 1844 Unloading Plugin APMAlert (1.16.1)
+2/23/2011 1:59:58 PM 1844 Unloading Plugin BWAPI Injector (1.16.1) RELEASE
+2/23/2011 1:59:58 PM 1844 Unloading Plugin BWAPI Injector (1.16.1) DEBUG
+2/23/2011 1:59:59 PM 1844 Unloading Plugin Chaosplugin for 1.16.1
+2/23/2011 1:59:59 PM 1844 Unloading Plugin ICCup
+2/23/2011 1:59:59 PM 1844 Unloading Plugin ICCup TV Streamer
+2/23/2011 1:59:59 PM 1844 Unloading Plugin ICCup TV Player
+2/23/2011 1:59:59 PM 1844 Unloading Plugin LatencyChanger for 1.16.1
+2/23/2011 1:59:59 PM 1844 Unloading Plugin RepFix
+2/23/2011 1:59:59 PM 1844 Unloading Plugin Stormplugin for 1.16.1
+2/23/2011 1:59:59 PM 1844 Unloading Plugin W-MODE 1.02
+2/23/2011 1:59:59 PM 1844 Logging ended

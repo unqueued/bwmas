@@ -85,24 +85,26 @@ public class PlayerWME extends WME {
 	public void update(String playerData, PlayerWME enemy) {		
 		String[] attributes = playerData.split(":")[0].split(";");
 		
-		System.out.println(playerData);
+		/*System.out.println(playerData);
 		for(String s : attributes){
 			System.out.print("["+s+"]");
 		
-		}
-		System.out.println( );
+		}*/
+		//System.out.println( );
 		minerals = Integer.parseInt(attributes[1]);
 		gas = Integer.parseInt(attributes[2]);
 		supplyUsed = Integer.parseInt(attributes[3]);
+		//System.out.print("supplyUsed:"+supplyUsed);
 		supplyTotal = Integer.parseInt(attributes[4]);
+		//System.out.println("|supplyTotal:"+supplyTotal);
 		String researchUpdate = attributes[5];
-		System.out.println("researchUpdate:["+researchUpdate+"]");
+		//System.out.println("researchUpdate:["+researchUpdate+"]");
 		String upgradeUpdate = attributes[6];
-		System.out.println("upgradeUpdate:["+upgradeUpdate+"]");
+		//System.out.println("upgradeUpdate:["+upgradeUpdate+"]");
 		
 		// research
 		final int r = hasResearched.length;
-		System.out.println("hasResearched.length==["+hasResearched.length+"] || isResearching.length==["+isResearching.length+"]|| researchUpdate.length==["+researchUpdate.length()+"]");
+		//System.out.println("hasResearched.length==["+hasResearched.length+"] || isResearching.length==["+isResearching.length+"]|| researchUpdate.length==["+researchUpdate.length()+"]");
 		char t;
 		int v;
 		for (int i=0; i<r; i++) {

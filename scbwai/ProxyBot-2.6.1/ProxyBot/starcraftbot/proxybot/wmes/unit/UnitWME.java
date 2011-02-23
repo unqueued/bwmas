@@ -82,7 +82,7 @@ public class UnitWME extends WME {
 			
 			String[] attributes = data.split(";");
 
-			System.out.println("UnitWME.getUnits:: attribute.length==["+attributes.length+"]");
+			//System.out.println("UnitWME.getUnits:: attribute.length==["+attributes.length+"]");
 			
 			int ID = Integer.parseInt(attributes[0]);
 			UnitWME unit = game.getUnitByID(ID);			
