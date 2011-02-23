@@ -29,7 +29,7 @@ public class ProxyBot {
 	public static boolean logCommands = false;
 
 	/** display agent commands in SC? */
-	public static boolean terrainAnalysis = true;
+	public static boolean terrainAnalysis = false;
 
 	/** run the game very fast ? */
 	public static boolean speedUp = true;
@@ -114,7 +114,7 @@ public class ProxyBot {
 	    		}
 	    		else {	    				    			
 	    			// update the game
-	    			game.update(update);	    			
+	    			game.updateData(update);	    			
 
 	    			if (firstFrame) {	    				
 	    				firstFrame = false;

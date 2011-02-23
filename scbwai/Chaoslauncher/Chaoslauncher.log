@@ -1,48 +1,18 @@
-2/20/2011 4:04:49 AM 3400 Logging started
-2/20/2011 4:04:49 AM 3400 Begin Startup
-2/20/2011 4:04:49 AM 3400 Chaosauncher 0.5.4.4 on NT 6.1.7600  at C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\Chaoslauncher\Chaoslauncher.exe
-2/20/2011 4:04:49 AM 3400 Load Settings
-2/20/2011 4:04:49 AM 3400 GamePath: C:\Program Files (x86)\StarCraft\\
-2/20/2011 4:04:49 AM 3400 Load Plugins
-2/20/2011 4:04:49 AM 3400 AdvLoaderPluginPath: \Plugins\
-2/20/2011 4:04:49 AM 3400 Loading BWL4-Plugin C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\Chaoslauncher\APMAlert.bwl
-2/20/2011 4:04:49 AM 3400 Plugin loaded APMAlert (1.16.1)
-2/20/2011 4:04:49 AM 3400 Loading BWL4-Plugin C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\Chaoslauncher\BWAPI_ChaosLauncherInjector.bwl
-2/20/2011 4:04:49 AM 3400 Plugin loaded BWAPI Injector (1.16.1) RELEASE
-2/20/2011 4:04:49 AM 3400 Loading BWL4-Plugin C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\Chaoslauncher\BWAPI_ChaosLauncherInjectord.bwl
-2/20/2011 4:04:49 AM 3400 Plugin loaded BWAPI Injector (1.16.1) DEBUG
-2/20/2011 4:04:49 AM 3400 Loading BWL4-Plugin C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\Chaoslauncher\Chaosplugin.bwl
-2/20/2011 4:04:50 AM 3400 Plugin loaded Chaosplugin for 1.16.1
-2/20/2011 4:04:50 AM 3400 Loading BWL4-Plugin C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\Chaoslauncher\iccscbn.icc
-2/20/2011 4:04:50 AM 3400 Plugin loaded ICCup
-2/20/2011 4:04:50 AM 3400 Loading BWL4-Plugin C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\Chaoslauncher\icctv.bwl
-2/20/2011 4:04:50 AM 3400 Plugin loaded ICCup TV Streamer
-2/20/2011 4:04:50 AM 3400 Loading BWL4-Plugin C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\Chaoslauncher\icctvp.bwl
-2/20/2011 4:04:50 AM 3400 Plugin loaded ICCup TV Player
-2/20/2011 4:04:50 AM 3400 Loading BWL4-Plugin C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\Chaoslauncher\LatencyChanger.bwl
-2/20/2011 4:04:50 AM 3400 Plugin loaded LatencyChanger for 1.16.1
-2/20/2011 4:04:50 AM 3400 Loading BWL4-Plugin C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\Chaoslauncher\repfix.bwl
-2/20/2011 4:04:50 AM 3400 Plugin loaded RepFix
-2/20/2011 4:04:50 AM 3400 Loading BWL4-Plugin C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\Chaoslauncher\Stormplugin.bwl
-2/20/2011 4:04:50 AM 3400 Plugin loaded Stormplugin for 1.16.1
-2/20/2011 4:04:50 AM 3400 Loading BWL4-Plugin C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\Chaoslauncher\wmode.bwl
-2/20/2011 4:04:50 AM 3400 Plugin loaded W-MODE 1.02
-2/20/2011 4:04:50 AM 3400 Load Tools
-2/20/2011 4:04:50 AM 3400 Init GUI
-2/20/2011 4:04:50 AM 3400 Get Starcraftversions
-2/20/2011 4:04:50 AM 3400 Init complete
-2/20/2011 4:04:51 AM 3400 Startbutton
-2/20/2011 4:04:51 AM 3400 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\\StarCraft.exe
-2/20/2011 4:04:51 AM 3400 BWAPI Injector (1.16.1) RELEASE Version  Compatible
-2/20/2011 4:04:51 AM 3400 W-MODE 1.02 Version 1.0.2 Compatible
-2/20/2011 4:04:51 AM 3400 Obtained DebugPrivilege
-2/20/2011 4:04:51 AM 3400 CreateProcess
-2/20/2011 4:04:51 AM 3400 Call ScSuspended for all active Plugins
-2/20/2011 4:04:51 AM 3400 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
-2/20/2011 4:04:52 AM 3400 ApplyPatchSuspended for W-MODE 1.02
-2/20/2011 4:04:52 AM 3400 ResumeThread
-2/20/2011 4:04:52 AM 3400 WaitForInputIdle
-2/20/2011 4:04:52 AM 3400 Call ScWindowCreated for all active Plugins
-2/20/2011 4:04:52 AM 3400 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
-2/20/2011 4:04:52 AM 3400 ApplyPatch for W-MODE 1.02
-2/20/2011 4:04:52 AM 3400 Starting Starcraft completed
+2/21/2011 12:50:43 PM 1620 Logging started
+2/21/2011 12:50:43 PM 1620 Already running
+2/21/2011 12:50:43 PM 1620 Logging ended
+2/21/2011 12:50:47 PM 3400 Startbutton
+2/21/2011 12:50:47 PM 3400 Starting Game Starcraft 1.16.1 C:\Program Files (x86)\StarCraft\\StarCraft.exe
+2/21/2011 12:50:47 PM 3400 BWAPI Injector (1.16.1) RELEASE Version  Compatible
+2/21/2011 12:50:47 PM 3400 W-MODE 1.02 Version 1.0.2 Compatible
+2/21/2011 12:50:47 PM 3400 Obtained DebugPrivilege
+2/21/2011 12:50:47 PM 3400 CreateProcess
+2/21/2011 12:50:47 PM 3400 Call ScSuspended for all active Plugins
+2/21/2011 12:50:47 PM 3400 ApplyPatchSuspended for BWAPI Injector (1.16.1) RELEASE
+2/21/2011 12:50:48 PM 3400 ApplyPatchSuspended for W-MODE 1.02
+2/21/2011 12:50:48 PM 3400 ResumeThread
+2/21/2011 12:50:48 PM 3400 WaitForInputIdle
+2/21/2011 12:50:48 PM 3400 Call ScWindowCreated for all active Plugins
+2/21/2011 12:50:48 PM 3400 ApplyPatch for BWAPI Injector (1.16.1) RELEASE
+2/21/2011 12:50:48 PM 3400 ApplyPatch for W-MODE 1.02
+2/21/2011 12:50:48 PM 3400 Starting Starcraft completed
