@@ -82,6 +82,8 @@ public class UnitWME extends WME {
 			
 			String[] attributes = data.split(";");
 
+			System.out.println("UnitWME.getUnits:: attribute.length==["+attributes.length+"]");
+			
 			int ID = Integer.parseInt(attributes[0]);
 			UnitWME unit = game.getUnitByID(ID);			
 						
@@ -128,10 +130,10 @@ public class UnitWME extends WME {
 			unit.upgradeTimer = Integer.parseInt(attributes[11]);
 			unit.orderTimer = Integer.parseInt(attributes[12]);
 			unit.order = Integer.parseInt(attributes[13]);
-			unit.lifted = (Integer.parseInt(attributes[14]) != 0);
-			unit.resources = Integer.parseInt(attributes[15]);
-			unit.addonID = Integer.parseInt(attributes[16]);
-			unit.mineCount = Integer.parseInt(attributes[17]);
+			//unit.lifted = (Integer.parseInt(attributes[14]) != 0);
+			unit.resources = Integer.parseInt(attributes[14]);
+			unit.addonID = Integer.parseInt(attributes[15]);
+			unit.mineCount = Integer.parseInt(attributes[16]);
 			units.add(unit);
 			
 			unit.x = unit.realX/32;

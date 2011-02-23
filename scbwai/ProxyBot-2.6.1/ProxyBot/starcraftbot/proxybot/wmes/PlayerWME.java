@@ -96,35 +96,46 @@ public class PlayerWME extends WME {
 		supplyUsed = Integer.parseInt(attributes[3]);
 		supplyTotal = Integer.parseInt(attributes[4]);
 		String researchUpdate = attributes[5];
+		System.out.println("researchUpdate:["+researchUpdate+"]");
 		String upgradeUpdate = attributes[6];
-
+		System.out.println("upgradeUpdate:["+upgradeUpdate+"]");
+		
 		// research
 		final int r = hasResearched.length;
+		System.out.println("hasResearched.length==["+hasResearched.length+"] || isResearching.length==["+isResearching.length+"]|| researchUpdate.length==["+researchUpdate.length()+"]");
+		char t;
+		int v;
 		for (int i=0; i<r; i++) {
-			hasResearched[i] = Integer.parseInt("" + researchUpdate.charAt(i)) > 0;
+			t = researchUpdate.charAt(i);
+			v = Integer.parseInt(""+t);
+			hasResearched[i] = v > 3;
+			isResearching[i] = (v > 0) && (v < 3);
 		}
 
-		for (int i=0; i<r; i++) {
-			isResearching[i] = Integer.parseInt("" + researchUpdate.charAt(r + i)) > 0;
-		}
+		//for (int i=0; i<r; i++) {
+		//	isResearching[i] = Integer.parseInt("" + researchUpdate.charAt(r)) > 0 && Integer.parseInt(""+ researchUpdate.charAt(r)) < 3;
+		//}
 		
-		for (int i=0; i<r; i++) {
+		/*for (int i=0; i<r; i++) {
 			enemy.hasResearched[i] = Integer.parseInt("" + researchUpdate.charAt(2*r + i)) > 0;
-		}		
+		}*/		
 
 		// upgrades
 		final int u = upgradeLevel.length;
 		for (int i=0; i<u; i++) {
-			upgradeLevel[i] = Integer.parseInt("" + upgradeUpdate.charAt(i));
+			t = upgradeUpdate.charAt(i);
+			v = Integer.parseInt("" + t);
+			upgradeLevel[i] = v;
+			isUpgrading[i] = v > 0;
 		}
 		
-		for (int i=0; i<u; i++) {
-			isUpgrading[i] = Integer.parseInt("" + upgradeUpdate.charAt(u + i)) > 0;
-		}
+		/*for (int i=0; i<u; i++) {
+	
+		}*/
 
-		for (int i=0; i<u; i++) {
+		/*for (int i=0; i<u; i++) {
 			enemy.upgradeLevel[i] = Integer.parseInt("" + upgradeUpdate.charAt(2*u + i));
-		}
+		}*/
 	}
 	
 	public boolean[] getResearched() {
