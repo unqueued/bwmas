@@ -87,7 +87,7 @@ public class Game {
 	 * 
 	 * The game object will not have units until update is called.
 	 */
-	public Game(String playerData, String locationData, String mapData,
+	public Game(String playerData, String locationData, String mapData,String chokesData,String basesData,String regionData){
 		//System.out.println(locationData);
 		String[] playerDatas = playerData.split(":");
 		playerID = Integer.parseInt(playerDatas[0].split(";")[1]);
@@ -95,7 +95,7 @@ public class Game {
 		//System.out.println("PlayerID: "+ playerID + "  Players: "+players);
 		for (PlayerWME p : players) {
 			//System.out.println("At: Player# "+p.getPlayerID() + "Of: " + players.size());
-					+ players.size());
+
 			if (playerID == p.getPlayerID()) {
 				player = p;
 				playerRace = Race.valueOf(p.getRace()).ordinal();

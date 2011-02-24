@@ -64,8 +64,7 @@ public class ExampleStarCraftBot implements StarCraftBot {
 						game.getCommandQueue()
 								.rightClick(unit.getID(), patchID);
 					}
-				}
-				}
+				}	
 				else
 				{ 
 					/*if(unit.getIsWorker())
@@ -114,6 +113,7 @@ public class ExampleStarCraftBot implements StarCraftBot {
 			
 			int NonBuildingUnits = 0;
 			int PrevSupplyUnits = 0;
+			int supplyType = UnitTypeWME.getSupplyType(game.getPlayerRace());
 			
 			for(UnitWME unit : game.getPlayerUnits())
 			{
@@ -126,16 +126,15 @@ public class ExampleStarCraftBot implements StarCraftBot {
 			
 			if (game.getPlayer().getMinerals() >= 100 && NonBuildingUnits > (9 + (PrevSupplyUnits*10) - 2)
 					/*game.getPlayer().getSupplyUsed() >= (game.getPlayer().getSupplyTotal() - 2)*/ ) {
-
-
+				
+				
 				System.out.println("Hit the need to build another farm...");
 				
 				// morph a larva into a supply
 				if (game.getPlayerRace() == Race.Zerg.ordinal()) {
 					for (UnitWME unit : game.getPlayerUnits()) {
 						if (unit.getTypeID() == UnitType.Zerg_Larva.ordinal()) {
-							game.getCommandQueue().morph(unit.getID(),
-									supplyType);
+							game.getCommandQueue().morph(unit.getID(),supplyType);
 						}
 					}
 				}
@@ -167,6 +166,7 @@ public class ExampleStarCraftBot implements StarCraftBot {
 			}
 		}
 	}
+	
 
 	/**
 	 * Tell the main thread to quit.

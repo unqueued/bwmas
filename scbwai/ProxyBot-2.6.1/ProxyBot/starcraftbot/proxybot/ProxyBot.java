@@ -97,8 +97,7 @@ public class ProxyBot extends Agent{
 				basesData = reader.readLine();
 			}
 
-			final Game game = new Game(playerData, locationData, mapData,
-					chokesData, basesData, regionsData);
+			final Game game = new Game(playerData, locationData, mapData, chokesData, basesData, regionsData);
 			gameRef = game;
 			boolean firstFrame = true;
 
