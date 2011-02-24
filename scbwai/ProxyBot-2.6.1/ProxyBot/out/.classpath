@@ -3,5 +3,6 @@
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JADE"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/eclipse/plugins/it.fbk.sra.ejade_0.8.0/lib/libjade/jade.jar"/>
 	<classpathentry kind="output" path="out"/>
 </classpath>
