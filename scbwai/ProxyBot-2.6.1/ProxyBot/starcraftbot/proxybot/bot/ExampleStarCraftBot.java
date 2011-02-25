@@ -42,10 +42,13 @@ public class ExampleStarCraftBot implements StarCraftBot {
 
 			// start mining
 			for (UnitWME unit : game.getPlayerUnits()) {
-				if (unit.getIsWorker() && !(unit.getOrder() == Order.MiningMinerals.ordinal()) || unit.getOrder() == Order.PlayerGuard.ordinal()) {
+				if (unit.getIsWorker()
+						&& !(unit.getOrder() == Order.MiningMinerals.ordinal())
+						|| unit.getOrder() == Order.PlayerGuard.ordinal()) {
 
-					//System.out.println("Assigning worker of type:"+ unit.getType().getName()+": to mine...");
-					
+					// System.out.println("Assigning worker of type:"+
+					// unit.getType().getName()+": to mine...");
+
 					int patchID = -1;
 					double closest = Double.MAX_VALUE;
 
@@ -63,24 +66,22 @@ public class ExampleStarCraftBot implements StarCraftBot {
 					if (patchID != -1) {
 						game.getCommandQueue()
 								.rightClick(unit.getID(), patchID);
+					} else {
+						/*
+						 * if(unit.getIsWorker()) System.out.println(
+						 * "Worker Unit NOT assigned to mine:  its current order is: getOrder() == "
+						 * + unit.getOrder()); else
+						 * System.out.println("Non-worker Unit. unit type() is:"
+						 * +unit.getType().getName()+"-- No need to mine");
+						 */
 					}
-				}	
-				else
-				{ 
-					/*if(unit.getIsWorker())
-					  System.out.println("Worker Unit NOT assigned to mine:  its current order is: getOrder() == "+ unit.getOrder());
-					else
-					  System.out.println("Non-worker Unit. unit type() is:"+unit.getType().getName()+"-- No need to mine");*/
 				}
-			}
 
-			/*try {
-				//System.in.read();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
-			
+				/*
+				 * try { //System.in.read(); } catch (IOException e) { // TODO
+				 * Auto-generated catch block e.printStackTrace(); }
+				 */
+			}
 			// build more workers
 			if (game.getPlayer().getMinerals() >= 50) {
 				int workerType = UnitTypeWME
@@ -110,31 +111,34 @@ public class ExampleStarCraftBot implements StarCraftBot {
 			}
 
 			// build more supply
-			
+
 			int NonBuildingUnits = 0;
 			int PrevSupplyUnits = 0;
 			int supplyType = UnitTypeWME.getSupplyType(game.getPlayerRace());
-			
-			for(UnitWME unit : game.getPlayerUnits())
-			{
-				if(!unit.getIsBuilding())
+
+			for (UnitWME unit : game.getPlayerUnits()) {
+				if (!unit.getIsBuilding())
 					NonBuildingUnits++;
-				else if(unit.getIsFarm())
+				else if (unit.getIsFarm())
 					PrevSupplyUnits++;
 			}
-			
-			
-			if (game.getPlayer().getMinerals() >= 100 && NonBuildingUnits > (9 + (PrevSupplyUnits*10) - 2)
-					/*game.getPlayer().getSupplyUsed() >= (game.getPlayer().getSupplyTotal() - 2)*/ ) {
-				
-				
+
+			if (game.getPlayer().getMinerals() >= 100
+					&& NonBuildingUnits > (9 + (PrevSupplyUnits * 10) - 2)
+			/*
+			 * game.getPlayer().getSupplyUsed() >=
+			 * (game.getPlayer().getSupplyTotal() - 2)
+			 */) {
+				//int supplyType = UnitTypeWME.getSupplyType(game.getPlayerRace());
+
 				System.out.println("Hit the need to build another farm...");
-				
+
 				// morph a larva into a supply
 				if (game.getPlayerRace() == Race.Zerg.ordinal()) {
 					for (UnitWME unit : game.getPlayerUnits()) {
 						if (unit.getTypeID() == UnitType.Zerg_Larva.ordinal()) {
-							game.getCommandQueue().morph(unit.getID(),supplyType);
+							game.getCommandQueue().morph(unit.getID(),
+									supplyType);
 						}
 					}
 				}
@@ -145,10 +149,13 @@ public class ExampleStarCraftBot implements StarCraftBot {
 					for (UnitWME unit : game.getPlayerUnits()) {
 						if (unit.getTypeID() == workerType) {
 
-							System.out.println("Assigning a unit to build supplyType:" + UnitTypeWME.getSupplyType(game.getPlayerRace())+"| should be...["+ UnitTypeWME.Protoss_Pylon+"]");
-							
-							
-							
+							System.out
+									.println("Assigning a unit to build supplyType:"
+											+ UnitTypeWME.getSupplyType(game
+													.getPlayerRace())
+											+ "| should be...["
+											+ UnitTypeWME.Protoss_Pylon + "]");
+
 							// pick a random spot near the worker
 							game.getCommandQueue()
 									.build(unit.getID(),
@@ -164,9 +171,9 @@ public class ExampleStarCraftBot implements StarCraftBot {
 					}
 				}
 			}
+
 		}
 	}
-	
 
 	/**
 	 * Tell the main thread to quit.
