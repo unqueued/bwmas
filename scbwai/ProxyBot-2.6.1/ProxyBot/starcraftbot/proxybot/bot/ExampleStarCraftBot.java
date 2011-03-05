@@ -52,6 +52,9 @@ public class ExampleStarCraftBot implements StarCraftBot {
 					int patchID = -1;
 					double closest = Double.MAX_VALUE;
 
+					System.out.println("Mineral: " + game.getMinerals().size());
+					System.out.println("Geyser: " + game.getGeysers().size());
+					
 					for (UnitWME minerals : game.getMinerals()) {
 						double dx = unit.getX() - minerals.getX();
 						double dy = unit.getY() - minerals.getY();

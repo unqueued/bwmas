@@ -69,6 +69,86 @@ public class UnitWME extends WME {
 
 	private int addonID;
 
+	public UnitWME(UnitWME unit) {
+		// TODO Auto-generated constructor stub
+		super();
+		ID = unit.ID;
+		this.playerID = unit.playerID;
+		this.type = unit.type;
+		this.x = unit.x;
+		this.realX = unit.realX;
+		this.y = unit.y;
+		this.realY = unit.realY;
+		this.hitPoints = unit.hitPoints;
+		this.shields = unit.shields;
+		this.energy = unit.energy;
+		this.orderTimer = unit.orderTimer;
+		this.mineCount = unit.mineCount;
+		this.buildTimer = unit.buildTimer;
+		this.trainTimer = unit.trainTimer;
+		this.researchTimer = unit.researchTimer;
+		this.upgradeTimer = unit.upgradeTimer;
+		this.order = unit.order;
+		this.lifted = unit.lifted;
+		this.resources = unit.resources;
+		this.addonID = unit.addonID;
+	}
+
+	/**
+	 * @param iD
+	 * @param playerID
+	 * @param type
+	 * @param x
+	 * @param realX
+	 * @param y
+	 * @param realY
+	 * @param hitPoints
+	 * @param shields
+	 * @param energy
+	 * @param orderTimer
+	 * @param mineCount
+	 * @param buildTimer
+	 * @param trainTimer
+	 * @param researchTimer
+	 * @param upgradeTimer
+	 * @param order
+	 * @param lifted
+	 * @param resources
+	 * @param addonID
+	 */
+	public UnitWME(int iD, int playerID, UnitTypeWME type, int x, int realX,
+			int y, int realY, int hitPoints, int shields, int energy,
+			int orderTimer, int mineCount, int buildTimer, int trainTimer,
+			int researchTimer, int upgradeTimer, int order, boolean lifted,
+			int resources, int addonID) {
+		super();
+		ID = iD;
+		this.playerID = playerID;
+		this.type = type;
+		this.x = x;
+		this.realX = realX;
+		this.y = y;
+		this.realY = realY;
+		this.hitPoints = hitPoints;
+		this.shields = shields;
+		this.energy = energy;
+		this.orderTimer = orderTimer;
+		this.mineCount = mineCount;
+		this.buildTimer = buildTimer;
+		this.trainTimer = trainTimer;
+		this.researchTimer = researchTimer;
+		this.upgradeTimer = upgradeTimer;
+		this.order = order;
+		this.lifted = lifted;
+		this.resources = resources;
+		this.addonID = addonID;
+	}
+
+	public UnitWME() {
+		// TODO Auto-generated constructor stub
+		super();
+	}
+
 	/**
 	 * Parses the unit data.
 	 */
@@ -327,5 +407,19 @@ public class UnitWME extends WME {
 				+ " x:" + x + " y:" + y + " hitPoints:" + hitPoints
 				+ " shields:" + shields + " enemy:" + energy + " orderTimer:"
 				+ orderTimer + " order:" + order + " resource:" + resources;
+	}
+
+	public boolean getIsMineral() {
+		// TODO Auto-generated method stub
+		
+		return (this.type.getId() == (UnitType.Resource_Mineral_Field.ordinal()));
+		
+		//return false;
+	}
+
+	public boolean getIsGeyser() {
+		// TODO Auto-generated method stub
+		return (this.type.getId() == (UnitType.Resource_Vespene_Geyser.ordinal()));
+		
 	}
 }

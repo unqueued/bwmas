@@ -5,4 +5,12 @@ package starcraftbot.proxybot.wmes.unit;
  */
 public class GeyserWME extends UnitWME {
 
+	public GeyserWME(UnitWME unit) {
+		// TODO Auto-generated constructor stub
+		super(unit);
+	}
+	public GeyserWME(){
+		super();
+	}
+
 }

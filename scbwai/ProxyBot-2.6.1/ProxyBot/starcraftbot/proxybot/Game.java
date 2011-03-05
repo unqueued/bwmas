@@ -345,9 +345,11 @@ public class Game {
 	public ArrayList<MineralWME> getMinerals() {
 		ArrayList<MineralWME> minerals= new ArrayList<MineralWME>();
 		for (UnitWME unit : units) {
-			if (unit instanceof MineralWME) {
+			/*if (unit instanceof MineralWME) {
 				minerals.add((MineralWME)unit);
-			}
+			}*/
+			if(unit.getIsMineral())
+				minerals.add(new MineralWME(unit));
 		}
 
 		return minerals;
@@ -359,9 +361,11 @@ public class Game {
 	public ArrayList<GeyserWME> getGeysers() {
 		ArrayList<GeyserWME> gas = new ArrayList<GeyserWME>();
 		for (UnitWME unit : units) {
-			if (unit instanceof GeyserWME) {
+			/*if (unit instanceof GeyserWME) {
 				gas.add((GeyserWME)unit);
-			}
+			}*/
+			if(unit.getIsGeyser())
+				gas.add(new GeyserWME(unit));
 		}
 
 		return gas;
