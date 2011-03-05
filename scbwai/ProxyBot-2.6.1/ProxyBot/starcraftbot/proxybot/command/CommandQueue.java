@@ -71,6 +71,10 @@ public class CommandQueue {
 					listener.event(order);
 				}
 			}
+			else
+			{
+				System.out.println("CommandQueue already had order:"+ order.toString()+": not putting in queue...");
+			}
 		}
 	}
 

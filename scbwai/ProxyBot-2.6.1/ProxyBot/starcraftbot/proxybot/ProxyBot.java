@@ -10,6 +10,8 @@ import java.net.SocketException;
 
 import starcraftbot.proxybot.bot.ExampleStarCraftBot;
 import starcraftbot.proxybot.bot.StarCraftBot;
+import starcraftbot.proxybot.command.Command.StarCraftCommand;
+import starcraftbot.proxybot.wmes.UnitTypeWME;
 /**
  * ProxyBot.
  * 
@@ -131,7 +133,32 @@ public class ProxyBot extends Agent{
 	    			}
 
 	    			// 5. send commands
-	    	    	socket.getOutputStream().write(game.getCommandQueue().getCommands().getBytes());
+	    			//System.out.println(":::::::::::::::::PROXYBOT:::::::::::::: sending commands to AIModule:");
+	    			String com = game.getCommandQueue().getCommands();
+	    			if(!com.isEmpty() && !com.trim().matches("commands"))
+	    			{
+		    			//System.out.println("Unparsed game commands-"+com+"----");
+		    			String coms[] = com.split(":");
+		    			for(String c : coms)
+		    			{
+		    				if(!c.endsWith("commands"))
+		    				{
+			    				String command[] = c.split(";");
+			    				if(command.length == 5)
+			    				{
+			    					System.out.print("	Command Name: "+StarCraftCommand.values()[Integer.parseInt(command[0])].name());
+			    					if(Integer.parseInt(command[1]) < game.getUnits().size())
+			    						System.out.println(" on unit["+ game.getUnits().get(Integer.parseInt(command[1])).getType().getName()+":#"+Integer.parseInt(command[1])+"]");
+			    					else
+			    						System.out.println(" on unit that is out of bounds...->"+command[1]+" with game.getUnits().size()="+game.getUnits().size());
+			    				}
+			    				else
+			    					System.out.println("weird lengthon command[]");
+		    				}
+		    			}
+		    			System.out.println("--------------------------------------------------------------------");
+	    			}
+	    			socket.getOutputStream().write(com.getBytes());//game.getCommandQueue().getCommands().getBytes());
 	    		}
 	    	}
 		}
