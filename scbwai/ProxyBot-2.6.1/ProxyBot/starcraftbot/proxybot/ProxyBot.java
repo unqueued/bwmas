@@ -31,7 +31,7 @@ public class ProxyBot extends Agent{
 	public static boolean completeInformation = true;
 
 	/** display agent commands in SC? */
-	public static boolean logCommands = false;
+	public static boolean logCommands = true;
 
 	/** display agent commands in SC? */
 	public static boolean terrainAnalysis = false;
@@ -148,7 +148,10 @@ public class ProxyBot extends Agent{
 			    				{
 			    					System.out.print("	Command Name: "+StarCraftCommand.values()[Integer.parseInt(command[0])].name());
 			    					if(Integer.parseInt(command[1]) < game.getUnits().size())
-			    						System.out.println(" on unit["+ game.getUnits().get(Integer.parseInt(command[1])).getType().getName()+":#"+Integer.parseInt(command[1])+"]");
+			    					{
+			    						System.out.print(" on unit["+ game.getUnits().get(Integer.parseInt(command[1])).getType().getName()+":#"+Integer.parseInt(command[1])+"]");
+			    						System.out.println("|arg1:"+command[2]+"|arg2:"+ command[3]+"|arg3:"+command[4]);
+			    					}
 			    					else
 			    						System.out.println(" on unit that is out of bounds...->"+command[1]+" with game.getUnits().size()="+game.getUnits().size());
 			    				}

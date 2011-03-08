@@ -210,8 +210,11 @@ public class ExampleStarCraftBot implements StarCraftBot {
 															 buildX, //unit.getX() + (int) (-10.0 + Math.random() * 20.0),
 															 buildY, //unit.getY() + (int) (-10.0 + Math.random() * 20.0),
 															 supplyType);
-								game.getCommandQueue().drawBoxScreen(buildX, buildY, buildX+5, buildY+5);
-								game.getCommandQueue().drawBoxMap(buildX, buildY, buildX+5, buildY+5);
+								
+								game.getCommandQueue().drawCircleScreen(buildX, buildY, 1, true);
+								game.getCommandQueue().drawCircleMap(buildX, buildY, 1, true);
+								//game.getCommandQueue().drawBoxScreen(buildX, buildY, buildX+5, buildY+5);
+								//game.getCommandQueue().drawBoxMap(buildX, buildY, buildX+5, buildY+5);
 								//game.getCommandQueue().drawBoxScreen(buildX, buildY, buildX+1, buildY+1);
 								
 								

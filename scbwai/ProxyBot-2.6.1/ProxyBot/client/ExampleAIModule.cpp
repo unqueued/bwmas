@@ -53,6 +53,9 @@ bool logCommands = false;
 std::map<Unit*, int> unitMap;
 std::map<int, Unit*> unitIDMap;
 
+/** color used to draw shapes **/
+Color* color;
+
 /** used to assign unit object IDs */
 int unitIDCounter = 1;
 
@@ -277,6 +280,7 @@ void ExampleAIModule::onStart()
 		send(proxyBotSocket, subuf, unitType.size(), 0);
 	  }*/
 	  
+	color = new Color();
 }
 
 /**
@@ -481,7 +485,92 @@ void handleCommand(int command, int unitID, int arg0, int arg1, int arg2)
 		Broodwar->setLocalSpeed(unitID);
 		return;
 	}
+	else if(command == 42){
+	//screenPosition
+		Broodwar->sendText("Set screen position: (%d,%d)", unitID, arg0);
+		Broodwar->setScreenPosition(unitID, arg0);
+return;
+	}
+	else if(command == 43){
+	//lineMap
+		Broodwar->sendText("Line map: from (%d,%d) to (%d,%d)", unitID, arg0, arg1, arg2);
+		Broodwar->drawLineMap(unitID, arg0, arg1, arg2, *color);
+return;
+	}
+	else if(command == 44){
+	//lineScreen
+		Broodwar->sendText("Line screen: from (%d, %d) to (%d, %d)", unitID, arg0, arg1, arg2);
+		Broodwar->drawLineScreen(unitID, arg0, arg1, arg2, *color);
+return;
+	}
+	else if(command == 45){
+	//circleMap
+		Broodwar->sendText("Circle Map: @(%d, %d) radius of %d", unitID, arg0, arg1);
+		Broodwar->drawCircleMap(unitID,arg0, arg1, *color, arg2);
+	return;
+	}
+	else if(command == 46){
+	//circleScreen
+		Broodwar->sendText("Circle Screen: @(%d,%d) radius of %d", unitID, arg0, arg1);
+		Broodwar->drawCircleScreen(unitID, arg0, arg1, *color, arg2);
+	return;
+	}
+	else if(command == 47){
+	//rectMap
+		Broodwar->sendText("Rect Map: topleft(%d, %d) bottom right %d", unitID, arg0, arg1, arg2);
+		Broodwar->drawLineMap(unitID, arg0, arg1, arg0, *color);
+		Broodwar->drawLineMap(arg1, arg0, arg1, arg2, *color);
+		Broodwar->drawLineMap(arg1, arg2, unitID, arg2, *color);
+		Broodwar->drawLineMap(unitID, arg2, unitID, arg0, *color);
+	return;
+	}
+	else if(command == 48){
+	//rectScreen
+		Broodwar->sendText("Rect Screen: topleft(%d, %d) bottom right %d", unitID, arg0, arg1, arg2);
+		Broodwar->drawLineScreen(unitID, arg0, arg1, arg0, *color);
+		Broodwar->drawLineScreen(arg1, arg0, arg1, arg2, *color);
+		Broodwar->drawLineScreen(arg1, arg2, unitID, arg2, *color);
+		Broodwar->drawLineScreen(unitID, arg2, unitID, arg0, *color);
+	return;
+	}
+	else if(command == 49){
+	//boxMap
+		Broodwar->sendText("Box Map: @topleft(%d,%d) @bottomright(%d, %d)", unitID, arg0, arg1, arg2);
+		Broodwar->drawBoxMap(unitID, arg0, arg1, arg2,*color,true);
+return;
+	}
+	else if(command == 50){
+	//boxScreen
+		Broodwar->sendText("Box Screen: @topleft(%d,%d) @bottomright(%d, %d)", unitID, arg0, arg1, arg2);
+		Broodwar->drawBoxScreen(unitID, arg0, arg1, arg2,*color,true);
+	return;
+	}
+	else if(command == 51){
+	//setColor
+		Broodwar->sendText("Set Color: to %d", unitID);
 
+		color = new Color(unitID);
+
+		//Broodwar->
+return;
+	}
+	else if(command == 52){
+	//leaveGame
+		Broodwar->sendText("Leaving Game...");
+		Broodwar->leaveGame();
+	return;
+	}
+	else if(command == 53){
+	//sayHello
+		Broodwar->sendText("Hello!");
+		//Broodwar->sendText
+	return;
+	}
+	else if(command == 54){
+	//sayGG
+		Broodwar->sendText("gg");
+	return;
+	}
 	// check that the unit ID is valid
 	Unit* unit = unitIDMap[unitID];
 	if (unit == NULL) {
@@ -772,7 +861,9 @@ void handleCommand(int command, int unitID, int arg0, int arg1, int arg2)
 				unit->useTech(getTechType(arg0), getUnit(arg1));
 			}
 			break;
+
 		default:
+			if (logCommands) Broodwar->sendText("Unknown command: %d, arguments are: %d, %d, %d %d", command, unitID, arg0, arg1, arg2);
 			break;
 	}
 }
