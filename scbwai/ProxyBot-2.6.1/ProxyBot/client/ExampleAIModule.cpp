@@ -517,7 +517,7 @@ return;
 	}
 	else if(command == 47){
 	//rectMap
-		Broodwar->sendText("Rect Map: topleft(%d, %d) bottom right %d", unitID, arg0, arg1, arg2);
+		Broodwar->sendText("Rect Map: topleft(%d, %d) bottom right (%d,%d)", unitID, arg0, arg1, arg2);
 		Broodwar->drawLineMap(unitID, arg0, arg1, arg0, *color);
 		Broodwar->drawLineMap(arg1, arg0, arg1, arg2, *color);
 		Broodwar->drawLineMap(arg1, arg2, unitID, arg2, *color);
@@ -526,7 +526,7 @@ return;
 	}
 	else if(command == 48){
 	//rectScreen
-		Broodwar->sendText("Rect Screen: topleft(%d, %d) bottom right %d", unitID, arg0, arg1, arg2);
+		Broodwar->sendText("Rect Screen: topleft(%d, %d) bottom right (%d,%d)", unitID, arg0, arg1, arg2);
 		Broodwar->drawLineScreen(unitID, arg0, arg1, arg0, *color);
 		Broodwar->drawLineScreen(arg1, arg0, arg1, arg2, *color);
 		Broodwar->drawLineScreen(arg1, arg2, unitID, arg2, *color);

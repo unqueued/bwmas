@@ -134,7 +134,7 @@ public class ProxyBot extends Agent{
 
 	    			// 5. send commands
 	    			//System.out.println(":::::::::::::::::PROXYBOT:::::::::::::: sending commands to AIModule:");
-	    			String com = game.getCommandQueue().getCommands();
+	    			/*String com = game.getCommandQueue().getCommands();
 	    			if(!com.isEmpty() && !com.trim().matches("commands"))
 	    			{
 		    			//System.out.println("Unparsed game commands-"+com+"----");
@@ -160,8 +160,8 @@ public class ProxyBot extends Agent{
 		    				}
 		    			}
 		    			System.out.println("--------------------------------------------------------------------");
-	    			}
-	    			socket.getOutputStream().write(com.getBytes());//game.getCommandQueue().getCommands().getBytes());
+	    			}*/
+	    			socket.getOutputStream().write(game.getCommandQueue().getCommands().getBytes());
 	    		}
 	    	}
 		}
