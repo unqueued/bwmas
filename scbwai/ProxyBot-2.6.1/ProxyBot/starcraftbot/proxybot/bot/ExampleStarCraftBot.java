@@ -26,6 +26,7 @@ public class ExampleStarCraftBot implements StarCraftBot {
 	boolean gatewayBuild = false;
 	boolean gatewayBuilding = false;
 	boolean pylonBuilding = false;
+	boolean probecount = false;
 	
 	private Game g;
 
@@ -50,7 +51,7 @@ public class ExampleStarCraftBot implements StarCraftBot {
 			}
 
 			// start mining
-			System.out.println("NEW TURN:::::::::");
+			//System.out.println("NEW TURN:::::::::");
 			
 			powered = new boolean[game.getMap().getMapHeight()][game.getMap().getMapWidth()];
 			
@@ -106,6 +107,7 @@ public class ExampleStarCraftBot implements StarCraftBot {
 						//
 						
 						int currentX = X - radius - 1;
+						if(currentX < 0) currentX = 0;
 						int currentY, maxY;
 						while(currentX < X+radius && currentX < game.getMap().getMapWidth())
 						{
@@ -117,7 +119,7 @@ public class ExampleStarCraftBot implements StarCraftBot {
 								maxY = currentY;
 								currentY = t;
 							}
-							System.out.println("for curX["+currentX+"], lowY:"+currentY+" & maxY:"+maxY);
+							System.out.println("Filling out power added by pylon:"+unit.getID()+"--at curX["+currentX+"], lowY:"+currentY+" & maxY:"+maxY);
 							while(currentY < maxY  && currentY < game.getMap().getMapHeight())
 							{
 								powered[currentY][currentX] = true;
@@ -137,7 +139,17 @@ public class ExampleStarCraftBot implements StarCraftBot {
 			}
 			
 			for (UnitWME unit : game.getPlayerUnits()) {
-				if (unit.getIsWorker())
+				if (unit.getTypeID() == UnitTypeWME.Protoss_Zealot)
+				{
+					if(!(unit.getOrder() == Order.Patrol.ordinal()))
+					{
+						int x = (int) (Math.random() * game.getMap().getMapWidth());
+						int y = (int) (Math.random() * game.getMap().getMapHeight());
+						game.getCommandQueue().patrol(unit.getID(), x, y);
+						System.out.println("Unit["+unit.getID()+"] ordered to patrol to ("+x+","+y+")");
+					}
+				}
+				else if (unit.getIsWorker()) //mine if doing nothing better
 				{
 					//System.out.println(unit.getOrder()+" which is :"+Order.values()[unit.getOrder()].toString());
 					if(!((unit.getOrder() == Order.MiningMinerals.ordinal())
@@ -148,6 +160,9 @@ public class ExampleStarCraftBot implements StarCraftBot {
 						|| (unit.getOrder() == Order.Harvest2.ordinal())
 						|| (unit.getOrder() == Order.Harvest3.ordinal())
 						|| (unit.getOrder() == Order.Harvest4.ordinal())
+						|| (unit.getOrder() == Order.HarvestGas.ordinal())
+						|| (unit.getOrder() == Order.WaitForGas.ordinal())
+						|| (unit.getOrder() == Order.ReturnGas.ordinal())
 						|| (unit.getOrder() == Order.Harvest5.ordinal()))) 
 					{
 
@@ -172,8 +187,7 @@ public class ExampleStarCraftBot implements StarCraftBot {
 					}
 
 					if (patchID != -1) {
-						game.getCommandQueue()
-								.rightClick(unit.getID(), patchID);
+						game.getCommandQueue().rightClick(unit.getID(), patchID);
 					} else {System.out.println("*pop*");
 						/*
 						 * if(unit.getIsWorker()) System.out.println(
@@ -188,14 +202,10 @@ public class ExampleStarCraftBot implements StarCraftBot {
 						//System.out.println("Worker unit["+unit.getID()+"] was doing:"+Order.values()[unit.getOrder()].toString()+" -- already Mining or something with mining...?");
 					}
 				}
-				/*
-				 * try { //System.in.read(); } catch (IOException e) { // TODO
-				 * Auto-generated catch block e.printStackTrace(); }
-				 */
 			}
 			// build more workers
 			//UnitWME center = new UnitWME();
-			if (game.getPlayer().getMinerals() >= 50) {
+			if (game.getPlayer().getMinerals() >= 50  && !probecount) {
 				int workerType = UnitTypeWME.getWorkerType(game.getPlayerRace());
 					//int centerType = UnitTypeWME.getCenterType(game.getPlayerRace());
 
@@ -277,18 +287,34 @@ public class ExampleStarCraftBot implements StarCraftBot {
 			int PrevSupplyUnits = 0;
 			int supplyType = UnitTypeWME.getSupplyType(game.getPlayerRace());
 
+			int probes = 0;
+			
 			for (UnitWME unit : game.getPlayerUnits()) 
 			{
-				if (unit.getTypeID() == UnitTypeWME.Protoss_Probe || unit.getTypeID() == UnitTypeWME.Protoss_Zealot)
+				if (unit.getTypeID() == UnitTypeWME.Protoss_Probe)
+				{
+					NonBuildingUnits++;
+					probes++;
+				}
+				else if(unit.getTypeID() == UnitTypeWME.Protoss_Zealot || unit.getTypeID() == UnitTypeWME.Protoss_Gateway)
 					NonBuildingUnits++;
 				else if (unit.getTypeID() == UnitTypeWME.Protoss_Pylon)
+				{
+					NonBuildingUnits++;
 					PrevSupplyUnits++;
+				}
 			}
-
-			//System.out.println("CURRENT # of Supply Units:"+NonBuildingUnits+": SUPPLY CAP IS: "+ (9 +(PrevSupplyUnits*8)));
 			
-			if (game.getPlayer().getMinerals() >= 100
-					&& NonBuildingUnits > (9 + (PrevSupplyUnits * 8) - 2)) {
+			if(probes > 14)
+				probecount = true;
+			else if(probecount)
+				probecount = false;
+			
+			
+			System.out.println("CURRENT # of Supply Units:"+NonBuildingUnits+": SUPPLY CAP IS: "+ (9 +(PrevSupplyUnits*8)));
+			
+			if (game.getPlayer().getMinerals() >= 100 && NonBuildingUnits >= (9 + (PrevSupplyUnits * 8) - 2))
+			{
 				// build a farm
 					int workerType = UnitTypeWME.getWorkerType(game.getPlayerRace());
 					for (UnitWME unit : game.getPlayerUnits()) {
