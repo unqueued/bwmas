@@ -28,7 +28,7 @@ public class ProxyBot extends Agent{
 	public static boolean allowUserControl = true;
 	
 	/** turn on complete information */
-	public static boolean completeInformation = true;
+	public static boolean completeInformation = false;
 
 	/** display agent commands in SC? */
 	public static boolean logCommands = true;

@@ -33,8 +33,10 @@ public class ExampleStarCraftBot implements StarCraftBot {
 	boolean buildingGas = false;
 	boolean cybercoreBuild = false;
 	boolean cybercoreBuilding = false;
+	boolean firstPylon = true;
 	
-	
+	private int NonBuildingUnits = 0;
+	private int PrevSupplyUnits = 0;
 	private int GasMaintain = 0;
 	private Game g;
 
@@ -74,7 +76,7 @@ public class ExampleStarCraftBot implements StarCraftBot {
 				}
 			}
 			
-			
+
 			
 			UnitWME Nexus = null;
 			for(UnitWME unit : game.getPlayerUnits()){
@@ -193,6 +195,10 @@ public class ExampleStarCraftBot implements StarCraftBot {
 					  		game.getCommandQueue().rightClick(unit.getID(), assim.getID());
 					  		GasMaintain++;
 					  	}
+					  	else
+					  	{
+					  		//System.out.println("GasMaintain="+GasMaintain+"for "+numAssim+" Assimilators");
+					  	}
 					}
 					//System.out.println(unit.getOrder()+" which is :"+Order.values()[unit.getOrder()].toString());
 					if(!((unit.getOrder() == Order.MiningMinerals.ordinal())
@@ -237,25 +243,14 @@ public class ExampleStarCraftBot implements StarCraftBot {
 			}
 			// build more workers
 			//UnitWME center = new UnitWME();
-			if (game.getPlayer().getMinerals() >= 50  && !probecount) {
+			if (game.getPlayer().getMinerals() >= 50  && !probecount  && (gatewayBuild || NonBuildingUnits < 8)) {
 				int workerType = UnitTypeWME.getWorkerType(game.getPlayerRace());
 					//int centerType = UnitTypeWME.getCenterType(game.getPlayerRace());
 
 				game.getCommandQueue().train(Nexus.getID(),workerType);
 							//center = new UnitWME(unit);
 			}
-			//make zealots
-			if(game.getPlayer().getMinerals() >= 100 && gatewayBuild)
-			{
-				for(UnitWME u : game.getPlayerUnits())
-				{
-					if(u.getTypeID() == UnitTypeWME.Protoss_Gateway)
-					{
-						game.getCommandQueue().train(u.getID(), UnitTypeWME.Protoss_Zealot);
-						break;
-					}
-				}
-			}
+			//make Dragoons if possible, zealots otherwise
 			if(cybercoreBuild && game.getPlayer().getMinerals() >= 125 && game.getPlayer().getGas() >= 50)
 			{
 				for(UnitWME u : game.getPlayerUnits())
@@ -267,6 +262,18 @@ public class ExampleStarCraftBot implements StarCraftBot {
 					}
 				}
 			}
+			else if(game.getPlayer().getMinerals() >= 100 && gatewayBuild)
+			{
+				for(UnitWME u : game.getPlayerUnits())
+				{
+					if(u.getTypeID() == UnitTypeWME.Protoss_Gateway)
+					{
+						game.getCommandQueue().train(u.getID(), UnitTypeWME.Protoss_Zealot);
+						break;
+					}
+				}
+			}
+
 			//if we have a gateway, build a cybernetics core
 			if(gatewayBuild && !cybercoreBuilding && !cybercoreBuild)
 			{
@@ -388,6 +395,7 @@ public class ExampleStarCraftBot implements StarCraftBot {
 						{
 							game.getCommandQueue().build(u.getID(), geyser.getRealX(), geyser.getRealY(), UnitTypeWME.Protoss_Assimilator);
 							buildingGas = true;
+							break;
 						}
 					}
 				}
@@ -490,8 +498,8 @@ public class ExampleStarCraftBot implements StarCraftBot {
 			
 			// build more supply
 
-			int NonBuildingUnits = 0;
-			int PrevSupplyUnits = 0;
+			NonBuildingUnits = 0;
+			PrevSupplyUnits = 0;
 			int supplyType = UnitTypeWME.getSupplyType(game.getPlayerRace());
 
 			int probes = 0;
@@ -503,7 +511,9 @@ public class ExampleStarCraftBot implements StarCraftBot {
 					NonBuildingUnits++;
 					probes++;
 				}
-				else if(unit.getTypeID() == UnitTypeWME.Protoss_Zealot || unit.getTypeID() == UnitTypeWME.Protoss_Gateway)
+				else if(unit.getTypeID() == UnitTypeWME.Protoss_Zealot || unit.getTypeID() == UnitTypeWME.Protoss_Dragoon)
+					NonBuildingUnits = NonBuildingUnits + 2;
+				else if( unit.getTypeID() == UnitTypeWME.Protoss_Cybernetics_Core || unit.getTypeID() == UnitTypeWME.Protoss_Gateway)
 					NonBuildingUnits++;
 				else if (unit.getTypeID() == UnitTypeWME.Protoss_Pylon)
 				{
@@ -520,7 +530,7 @@ public class ExampleStarCraftBot implements StarCraftBot {
 			
 			System.out.println("CURRENT # of Supply Units:"+NonBuildingUnits+": SUPPLY CAP IS: "+ (9 +(PrevSupplyUnits*8)));
 			
-			if (game.getPlayer().getMinerals() >= 100 && NonBuildingUnits >= (9 + (PrevSupplyUnits * 8) - 2))
+			if (game.getPlayer().getMinerals() >= 100 && (NonBuildingUnits >= (9 + (PrevSupplyUnits * 8) - 2) || !pylonBuilding))
 			{
 				// build a farm
 					int workerType = UnitTypeWME.getWorkerType(game.getPlayerRace());
