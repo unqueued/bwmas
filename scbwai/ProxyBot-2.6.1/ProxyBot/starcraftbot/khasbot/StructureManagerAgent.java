@@ -3,6 +3,6 @@ package starcraftbot.khasbot;
 
 import jade.core.Agent;
 
-public class StructureManagerAgent {
+public class StructureManagerAgent extends Agent{
 
 }
