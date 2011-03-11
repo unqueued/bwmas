@@ -27,7 +27,15 @@ public class ExampleStarCraftBot implements StarCraftBot {
 	boolean gatewayBuilding = false;
 	boolean pylonBuilding = false;
 	boolean probecount = false;
+	boolean goUp = false;
+	boolean goRight = false;
+	boolean canGas = false;
+	boolean buildingGas = false;
+	boolean cybercoreBuild = false;
+	boolean cybercoreBuilding = false;
 	
+	
+	private int GasMaintain = 0;
 	private Game g;
 
 	public JPanel getPanel() {
@@ -73,7 +81,30 @@ public class ExampleStarCraftBot implements StarCraftBot {
 				if(unit.getIsCenter())
 				{
 					Nexus = new UnitWME(unit);
-					break;
+					if(Nexus.getRealX() < (game.getMap().getMapWidth() / 2))
+						goRight = true;
+					if(Nexus.getRealY() < (game.getMap().getMapHeight() / 2))
+						goUp = true;	
+				}
+				else if(unit.getTypeID() == UnitTypeWME.Protoss_Assimilator)
+				{
+					if(unit.getIsBuilt())
+					{
+						canGas = true;
+						buildingGas = false;
+					}
+				}
+				else if(unit.getTypeID() == UnitTypeWME.Protoss_Cybernetics_Core)
+				{
+					if(unit.getIsBuilding())
+					{
+						cybercoreBuilding = true;
+					}
+					else if(unit.getIsBuilt())
+					{
+						cybercoreBuild = true;
+						cybercoreBuilding = false;
+					}
 				}
 				else if(unit.getTypeID() == UnitTypeWME.Protoss_Gateway)
 				{
@@ -128,18 +159,12 @@ public class ExampleStarCraftBot implements StarCraftBot {
 							currentX++;
 							
 						}
-						
-						
-						game.getCommandQueue().drawCircleScreen(unit.getRealX(), unit.getRealY(), 10, true);
-						game.getCommandQueue().drawCircleMap(unit.getRealX(), unit.getRealY(), 10, true);
-						game.getCommandQueue().drawCircleMap(unit.getX(), unit.getY(), 10, true);
-						game.getCommandQueue().drawCircleScreen(unit.getX(), unit.getY(), 10, true);
 					}
 				}
 			}
 			
 			for (UnitWME unit : game.getPlayerUnits()) {
-				if (unit.getTypeID() == UnitTypeWME.Protoss_Zealot)
+				if (unit.getTypeID() == UnitTypeWME.Protoss_Zealot || unit.getTypeID() == UnitTypeWME.Protoss_Dragoon)
 				{
 					if(!(unit.getOrder() == Order.Patrol.ordinal()))
 					{
@@ -151,6 +176,24 @@ public class ExampleStarCraftBot implements StarCraftBot {
 				}
 				else if (unit.getIsWorker()) //mine if doing nothing better
 				{
+					int numAssim = 0;
+					UnitWME assim = null;
+					for(UnitWME u: game.getPlayerUnits())
+					{
+						if(u.getTypeID() == UnitTypeWME.Protoss_Assimilator)
+						{
+							assim = new UnitWME(u);
+							numAssim++;
+						}
+					}
+					if(canGas)
+					{
+					  	if(GasMaintain < 3*numAssim)
+					  	{
+					  		game.getCommandQueue().rightClick(unit.getID(), assim.getID());
+					  		GasMaintain++;
+					  	}
+					}
 					//System.out.println(unit.getOrder()+" which is :"+Order.values()[unit.getOrder()].toString());
 					if(!((unit.getOrder() == Order.MiningMinerals.ordinal())
 						|| (unit.getOrder() == Order.ReturnMinerals.ordinal())
@@ -166,40 +209,29 @@ public class ExampleStarCraftBot implements StarCraftBot {
 						|| (unit.getOrder() == Order.Harvest5.ordinal()))) 
 					{
 
-					// System.out.println("Assigning worker of type:"+
-					// unit.getType().getName()+": to mine...");
-					//System.out.println("Worker unit["+unit.getID()+"] was doing:"+Order.values()[unit.getOrder()].toString()+" -- setting it to Mine now.");
-					int patchID = -1;
-					double closest = Double.MAX_VALUE;
-
-					//System.out.println("Mineral: " + game.getMinerals().size());
-					//System.out.println("Geyser: " + game.getGeysers().size());
-					
-					for (UnitWME minerals : game.getMinerals()) {
-						double dx = Nexus.getX() - minerals.getX();
-						double dy = Nexus.getY() - minerals.getY();
-						double dist = Math.sqrt(dx * dx + dy * dy);
-
-						if (dist < closest) {
-							patchID = minerals.getID();
-							closest = dist;
+						// System.out.println("Assigning worker of type:"+
+						// unit.getType().getName()+": to mine...");
+						//System.out.println("Worker unit["+unit.getID()+"] was doing:"+Order.values()[unit.getOrder()].toString()+" -- setting it to Mine now.");
+						int patchID = -1;
+						double closest = Double.MAX_VALUE;
+	
+						//System.out.println("Mineral: " + game.getMinerals().size());
+						//System.out.println("Geyser: " + game.getGeysers().size());
+						
+						for (UnitWME minerals : game.getMinerals()) {
+							double dx = Nexus.getX() - minerals.getX();
+							double dy = Nexus.getY() - minerals.getY();
+							double dist = Math.sqrt(dx * dx + dy * dy);
+	
+							if (dist < closest) {
+								patchID = minerals.getID();
+								closest = dist;
+							}
 						}
-					}
-
-					if (patchID != -1) {
-						game.getCommandQueue().rightClick(unit.getID(), patchID);
-					} else {System.out.println("*pop*");
-						/*
-						 * if(unit.getIsWorker()) System.out.println(
-						 * "Worker Unit NOT assigned to mine:  its current order is: getOrder() == "
-						 * + unit.getOrder()); else
-						 * System.out.println("Non-worker Unit. unit type() is:"
-						 * +unit.getType().getName()+"-- No need to mine");
-						 */
-					}
-				}
-					else{
-						//System.out.println("Worker unit["+unit.getID()+"] was doing:"+Order.values()[unit.getOrder()].toString()+" -- already Mining or something with mining...?");
+	
+						if (patchID != -1) {
+							game.getCommandQueue().rightClick(unit.getID(), patchID);
+						} 
 					}
 				}
 			}
@@ -220,10 +252,146 @@ public class ExampleStarCraftBot implements StarCraftBot {
 					if(u.getTypeID() == UnitTypeWME.Protoss_Gateway)
 					{
 						game.getCommandQueue().train(u.getID(), UnitTypeWME.Protoss_Zealot);
+						break;
 					}
 				}
 			}
-			
+			if(cybercoreBuild && game.getPlayer().getMinerals() >= 125 && game.getPlayer().getGas() >= 50)
+			{
+				for(UnitWME u : game.getPlayerUnits())
+				{
+					if(u.getTypeID() == UnitTypeWME.Protoss_Gateway)
+					{
+						game.getCommandQueue().train(u.getID(), UnitTypeWME.Protoss_Dragoon);
+						break;
+					}
+				}
+			}
+			//if we have a gateway, build a cybernetics core
+			if(gatewayBuild && !cybercoreBuilding && !cybercoreBuild)
+			{
+				UnitWME pylon = null;
+				for(UnitWME u : game.getPlayerUnits())
+				{
+					if(u.getIsFarm())
+					{
+						pylon = u;
+						break;
+					}
+				}
+				int RandomX,RandomY;
+				if(pylon != null)
+				{
+					if(goRight)
+					{
+						RandomX = (int) (pylon.getRealX() + (Math.random()*9));
+					}
+					else
+					{
+						RandomX = (int) (pylon.getRealX() - (Math.random()*9));
+					}
+					if(goUp)
+					{
+						RandomY = (int) (pylon.getRealY() - (Math.random()*9));
+					}
+					else
+					{
+						RandomY = (int) (pylon.getRealY() + (Math.random()*9));
+					}
+					if(RandomX < 0)
+						RandomX =0;
+					else if(RandomX > game.getMap().getMapWidth() - 4)
+						RandomX = game.getMap().getMapWidth() - 4;
+					if(RandomY < 0)
+						RandomY = 0;
+					else if(RandomY > game.getMap().getMapHeight() - 3)
+						RandomY = game.getMap().getMapHeight() - 3;
+					boolean flip = false;
+					while(!game.getMap().isBuildable(RandomX, RandomY, 3, 2) && hasPower(RandomX, RandomY, 3, 2))
+					{
+						if(flip)
+						{
+							if(goRight)
+								RandomX++;
+							else
+								RandomX--;
+							flip = false;
+						}
+						else
+						{
+							if(goUp)
+								RandomY--;
+							else
+								RandomY++;
+							flip = true;
+						}
+						if(RandomX > pylon.getRealX()+9 || RandomX > game.getMap().getMapWidth()-5) //bounds case, building is width of 4...
+						{
+							RandomX = pylon.getRealX()-10;
+							if(RandomX < 0)
+								RandomX = 0;
+						}
+						else if(RandomX < pylon.getRealX()-9 || RandomX < 0)
+						{
+							RandomX = pylon.getRealX()+10;
+							if(RandomX > game.getMap().getMapWidth()-5)
+								RandomX = game.getMap().getMapWidth()-5;
+						}
+						if(RandomY > pylon.getRealY()+9 || RandomY > game.getMap().getMapHeight()-4) //bounds case, building is height of 3...
+						{
+							RandomY = pylon.getRealY()-10;
+							if(RandomY < 0)
+								RandomY = 0;
+						}
+						else if(RandomY < pylon.getRealY()-9 || RandomY < 0)
+						{
+							RandomY = pylon.getRealY()+10;
+							if(RandomY >game.getMap().getMapHeight()-4)
+								RandomY = game.getMap().getMapHeight()-4;
+						}
+					}
+					for(UnitWME u : game.getPlayerUnits())
+					{
+						if(u.getIsWorker())
+						{
+							System.out.println("BUILDING A CYBERNETICS CORE AT:: ("+RandomX+","+RandomY+") near pylon @("+pylon.getRealX()+","+pylon.getRealY()+")!!");
+							game.getCommandQueue().build(u.getID(), RandomX, RandomY, UnitTypeWME.Protoss_Cybernetics_Core);
+							break;
+						}
+					}
+				}
+			}
+			//if we have a gateway, build an assimilator
+			if(gatewayBuild && !buildingGas && !canGas)
+			{
+				double closest = Double.MAX_VALUE;
+				int patchID = -1;
+				UnitWME geyser = null;
+				for(UnitWME gas : game.getGeysers())
+				{
+					double dx = Nexus.getX() - gas.getX();
+					double dy = Nexus.getY() - gas.getY();
+					double dist = Math.sqrt(dx * dx + dy * dy);
+
+					if (dist < closest) {
+						//patchID = gas.getID();
+						geyser = new UnitWME(gas);
+						closest = dist;
+					}
+				}
+
+				if(geyser != null)
+				{
+					for(UnitWME u : game.getPlayerUnits())
+					{
+						if (u.getIsWorker())
+						{
+							game.getCommandQueue().build(u.getID(), geyser.getRealX(), geyser.getRealY(), UnitTypeWME.Protoss_Assimilator);
+							buildingGas = true;
+						}
+					}
+				}
+			}
 			//if we have pylons, build a gateway
 			if(game.getPlayer().getMinerals() >= 150 && !gatewayBuild && !gatewayBuilding)
 			{
@@ -239,20 +407,47 @@ public class ExampleStarCraftBot implements StarCraftBot {
 				int RandomX,RandomY;
 				if(pylon != null)
 				{
-					RandomX = (int) (pylon.getRealX() + (Math.random()*9));
-					RandomY = (int) (pylon.getRealY() + (Math.random()*9));
-					
+					if(goRight)
+					{
+						RandomX = (int) (pylon.getRealX() + (Math.random()*9));
+					}
+					else
+					{
+						RandomX = (int) (pylon.getRealX() - (Math.random()*9));
+					}
+					if(goUp)
+					{
+						RandomY = (int) (pylon.getRealY() - (Math.random()*9));
+					}
+					else
+					{
+						RandomY = (int) (pylon.getRealY() + (Math.random()*9));
+					}
+					if(RandomX < 0)
+						RandomX = 0;
+					else if(RandomX > game.getMap().getMapWidth() - 5)
+						RandomX = game.getMap().getMapWidth() - 5;
+					if(RandomY < 0)
+						RandomY = 0;
+					else if(RandomY > game.getMap().getMapHeight() - 4)
+						RandomY = game.getMap().getMapHeight() - 4;
 					boolean flip = false;
 					while(!game.getMap().isBuildable(RandomX, RandomY, 4, 3) && hasPower(RandomX, RandomY, 4, 3))
 					{
 						if(flip)
 						{
-							RandomX++;
+							if(goRight)
+								RandomX++;
+							else
+								RandomX--;
 							flip = false;
 						}
 						else
 						{
-							RandomY++;
+							if(goUp)
+								RandomY--;
+							else
+								RandomY++;
 							flip = true;
 						}
 						if(RandomX > pylon.getRealX()+9 || RandomX > game.getMap().getMapWidth()-5) //bounds case, building is width of 4...
@@ -261,11 +456,23 @@ public class ExampleStarCraftBot implements StarCraftBot {
 							if(RandomX < 0)
 								RandomX = 0;
 						}
+						else if(RandomX < pylon.getRealX()-9 || RandomX < 0)
+						{
+							RandomX = pylon.getRealX()+10;
+							if(RandomX > game.getMap().getMapWidth()-5)
+								RandomX = game.getMap().getMapWidth()-5;
+						}
 						if(RandomY > pylon.getRealY()+9 || RandomY > game.getMap().getMapHeight()-4) //bounds case, building is height of 3...
 						{
 							RandomY = pylon.getRealY()-10;
 							if(RandomY < 0)
 								RandomY = 0;
+						}
+						else if(RandomY < pylon.getRealY()-9 || RandomY < 0)
+						{
+							RandomY = pylon.getRealY()+10;
+							if(RandomY >game.getMap().getMapHeight()-4)
+								RandomY = game.getMap().getMapHeight()-4;
 						}
 					}
 					for(UnitWME u : game.getPlayerUnits())
@@ -322,60 +529,56 @@ public class ExampleStarCraftBot implements StarCraftBot {
 							
 							//pick spot near Nexus
 							int buildX=0,buildY=0;
-							buildX = Nexus.getRealX() + (int) (Math.random() * 5.0);
-							buildY = Nexus.getRealY() + (int) (Math.random() * 5.0);
-							if(buildX == Nexus.getRealX() && buildY == Nexus.getRealY())
+							if(goRight)
+								buildX = Nexus.getRealX() + (int) (Math.random() * 15.0);
+							else
+								buildX = Nexus.getRealX() - (int) (Math.random() * 15.0);
+							if(goUp)
+								buildY = Nexus.getRealY() - (int) (Math.random() * 15.0);
+							else
+								buildY = Nexus.getRealY() + (int) (Math.random() * 15.0);
+							if(buildX > game.getMap().getMapWidth()-1)
 							{
-								if((int) (Math.random() * 1.0) == 1)
-									buildX++;
-								else
-									buildY++;
+								buildX = Nexus.getRealX();
 							}
-							if(buildX > game.getMap().getMapWidth())
+							if(buildY > game.getMap().getMapHeight()-1)
 							{
-								buildX = Nexus.getRealX() - (buildX-Nexus.getRealX());
+								buildY = Nexus.getRealY();
 							}
-							if(buildY > game.getMap().getMapHeight())
-							{
-								buildY = Nexus.getRealY() - (buildY - Nexus.getRealY());
-							}
-							System.out.print("checking spot ["+buildX+","+buildY+"] to see if buildable for Pylon by center["+Nexus.getRealX()+","+Nexus.getRealY()+"]...");
-							System.out.println("Range of map is {0.."+game.getMap().getMapWidth()+"} wide and {0.."+game.getMap().getMapHeight()+"} height");
 							boolean flip = true;
 							while(!(game.getMap().isBuildable(buildX, buildY, 2, 2))) //pylon is 2x2 tiles
 							{
 								if(flip)
 								{
-									buildX++;
+									if(goRight)
+										buildX++;
+									else
+										buildX--;
 									flip = false;
 								}
 								else
 								{
-									buildY++;
+									if(goUp)
+										buildY--;
+									else
+										buildY++;
 									flip = true;
 								}
-								if(buildX > game.getMap().getMapWidth())
+								if(buildX > game.getMap().getMapWidth() - 3)
 								{
 									buildX = Nexus.getRealX() - (buildX-Nexus.getRealX());
 								}
-								if(buildY > game.getMap().getMapHeight())
+								if(buildY > game.getMap().getMapHeight() - 3)
 								{
 									buildY = Nexus.getRealY() - (buildY - Nexus.getRealY());
 								}
+								if(buildX < 0)
+									buildX = Nexus.getRealX() - buildX;
+								if(buildY < 0)
+									buildY = Nexus.getRealY() - buildY;
 							}
 								System.out.println("BUILDABLE, ORDERING BUILD: Unit["+unit.getID()+"] will build pylon @("+buildX+","+buildY+"), the unit was previously: "+ Order.values()[unit.getOrder()].toString());
-								
-								
-								//game.getCommandQueue().stop(unit.getID());
-								
-								game.getCommandQueue().build(unit.getID(),
-															 buildX, //unit.getX() + (int) (-10.0 + Math.random() * 20.0),
-															 buildY, //unit.getY() + (int) (-10.0 + Math.random() * 20.0),
-															 supplyType);
-								game.getCommandQueue().rightClick(unit.getID(), buildX, buildY);
-								game.getCommandQueue().drawRectScreen(buildX, buildY, buildX+1, buildY-1);
-								game.getCommandQueue().drawRectMap(buildX, buildY, buildX+1, buildY-1);
-
+								game.getCommandQueue().build(unit.getID(), buildX, buildY, supplyType);
 							break;
 						}
 					}
