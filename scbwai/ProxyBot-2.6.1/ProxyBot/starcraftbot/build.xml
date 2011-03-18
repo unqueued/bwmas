@@ -1,4 +1,4 @@
-<project name="bwmas" default="dist" basedir=".">
+<project name="bwmas" default="khasbot-dist" basedir=".">
   <description>
     A JADE Agent implementation that runs the StarCraft Broodwar AI
   </description>
@@ -11,7 +11,16 @@
   <property name="build-proxybot" location="proxybot${file.separator}build"/>
   <property name="dist-proxybot"  location="proxybot${file.separator}dist"/>
 
+  <property name="src-khasbot" location="khasbot${file.separator}"/>
+  <property name="build-khasbot" location="khasbot${file.separator}build"/>
+  <property name="dist-khasbot"  location="khasbot${file.separator}dist"/>
 
+  <property name="khasbot-exe-path" location="${build-khasbot}"/>
+
+  <!-- ensure Ant uses the CLASSPATH defined in the environment -->
+  <property environment="env"/>
+
+  <!-- proxybot -->
   <target name="proxybot-init">
     <!-- Create the time stamp -->
     <tstamp/>
@@ -25,17 +34,54 @@
         <javac srcdir="${src-proxybot}" destdir="${build-proxybot}"/>
   </target>
 
-  <target name="dist" depends="proxybot" description="generate the distribution" >
+  <target name="proxy-dist" depends="proxybot" description="generate the distribution" >
     <!-- Create the distribution directory -->
-    <mkdir dir="${dist-proxybot}/lib"/>
-    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-    <jar jarfile="${dist-proxybot}/lib/proxybot.jar" basedir="${build-proxybot}"/>
+    <mkdir dir="${dist-proxybot}${file.separator}lib"/>
+    <!-- Put everything in ${build} into the MyProject.jar file -->
+    <jar jarfile="${dist-proxybot}${file.separator}lib${file.separator}proxybot.jar" basedir="${build-proxybot}"/>
   </target>
 
   <target name="clean" description="clean up" >
     <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${build-proxybot}"/>
     <delete dir="${dist-proxybot}"/>
+
+    <delete dir="${build-khasbot}"/>
+    <delete dir="${dist-khasbot}"/>
   </target>
+
+  <!-- khasbot -->
+  <target name="khasbot-init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build-khasbot}"/>
+    <mkdir dir="${dist-khasbot}"/>
+  </target>
+
+  <target name="khasbot" depends="khasbot-init" description="compile the source " >
+      <!-- Compile the java code from ${src} into ${build} -->
+      <javac destdir="${build-khasbot}" includeAntRuntime="false">
+        <src path="${src-khasbot}" />
+        <classpath path="${env.CLASSPATH}" />
+      </javac>
+  </target>
+
+  <target name="khasbot-dist" depends="khasbot" description="generate the distribution" >
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist-khasbot}${file.separator}lib"/>
+    <!-- Put everything in ${build} into the MyProject.jar file -->
+    <jar jarfile="${dist-khasbot}${file.separator}lib${file.separator}khasbot.jar" basedir="${build-khasbot}"/>
+  </target>
+
+  <target name="khasbot-test" description="test the agent classes ">
+    <exec executable="java" dir="${khasbot-exe-path}">
+      <arg value="jade.Boot"/>
+      <arg value="-gui"/>
+      <arg value="-agents"/>
+      <arg value="sniff:jade.tools.sniffer.Sniffer(Khas*);KhasStructureManager:starcraftbot.khasbot.StructureManagerAgent;KhasBuildingManager:starcraftbot.khasbot.BuildingManagerAgent"/>
+    </exec>
+  </target>
+
 </project>
 
