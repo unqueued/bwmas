@@ -1,17 +1,25 @@
 /**
+ * Incorporates Construction Manager and Building Placer from "bwsal".
  * 
  * Agent Description:
- * 	Controls all the structure Units, this includes training new units and researching tech
+ * 	Controls units to build buildings, and communicates with MapManagerAgent to place possible 
+ * 	future buildings known from Commander
  * 
  * Communicates with:
  * 	<-> CommanderAgent
+ * 	 -> StructureManagerAgent
  *  <-> UnitManagerAgent
+ *  <-  MapManagerAgent
  *  
  * Associated Agents:
  * 	@see CommanderAgent
+ * 	@see StructureManagerAgent
  *  @see UnitManagerAgent
+ *  @see MapManagerAgent
+ * 
  */
-package starcraftbot.khasbot;
+
+package starcraftbot.khasbot.buildingma;
 
 import jade.content.ContentManager;
 import jade.content.lang.Codec;
@@ -22,28 +30,32 @@ import jade.domain.FIPAAgentManagement.*;
 import jade.lang.acl.*;
 import jade.proto.*;
 
+
 @SuppressWarnings("serial")
-public class StructureManagerAgent extends Agent{
+public class BuildingManagerAgent extends Agent {
 	private ContentManager manager = (ContentManager) getContentManager();
 	private Codec codec = new SLCodec();
 
 	AID commander = new AID("Commander",AID.ISLOCALNAME);
+	AID structure_manager = new AID("KhasStructureManager",AID.ISLOCALNAME);
 	AID unit_manager = new AID("UnitManager",AID.ISLOCALNAME);
-	AID building_manager = new AID("KhasBuildingManager",AID.ISLOCALNAME);
-		
+	AID map_manager = new AID("MapManager",AID.ISLOCALNAME);
+
+	
 	protected void setup(){
-		MessageTemplate mt = MessageTemplate.and(
-		  		MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-		  		MessageTemplate.MatchPerformative(ACLMessage.REQUEST) );
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.addReceiver(structure_manager);
+		//msg.addReceiver(unit_manager);
+		//msg.addReceiver(commander);	
+		msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+		msg.setContent("dummy-action");
 		
-		addBehaviour(new StructureManagerAgentResp(this, mt));
-		
+		addBehaviour(new BuildManagerAgentInit(this,msg));
 	}
-  
-  /* StructureManager initiator 
-	class StructureManagerAgentInit extends AchieveREInitiator{
+	
+  class BuildManagerAgentInit extends AchieveREInitiator{
 		
-		public StructureManagerAgentInit(Agent a, ACLMessage msg) {
+		public BuildManagerAgentInit(Agent a, ACLMessage msg) {
 			super(a, msg);
 		}
 		protected void handleInform(ACLMessage inform){
@@ -55,19 +67,20 @@ public class StructureManagerAgent extends Agent{
 		protected void handleFailure(ACLMessage failure){
 			System.out.println("Failed to get response!!!");
 		}
-		//protected void handleAllResultNotifications(Vector notifications) {
+
+//		protected void handleAllResultNotifications(Vector notifications) {
 			//if (notifications.size() < nResponders) {
 				// Some responder didn't reply within the specified timeout
-				System.out.println("Timeout expired: missing " + (notifications.size()) + " responses");
+//				System.out.println("Timeout expired: missing " + (notifications.size()) + " responses");
 			//}
-		//}
-	}//end StructureManagerAgentInit
-  */
+//		}
 
-  /* Structure manager responder class */
-	class StructureManagerAgentResp extends AchieveREResponder{
+	}//end BuildManagerAgentInit
+
+  /* BuildingManager responder class 
+	class BuildingManagerAgentResp extends AchieveREResponder{
 		
-		public StructureManagerAgentResp(Agent a, MessageTemplate mt) {
+		public BuildingManagerAgentResp(Agent a, MessageTemplate mt) {
 			super(a, mt);
 		}
 
@@ -81,13 +94,15 @@ public class StructureManagerAgent extends Agent{
 				ACLMessage agree = request.createReply();
 				agree.setPerformative(ACLMessage.AGREE);
 				return agree;
-			//}else{
+
+	//		}else{
 			
 				// We refuse to perform the action
-			//	System.out.println("Agent "+getLocalName()+": Refuse");
-		//		throw new RefuseException("check-failed");
-		//	}
+	//			System.out.println("Agent "+getLocalName()+": Refuse");
+	//			throw new RefuseException("check-failed");
+	//		}
 		}
+		
 		
 		protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) throws FailureException {
 			//if( performAction() ) {
@@ -95,12 +110,16 @@ public class StructureManagerAgent extends Agent{
 				ACLMessage inform = request.createReply();
 				inform.setPerformative(ACLMessage.INFORM);
 				return inform;
+      
 			//}else{
-		//		System.out.println("Agent "+getLocalName()+": Action failed");
+			//	System.out.println("Agent "+getLocalName()+": Action failed");
 		//		throw new FailureException("unexpected-error");
-		//	}		
+	//		}		
+      
 		}//end prepareResultNotification
-	}//class StructureManagerAgentResp
+	}//class BuildingManagerAgentResp
+  */
 
-}//end StructureManagerAgent
 
+
+}

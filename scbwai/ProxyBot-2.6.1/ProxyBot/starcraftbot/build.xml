@@ -79,7 +79,7 @@
       <arg value="jade.Boot"/>
       <arg value="-gui"/>
       <arg value="-agents"/>
-      <arg value="sniff:jade.tools.sniffer.Sniffer(Khas*);KhasStructureManager:starcraftbot.khasbot.StructureManagerAgent;KhasBuildingManager:starcraftbot.khasbot.BuildingManagerAgent"/>
+      <arg value="sniff:jade.tools.sniffer.Sniffer(Khas*);KhasStructureManager:starcraftbot.khasbot.structurema.StructureManagerAgent;KhasBuildingManager:starcraftbot.khasbot.buildingma.BuildingManagerAgent"/>
     </exec>
   </target>
 
