@@ -6,4 +6,4 @@ syntax: glob
 *.class
 *.swp
 *~ 
-
+*log.txt

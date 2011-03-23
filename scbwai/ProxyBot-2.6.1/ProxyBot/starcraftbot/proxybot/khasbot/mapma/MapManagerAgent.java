@@ -1,5 +1,5 @@
 
-package starcraftbot.proxybot.khasbot;
+package starcraftbot.proxybot.khasbot.mapma;
 
 import jade.core.Agent;
 
