@@ -3,9 +3,9 @@
  * Agent Description:
  * 
  * Associated Agents (Controlling Agent):
- * 	@see StructureManagerAgent 
+ * 	@see UnitManagerAgent 
  */
-package starcraftbot.khasbot.structurema;
+package starcraftbot.proxybot.khasbot.unitma;
 
 import jade.content.ContentManager;
 import jade.content.lang.Codec;
@@ -16,26 +16,25 @@ import jade.domain.FIPAAgentManagement.*;
 import jade.lang.acl.*;
 import jade.proto.*;
 
-
-/* Structure manager responder class */
-public class StructureManagerAgentResp extends AchieveREResponder{
+@SuppressWarnings("serial")
+public class UnitManagerAgentResp extends AchieveREResponder{
 		
 	AID commander = new AID("Commander",AID.ISLOCALNAME);
-	AID unit_manager = new AID("UnitManager",AID.ISLOCALNAME);
+	AID unit_manager = new AID("KhasUnitManager",AID.ISLOCALNAME);
 	AID building_manager = new AID("KhasBuildingManager",AID.ISLOCALNAME);
 	
-  public StructureManagerAgentResp(Agent a, MessageTemplate mt) {
+  public UnitManagerAgentResp(Agent a, MessageTemplate mt) {
     super(a, mt);
   }
 
   protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
-    System.out.println("Agent "+myAgent.getLocalName()+": REQUEST received from "+request.getSender().getName()+
+    System.out.println("*** " + myAgent.getLocalName() + ": REQUEST received from "+request.getSender().getName()+
         ". Action is "+request.getContent());
     //if (checkAction()) {
       // We agree to perform the action. Note that in the FIPA-Request
       // protocol the AGREE message is optional. Return null if you
       // don't want to send it.
-      System.out.println("Agent "+myAgent.getLocalName()+": Agree");
+      System.out.println("*** " + myAgent.getLocalName() + ": Agree");
       ACLMessage agree = request.createReply();
       agree.setPerformative(ACLMessage.AGREE);
       return agree;
@@ -49,7 +48,7 @@ public class StructureManagerAgentResp extends AchieveREResponder{
   
   protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) throws FailureException {
     //if( performAction() ) {
-      System.out.println("Agent "+myAgent.getLocalName()+": Action successfully performed");
+      System.out.println("*** " + myAgent.getLocalName() + ": Action successfully performed");
       ACLMessage inform = request.createReply();
       inform.setPerformative(ACLMessage.INFORM);
       return inform;
@@ -59,5 +58,6 @@ public class StructureManagerAgentResp extends AchieveREResponder{
   //	}		
   }//end prepareResultNotification
 
-}//class StructureManagerAgentResp
+}//class UnitManagerAgentResp
+
 

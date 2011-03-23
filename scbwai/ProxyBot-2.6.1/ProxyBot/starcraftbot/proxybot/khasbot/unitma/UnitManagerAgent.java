@@ -4,13 +4,22 @@
  * 
  * Communicates with:
  * 	<-> CommanderAgent
- *  <-> UnitManagerAgent
+ * 	<-> BuildingManagerAgent
+ * 	<-> StructureManagerAgent
+ * 	 -> BattleManagerAgent
+ * 	 -> ResourceManagerAgent
+ * 	<-  MapManagerAgent
  *  
  * Associated Agents:
  * 	@see CommanderAgent
- *  @see UnitManagerAgent
+ * 	@see BuildingManagerAgent
+ * 	@see StructureManagerAgent
+ * 	@see BattleManagerAgent
+ * 	@see ResourceManagerAgent
+ * 	@see MapManagerAgent
+ *
  */
-package starcraftbot.khasbot.structurema;
+package starcraftbot.proxybot.khasbot.unitma;
 
 import jade.content.ContentManager;
 import jade.content.lang.Codec;
@@ -22,7 +31,7 @@ import jade.lang.acl.*;
 import jade.proto.*;
 
 @SuppressWarnings("serial")
-public class StructureManagerAgent extends Agent{
+public class UnitManagerAgent extends Agent{
 	private ContentManager manager = (ContentManager) getContentManager();
 	private Codec codec = new SLCodec();
 	
@@ -30,10 +39,18 @@ public class StructureManagerAgent extends Agent{
 		MessageTemplate mt = MessageTemplate.and(
 		  		MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
 		  		MessageTemplate.MatchPerformative(ACLMessage.REQUEST) );
-		
-		addBehaviour(new StructureManagerAgentResp(this, mt));
+
+    //use the arguments for testing purposes only
+    Object[] args = getArguments();
+    String arg1 = args[0].toString(); 
+    String arg2 = args[1].toString(); 
+    String arg3 = args[2].toString(); 
+
+
+		addBehaviour(new UnitManagerAgentResp(this, mt));
 		
 	}
   
- }//end StructureManagerAgent
+}//end UnitManagerAgent
+
 
