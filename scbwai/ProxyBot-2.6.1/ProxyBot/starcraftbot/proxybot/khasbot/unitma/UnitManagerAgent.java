@@ -53,6 +53,7 @@ public class UnitManagerAgent extends Agent{
     ParallelBehaviour root_behaviour = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
     
     root_behaviour.addSubBehaviour(new UnitManagerAgentRespInform(this,inform_mt));
+    //root_behaviour.addSubBehaviour(new UnitManagerAgentInitInform(this,inform_mt));
     
 
     addBehaviour(root_behaviour);

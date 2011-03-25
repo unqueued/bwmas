@@ -5,6 +5,7 @@ import jade.content.ContentManager;
 import jade.content.lang.Codec;
 import jade.content.lang.sl.SLCodec;
 import jade.core.*;
+import jade.core.behaviours.*;
 import jade.domain.FIPANames;
 import jade.domain.FIPAAgentManagement.*;
 import jade.lang.acl.*;
@@ -18,20 +19,19 @@ public class BattleManagerAgent extends Agent{
 	protected void setup(){
     System.out.println(getAID().getLocalName() + ": is alive !!!");
 
-		MessageTemplate mt = MessageTemplate.and(
-		  		MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-		  		MessageTemplate.MatchPerformative(ACLMessage.REQUEST) );
+    MessageTemplate fipa_request_mt = null;
 
-    /*
-    //use the arguments for testing purposes only
-    Object[] args = getArguments();
-    String arg1 = args[0].toString(); 
-    String arg2 = args[1].toString(); 
-    String arg3 = args[2].toString(); 
+    //this template will only respond to FIPA_REQUEST messages 
+    fipa_request_mt = MessageTemplate.and(
+                                 MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
+                                 MessageTemplate.MatchPerformative(ACLMessage.REQUEST)
+                                 );
 
+    ParallelBehaviour root_behaviour = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
+    
+    root_behaviour.addSubBehaviour(new BattleManagerAgentRespFIPARequest(this,fipa_request_mt));
 
-		addBehaviour(new BattleManagerAgentResp(this, mt));
-	  */	
+    addBehaviour(root_behaviour);
 	}
   
 }//end BattleManagerAgent

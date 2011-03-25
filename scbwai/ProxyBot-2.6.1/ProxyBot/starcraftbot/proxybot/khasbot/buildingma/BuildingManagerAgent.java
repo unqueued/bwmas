@@ -37,25 +37,30 @@ public class BuildingManagerAgent extends Agent {
 
 	protected void setup(){
     System.out.println(getAID().getLocalName() + ": is alive !!!");
-   
+
     //
     //Message Templates
     //
-    
+ 
+    MessageTemplate fipa_request_mt = null;
+
     //game updates will be INFORM messages
     MessageTemplate inform_mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 
-    MessageTemplate mt = MessageTemplate.and(
-                         MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-                         MessageTemplate.MatchPerformative(ACLMessage.REQUEST) );
+
+    //this template will only respond to FIPA_REQUEST messages 
+    fipa_request_mt = MessageTemplate.and(
+                                 MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
+                                 MessageTemplate.MatchPerformative(ACLMessage.REQUEST)
+                                 );
 
     ParallelBehaviour root_behaviour = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
     
+    root_behaviour.addSubBehaviour(new BuildingManagerAgentRespFIPARequest(this,fipa_request_mt));
     root_behaviour.addSubBehaviour(new BuildingManagerAgentRespInform(this,inform_mt));
-    
 
     addBehaviour(root_behaviour);
-	}
+	}//end setup
 
-}
+}//end BuildingManagerAgent
 

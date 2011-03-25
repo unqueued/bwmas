@@ -43,9 +43,6 @@ public class ProxyBotAgentCreateAgents {
     ca.setAgentName(agent_name);
     ca.setClassName(agent_classname);
 
-    //stuff the ready to go switch as a parameter
-    //ca.addArguments(commander_ready);
-
     //now send the khasbot agents as individual strings. I wasn't able
     //to get the String[] to work (I'm also too tired to figure it out now,
     //I might come back to it later)

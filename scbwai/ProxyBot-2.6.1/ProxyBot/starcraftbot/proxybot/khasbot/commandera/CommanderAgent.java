@@ -15,8 +15,6 @@ import jade.proto.*;
 
 import java.lang.reflect.*;
 
-import starcraftbot.proxybot.ReadyToGo;
-
 public class CommanderAgent extends Agent{
   private Codec codec = new SLCodec();
   private Ontology ontology = JADEManagementOntology.getInstance();
@@ -33,13 +31,9 @@ public class CommanderAgent extends Agent{
     //
     //Message Templates
     //
-    
-    //game updates will be INFORM messages
-    MessageTemplate inform_mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-
-    MessageTemplate fipa_request_mt = MessageTemplate.and(
-                                 MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-                                 MessageTemplate.MatchPerformative(ACLMessage.REQUEST) );
+  
+    MessageTemplate inform_mt = null;
+    MessageTemplate fipa_request_mt = null; 
 
     //register the SL codec with the content manager
     getContentManager().registerLanguage(codec);
@@ -58,7 +52,6 @@ public class CommanderAgent extends Agent{
     khasbot_agents = new String[args.length];
     khasbot_agent_names = new String[args.length];
     game_update_agents = new String[2]; //HARDCODE: predefined agents that will get game updates
-   
     //
     //now strip out the khasbot agents that the commander will create from the arguments passed in
     //
@@ -71,8 +64,16 @@ public class CommanderAgent extends Agent{
         game_update_agents[j++] = khasbot_agent_names[i];
       else if(khasbot_agent_names[i].matches(".*[Uu]nit[Mm]anager.*"))
         game_update_agents[j++] = khasbot_agent_names[i];
-
     } 
+ 
+    //this template will only respond to INFORM messages 
+    inform_mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+
+    //this template will only respond to FIPA_REQUEST messages 
+    fipa_request_mt = MessageTemplate.and(
+                                 MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
+                                 MessageTemplate.MatchPerformative(ACLMessage.REQUEST)
+                                 );
 
     //This call will create all of the other agents that will be needed
     CommanderAgentCreateAgents agents = new CommanderAgentCreateAgents(khasbot_agents);
@@ -81,8 +82,7 @@ public class CommanderAgent extends Agent{
     ParallelBehaviour root_behaviour = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
     
     root_behaviour.addSubBehaviour(new CommanderAgentRespInform(this,inform_mt,game_update_agents));
-    //root_behaviour.addSubBehaviour(new CommanderAgentInitInform(this,inform_mt,game_update_agents));
-    //root_behaviour.addSubBehaviour(new CommanderAgentRespFipaRequest(this,fipa_request_mt));
+    root_behaviour.addSubBehaviour(new CommanderAgentRespFIPARequest(this,fipa_request_mt));
 
     addBehaviour(root_behaviour);
 

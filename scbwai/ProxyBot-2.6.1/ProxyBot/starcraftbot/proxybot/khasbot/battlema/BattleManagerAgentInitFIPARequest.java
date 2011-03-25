@@ -1,7 +1,7 @@
 /**
  * 
  */
-package starcraftbot.proxybot.khasbot.commandera;
+package starcraftbot.proxybot.khasbot.battlema;
 
 import jade.content.ContentManager;
 import jade.content.lang.Codec;
@@ -12,15 +12,63 @@ import jade.domain.FIPAAgentManagement.*;
 import jade.lang.acl.*;
 import jade.proto.*;
 
+import java.util.*;
+
 import starcraftbot.proxybot.khasbot.ParseACLMessage;
+import starcraftbot.proxybot.CommID;
 
+/**
+ * This class should be instantiated everytime a FIPA-Request is made. 
+ * I'm hoping once the FIPA-Request is done the instance will get picked
+ * up by the garbage collector until the next FIPA-Request is made.
+ */
 @SuppressWarnings("serial")
-public class CommanderAgentResp extends AchieveREResponder{
-	Agent agent=null;	
+public class BattleManagerAgentInitFIPARequest {
+	Agent agent=null;
 
-  public CommanderAgentResp(Agent a, MessageTemplate mt) {
-    super(a, mt);
+  public BattleManagerAgentInitFIPARequest(Agent a, String[] receivers) {
     agent=a;
+
+    ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+    msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+
+    //set a conversatinon id for this FIPA-Request
+    msg.setConversationId(CommID.genID(a));
+    
+    for(int i=0; i < receivers.length; i++)
+      msg.addReceiver(new AID((String) receivers[i], AID.ISLOCALNAME));
+     
+    agent.addBehaviour(new FIPARequest(agent,msg));
+  }
+
+  /**
+   * inner class to handle the actual requests.
+   */
+  class FIPARequest extends AchieveREInitiator {
+    ACLMessage msg = null;
+
+    public FIPARequest(Agent a, ACLMessage msg){
+      super(a,msg);
+      this.msg=msg;
+    }
+    protected void handleInform(ACLMessage inform) {
+      System.out.println("Agent "+inform.getSender().getName()+" successfully performed the requested action");
+    }
+
+    protected void handleRefuse(ACLMessage refuse) {
+      System.out.println("Agent "+refuse.getSender().getName()+" refused to perform the requested action");
+    }
+
+    protected void handleFailure(ACLMessage failure) {
+        // FAILURE notification from the JADE runtime: the receiver
+        // does not exist
+        System.out.println("Responder does not exist");
+    }
+  }
+  /*
+  protected void handleAllResultNotifications(Vector notifications) {
+      // Some responder didn't reply within the specified timeout
+      System.out.println("Timeout expired: missing " + notifications.size() + " responses");
   }
 
   protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
@@ -63,6 +111,6 @@ public class CommanderAgentResp extends AchieveREResponder{
     //  throw new FailureException("unexpected-error");
     //}	
 	}//end prepareResultNotification
-
+  */
 
 }

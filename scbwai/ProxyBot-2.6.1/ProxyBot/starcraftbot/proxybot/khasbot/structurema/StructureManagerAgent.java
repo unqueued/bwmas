@@ -30,19 +30,20 @@ public class StructureManagerAgent extends Agent{
 	protected void setup(){
     System.out.println(getAID().getLocalName() + ": is alive !!!");
 
-		MessageTemplate mt = MessageTemplate.and(
-		  		MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-		  		MessageTemplate.MatchPerformative(ACLMessage.REQUEST) );
-    
-    /*
-    ParallelBehaviour controller = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
-    
-    // add all the individual behaviours 
-    controller.addSubBehaviour(new StructureManagerAgentResp(this, mt));
+    MessageTemplate fipa_request_mt = null;
 
-    // finally add the parallel behaviour
-    addBehaviour(controller);
-    */
+    //this template will only respond to FIPA_REQUEST messages 
+    fipa_request_mt = MessageTemplate.and(
+                                 MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
+                                 MessageTemplate.MatchPerformative(ACLMessage.REQUEST)
+                                 );
+
+    ParallelBehaviour root_behaviour = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
+    
+    root_behaviour.addSubBehaviour(new StructureManagerAgentRespFIPARequest(this,fipa_request_mt));
+
+    addBehaviour(root_behaviour);
+		
 	}
   
 }//end StructureManagerAgent

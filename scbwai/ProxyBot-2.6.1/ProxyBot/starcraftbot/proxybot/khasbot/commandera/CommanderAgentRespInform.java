@@ -38,19 +38,10 @@ public class CommanderAgentRespInform extends CyclicBehaviour{
         if(ParseACLMessage.isSenderProxyBot(msg)) {
           System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + msg.getContent());
           proxybot_agent_name = ParseACLMessage.getProxyBotName(msg);
-         
-          //
-          //game updates go to game_update_agents[]
-          //
-          for( int i=0; i < game_update_agents.length; i++){
-            ACLMessage msg_gameObj = new ACLMessage(ACLMessage.INFORM); 
-            msg_gameObj.addReceiver(new AID(game_update_agents[i], AID.ISLOCALNAME));
-            //msg_gameObj.setContent(gameObject);
-            msg_gameObj.setContent(msg.getContent());
-            agent.send(msg_gameObj);
-          }
-        }//end if ProxyBot
 
+          sendGameUpdate2Agents(msg);
+
+        }//end if ProxyBot
         //handle the messages that come from UnitManager and send them to ProxyBot 
         if(ParseACLMessage.isSenderUnitManager(msg)) {
           System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + msg.getContent());
@@ -68,6 +59,21 @@ public class CommanderAgentRespInform extends CyclicBehaviour{
     }
 
   }//end action
+
+  private void sendGameUpdate2Agents(ACLMessage msg){
+    //
+    //game updates go to game_update_agents[]
+    //
+    for( int i=0; i < game_update_agents.length; i++){
+      ACLMessage msg_gameObj = new ACLMessage(ACLMessage.INFORM); 
+      msg_gameObj.addReceiver(new AID(game_update_agents[i], AID.ISLOCALNAME));
+      //msg_gameObj.setContent(gameObject);
+      msg_gameObj.setContent(msg.getContent());
+      agent.send(msg_gameObj);
+    }
+
+  }
+
 
 }//end CommanderAgentRespInform
 
