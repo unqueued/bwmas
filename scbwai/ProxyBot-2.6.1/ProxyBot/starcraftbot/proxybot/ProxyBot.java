@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.logging.*;
 import java.lang.*;
 
 import jade.core.*;
@@ -27,7 +28,8 @@ import starcraftbot.proxybot.wmes.UnitTypeWME;
  * @see ProxyBotAgent
  */
 public class ProxyBot {
-
+  private Logger out = Logger.getLogger(getClass().getName());
+ 
 	/** port to start the server socket on */
 	public static int port = 12345;
 	
@@ -56,17 +58,25 @@ public class ProxyBot {
 	 * A server socket is opened and waits for client connections.
 	 */
 	public void start() { 
+    out.setLevel(Level.FINE);
 
     //AA: This is just test code for ensure back and forth communication 
     //AA: with the JADE platform and this Java application
-    /*
     ProxyBotAgentClient pba = new ProxyBotAgentClient();
     pba.startClient("localhost", "1099", "KhasProxyBot");
+     
+    //FIX: This wait i here to simulate the time it takes to start the Starcraft game
+		try {			
+      Thread.sleep(5000);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
     pba.sendUpdate("Game is starting");
     pba.sendUpdate("Game going");
     pba.sendUpdate("Game ended");
-    */
+
+    /*
 		try {			
 		    ServerSocket serverSocket = new ServerSocket(port);
 		    
@@ -81,6 +91,7 @@ public class ProxyBot {
 			e.printStackTrace();
 		}
   
+    */
 	}	
 
 	/**
@@ -215,6 +226,8 @@ public class ProxyBot {
    * @param name Agent name
    */
   class ProxyBotAgentClient {
+    private Logger out = Logger.getLogger(getClass().getName());
+
     //Agent that will be used to communicate with between ProxyBot <-> ProxyBotAgent
     //communication between JADE and non-JADE application
     AgentController ac;
@@ -222,6 +235,12 @@ public class ProxyBot {
     //This will be used to communicate back and forth
     //ArrayBlockingQueue<String> jadeReplyQueue = null;
     ArrayBlockingQueue<String> jadeReplyQueue = null;
+
+    public ProxyBotAgentClient(){
+      //set the level for the logger
+      //use Level.OFF to turn it off
+      out.setLevel(Level.FINE);
+    }
 
     public AgentController startClient(String host, String port, String name ) {
       // Retrieve the singleton instance of the JADE Runtime
@@ -236,15 +255,16 @@ public class ProxyBot {
       //Parameters to pass to the agent
       Object[] agentArgs = new Object[2];
 
+      //array queue of 20 for ProxyBot to Tx & RX with ProxyBotAgent
       jadeReplyQueue = new ArrayBlockingQueue<String>(20); 
     
       //pass a wait switch so that we can communicate with the agent once it has
       //been created
-      ReadyToGo flip_switch = new ReadyToGo();
+      //ReadyToGo flip_switch = new ReadyToGo();
 
       //agent arguments
-      agentArgs[0] = flip_switch;
-      agentArgs[1] = jadeReplyQueue;
+      agentArgs[0] = jadeReplyQueue;
+      //agentArgs[1] = flip_switch;
 
       // notice that in the book it was rt.createAgentContainer(p) which requires a main-container to be already active
       if (cc != null) {
@@ -253,7 +273,8 @@ public class ProxyBot {
           ac = cc.createNewAgent(name, "starcraftbot.proxybot.ProxyBotAgent", agentArgs);
           ac.start();
 
-          flip_switch.waitOn();
+          //TODO: if agents are still not responding, then enable this wait 
+          //flip_switch.waitOn();
 
           return ac;
         } catch (Exception e) {
@@ -285,9 +306,14 @@ public class ProxyBot {
     public void getUpdate(){
       String reply = null;
 
-      //reply = jadeReplyQueue.take();
-      
+      try {
+        reply = (String)jadeReplyQueue.take();
+      } catch( InterruptedException ie ) {
+        ie.printStackTrace();
+      }
       //now process the incoming update
+      System.out.println(this.getClass().getName() + " RX: " + reply );
+      //out.info(this.getClass().getName() + " RX: " + reply );
 
     }//end getUpdate
 

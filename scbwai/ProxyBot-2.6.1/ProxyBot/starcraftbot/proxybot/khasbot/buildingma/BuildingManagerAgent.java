@@ -35,37 +35,26 @@ public class BuildingManagerAgent extends Agent {
 	private ContentManager manager = (ContentManager) getContentManager();
 	private Codec codec = new SLCodec();
 
-	AID commander = new AID("KhasCommander",AID.ISLOCALNAME);
-	AID unit_manager = new AID("KhasUnitManager",AID.ISLOCALNAME);
-	AID map_manager = new AID("KhasMapManager",AID.ISLOCALNAME);
-	
 	protected void setup(){
+    System.out.println(getAID().getLocalName() + ": is alive !!!");
+   
+    //
+    //Message Templates
+    //
+    
+    //game updates will be INFORM messages
+    MessageTemplate inform_mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+
     MessageTemplate mt = MessageTemplate.and(
                          MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
                          MessageTemplate.MatchPerformative(ACLMessage.REQUEST) );
 
-		//ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-		//msg.addReceiver(unit_manager);
-		//msg.addReceiver(commander);	
-		//msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-		//msg.setContent("dummy-action");
-		
+    ParallelBehaviour root_behaviour = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
     
-    //use the arguments for testing purposes only
-    /*
-    Object[] args = getArguments();
-        String arg1 = args[0].toString(); 
-        String arg2 = args[1].toString(); 
-        String arg3 = args[2].toString(); 
-    */
-    //ParallelBehaviour controller = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
+    root_behaviour.addSubBehaviour(new BuildingManagerAgentRespInform(this,inform_mt));
     
-    // add all the individual behaviours 
-    //controller.addSubBehaviour(new StructureManagerAgentResp(this, mt));
 
-    // finally add the parallel behaviour
-    //addBehaviour(controller);
-    addBehaviour(new BuildingManagerAgentResp(this,mt));
+    addBehaviour(root_behaviour);
 	}
 
 }

@@ -25,6 +25,7 @@ import jade.content.ContentManager;
 import jade.content.lang.Codec;
 import jade.content.lang.sl.SLCodec;
 import jade.core.*;
+import jade.core.behaviours.*;
 import jade.domain.FIPANames;
 import jade.domain.FIPAAgentManagement.*;
 import jade.lang.acl.*;
@@ -36,19 +37,26 @@ public class UnitManagerAgent extends Agent{
 	private Codec codec = new SLCodec();
 	
 	protected void setup(){
-		MessageTemplate mt = MessageTemplate.and(
-		  		MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-		  		MessageTemplate.MatchPerformative(ACLMessage.REQUEST) );
+    System.out.println(getAID().getLocalName() + ": is alive !!!");
+	   
+    //
+    //Message Templates
+    //
+    
+    //game updates will be INFORM messages
+    MessageTemplate inform_mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 
-    //use the arguments for testing purposes only
-    Object[] args = getArguments();
-    String arg1 = args[0].toString(); 
-    String arg2 = args[1].toString(); 
-    String arg3 = args[2].toString(); 
+    MessageTemplate mt = MessageTemplate.and(
+                         MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
+                         MessageTemplate.MatchPerformative(ACLMessage.REQUEST) );
 
+    ParallelBehaviour root_behaviour = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
+    
+    root_behaviour.addSubBehaviour(new UnitManagerAgentRespInform(this,inform_mt));
+    
 
-		addBehaviour(new UnitManagerAgentResp(this, mt));
-		
+    addBehaviour(root_behaviour);
+
 	}
   
 }//end UnitManagerAgent

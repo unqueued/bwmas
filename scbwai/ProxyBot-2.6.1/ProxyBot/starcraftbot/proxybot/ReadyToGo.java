@@ -1,17 +1,19 @@
 
 package starcraftbot.proxybot;
 
+import java.io.*;
+
 //Class used to wait for the Agent to be created so communication can start
-public class ReadyToGo {
+public class ReadyToGo implements Serializable {
     private boolean ready = false;
 
-    synchronized void waitOn() throws InterruptedException{ 
+    public synchronized void waitOn() throws InterruptedException{ 
       while(!ready) {
         wait();
       }
     }
     
-    synchronized void signal() {
+    public synchronized void signal() {
       ready = true;
       notifyAll();
     }

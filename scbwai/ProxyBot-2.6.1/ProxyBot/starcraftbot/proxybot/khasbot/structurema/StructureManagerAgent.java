@@ -28,16 +28,13 @@ public class StructureManagerAgent extends Agent{
 	private Codec codec = new SLCodec();
 	
 	protected void setup(){
+    System.out.println(getAID().getLocalName() + ": is alive !!!");
+
 		MessageTemplate mt = MessageTemplate.and(
 		  		MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
 		  		MessageTemplate.MatchPerformative(ACLMessage.REQUEST) );
     
-    //use the arguments for testing purposes only
-    Object[] args = getArguments();
-        String arg1 = args[0].toString(); 
-        String arg2 = args[1].toString(); 
-        String arg3 = args[2].toString(); 
-
+    /*
     ParallelBehaviour controller = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
     
     // add all the individual behaviours 
@@ -45,6 +42,7 @@ public class StructureManagerAgent extends Agent{
 
     // finally add the parallel behaviour
     addBehaviour(controller);
+    */
 	}
   
 }//end StructureManagerAgent

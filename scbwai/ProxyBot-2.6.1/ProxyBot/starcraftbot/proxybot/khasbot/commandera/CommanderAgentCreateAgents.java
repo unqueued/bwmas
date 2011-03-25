@@ -24,16 +24,18 @@ public class CommanderAgentCreateAgents {
   }
 
   public void createAgents(final Agent commander) {
-
+ 
     final CreateAgent ca = new CreateAgent();
     Action actExpr = new Action();
-  
-    for( int i = 0; i < 1 ; i++) {
+
+    //Only creates the Building and Structure managers for now
+    for( int i = 0; i < khasbot_agents.length ; i++) {
       ca.setAgentName((String)Array.get(khasbot_agents[i].split(";"),0));
       ca.setClassName((String)Array.get(khasbot_agents[i].split(";"),1));
       ca.setContainer(new ContainerID(AgentContainer.MAIN_CONTAINER_NAME, null));
 
-      System.out.println("Creating Agent: " + ca.getAgentName() + " with class " + ca.getClassName());
+      //DEBUG
+      //System.out.println("Creating Agent: " + ca.getAgentName() + " with class " + ca.getClassName());
 
       actExpr.setActor(commander.getAMS());
       actExpr.setAction(ca);
@@ -48,7 +50,7 @@ public class CommanderAgentCreateAgents {
         commander.getContentManager().fillContent(request, actExpr);
         commander.addBehaviour(new AchieveREInitiator(commander, request) {
           protected void handleInform(ACLMessage inform) {
-            System.out.println(commander.getAID().getLocalName() + ": " + ca.getAgentName() + " successfully created");
+            System.out.println(commander.getAID().getLocalName() + ": Agent successfully created");
           }
           protected void handleFailure(ACLMessage failure) {
             System.out.println("Error creating agent.");
@@ -57,9 +59,7 @@ public class CommanderAgentCreateAgents {
       } catch (Exception e) {
         e.printStackTrace();
       }//end try-catch
-
     }// for
-
   }//end createAgents
 
 }//end CommanderAgentCreateAgents
