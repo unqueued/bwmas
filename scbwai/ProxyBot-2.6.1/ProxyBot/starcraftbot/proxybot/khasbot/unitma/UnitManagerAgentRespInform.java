@@ -28,6 +28,8 @@ public class UnitManagerAgentRespInform extends CyclicBehaviour{
     ACLMessage msg = agent.receive(mt);
     if (msg != null) {
       //System.out.println(agent.getLocalName() + ": MSG RX : " + msg.getContent() ); 
+      System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + msg.getContent());
+      /*
       if (msg.getPerformative() == ACLMessage.INFORM) {
         //System.out.println(agent.getLocalName() + ": MSG INFORM : " + msg.getContent() ); 
         
@@ -41,6 +43,7 @@ public class UnitManagerAgentRespInform extends CyclicBehaviour{
         
         }
       }
+      */
     } else {
       block();
     }

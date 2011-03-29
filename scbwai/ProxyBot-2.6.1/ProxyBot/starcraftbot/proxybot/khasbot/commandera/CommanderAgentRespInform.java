@@ -16,10 +16,10 @@ import starcraftbot.proxybot.khasbot.ParseACLMessage;
 public class CommanderAgentRespInform extends CyclicBehaviour{
 	Agent agent=null;	
   MessageTemplate mt = null;
-  String[] game_update_agents = null;
+  AID[] game_update_agents = null;
   String proxybot_agent_name = null;
 
-  public CommanderAgentRespInform(Agent a, MessageTemplate mt, String[] game_update_agents) {
+  public CommanderAgentRespInform(Agent a, MessageTemplate mt, AID[] game_update_agents) {
     super(a);
     agent=a;
     this.mt=mt;
@@ -30,8 +30,13 @@ public class CommanderAgentRespInform extends CyclicBehaviour{
     //process only the Inform messages
     ACLMessage msg = agent.receive(mt);
     if (msg != null) {
+      try{
+        System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + msg.getContentObject());
+      }catch(Exception e) {
+        System.out.println(agent.getLocalName() + "FAIL: Unable to get message ContentObject");
+      }
       //System.out.println(agent.getLocalName() + ": MSG RX : " + msg.getContent() ); 
-      if (msg.getPerformative() == ACLMessage.INFORM) {
+      /*if (msg.getPerformative() == ACLMessage.INFORM) {
         //System.out.println(agent.getLocalName() + ": MSG INFORM : " + msg.getContent() ); 
         
         //handle the messages that come from Proxybot and send them to agents that need the game object update
@@ -39,7 +44,7 @@ public class CommanderAgentRespInform extends CyclicBehaviour{
           System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + msg.getContent());
           proxybot_agent_name = ParseACLMessage.getProxyBotName(msg);
 
-          sendGameUpdate2Agents(msg);
+          //sendGameUpdate2Agents(msg);
 
         }//end if ProxyBot
         //handle the messages that come from UnitManager and send them to ProxyBot 
@@ -54,6 +59,7 @@ public class CommanderAgentRespInform extends CyclicBehaviour{
 
         }//end if UnitManager
       }//end if ACLMessage.INFORM
+      */
     } else {
       block();
     }
@@ -66,9 +72,12 @@ public class CommanderAgentRespInform extends CyclicBehaviour{
     //
     for( int i=0; i < game_update_agents.length; i++){
       ACLMessage msg_gameObj = new ACLMessage(ACLMessage.INFORM); 
-      msg_gameObj.addReceiver(new AID(game_update_agents[i], AID.ISLOCALNAME));
-      //msg_gameObj.setContent(gameObject);
-      msg_gameObj.setContent(msg.getContent());
+      msg_gameObj.addReceiver(game_update_agents[i]);
+      try{
+        msg_gameObj.setContentObject(msg.getContentObject());
+      }catch(Exception e){
+        System.out.println("Failed to serialize the Game object!!!");
+      }
       agent.send(msg_gameObj);
     }
 

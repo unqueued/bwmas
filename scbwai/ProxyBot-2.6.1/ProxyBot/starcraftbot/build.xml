@@ -37,7 +37,7 @@
   </target>
 
   <!-- proxybot -->
-  <target name="proxybot-init">
+  <target name="proxybot-init" >
     <!-- Create the time stamp -->
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
@@ -71,7 +71,7 @@
   </target>
 
   <!-- <target name="proxybot-test" depends="proxybot-jade" description="test Proxybot"> -->
-  <target name="proxybot-test" description="test Proxybot">
+  <target name="proxybot-test" depends="proxybot" description="test Proxybot">
     <exec executable="java" dir="${proxybot-exe-path}">
       <arg value="starcraftbot.proxybot.ProxyBot"/>
     </exec>
@@ -81,7 +81,6 @@
   <!-- 
        khasbot 
   -->
-
   <target name="khasbot-init">
     <!-- Create the time stamp -->
     <tstamp/>
@@ -106,24 +105,6 @@
     <jar jarfile="${dist-khasbot}${file.separator}lib${file.separator}khasbot.jar" basedir="${build-khasbot}"/>
   </target>
   
-  <target name="khasbot-test-build2struct" description="test the agent classes ">
-    <exec executable="java" dir="${khasbot-exe-path}">
-      <arg value="jade.Boot"/>
-      <arg value="-gui"/>
-      <arg value="-agents"/>
-      <arg value="sniff:jade.tools.sniffer.Sniffer(Khas*);KhasStructureManager:starcraftbot.khasbot.structurema.StructureManagerAgent;KhasBuildingManager:starcraftbot.khasbot.buildingma.BuildingManagerAgent"/>
-    </exec>
-  </target>
-
-  <target name="khasbot-test-structb2bunit" description="test the agent classes ">
-    <exec executable="java" dir="${khasbot-exe-path}">
-      <arg value="jade.Boot"/>
-      <arg value="-gui"/>
-      <arg value="-agents"/>
-      <arg value="sniff:jade.tools.sniffer.Sniffer(Khas*);KhasStructureManager:starcraftbot.khasbot.structurema.StructureManagerAgent;KhasUnitManager:starcraftbot.khasbot.unitma.UnitManagerAgent"/>
-    </exec>
-  </target>
-
   <target name="khasbot-test-commander" description="test the Commander agent ">
     <exec executable="java" dir="${khasbot-exe-path}">
       <arg value="jade.Boot"/>

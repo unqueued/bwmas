@@ -21,12 +21,18 @@ public class CommanderAgentCreateAgents {
 
   public CommanderAgentCreateAgents(String [] input) {
     khasbot_agents = input;
+    
   }
 
-  public void createAgents(final Agent commander) {
+  public void createAgents(final Agent commander, String[] khasbot_agent_names) {
  
     final CreateAgent ca = new CreateAgent();
     Action actExpr = new Action();
+
+    //all the agents created will get the names of all the other agents, so that they
+    //can build AID's from them
+    for( int i = 0; i < khasbot_agent_names.length; i++)
+      ca.addArguments(khasbot_agent_names[i]);
 
     //Only creates the Building and Structure managers for now
     for( int i = 0; i < khasbot_agents.length ; i++) {
@@ -50,7 +56,7 @@ public class CommanderAgentCreateAgents {
         commander.getContentManager().fillContent(request, actExpr);
         commander.addBehaviour(new AchieveREInitiator(commander, request) {
           protected void handleInform(ACLMessage inform) {
-            System.out.println(commander.getAID().getLocalName() + ": Agent successfully created");
+            //System.out.println(commander.getAID().getLocalName() + ": Agent successfully created");
           }
           protected void handleFailure(ACLMessage failure) {
             System.out.println("Error creating agent.");

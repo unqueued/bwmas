@@ -21,6 +21,7 @@ import java.util.logging.*;
 import java.util.concurrent.*;
 
 import starcraftbot.proxybot.khasbot.ParseACLMessage;
+import starcraftbot.proxybot.game.GameObject;
 
 @SuppressWarnings("serial")
 public class ProxyBotAgent extends Agent{
@@ -32,7 +33,7 @@ public class ProxyBotAgent extends Agent{
   
    //an array of strings will be used to store the agent names and paths
   //the values will be split via a ;
-  String [] khasbot_agents = new String [7];
+  String [] khasbot_agents = new String [8];
  
   //variables to identify the CommanderAgent name & classname on JADE
   String commander_name = null;
@@ -51,12 +52,13 @@ public class ProxyBotAgent extends Agent{
 
     //setup the agent names and paths
     khasbot_agents[0] = "KhasCommander;starcraftbot.proxybot.khasbot.commandera.CommanderAgent";
-    khasbot_agents[1] = "KhasBuildingManager;starcraftbot.proxybot.khasbot.buildingma.BuildingManagerAgent";
-    khasbot_agents[2] = "KhasStructureManager;starcraftbot.proxybot.khasbot.structurema.StructureManagerAgent";
-    khasbot_agents[3] = "KhasUnitManager;starcraftbot.proxybot.khasbot.unitma.UnitManagerAgent";
-    khasbot_agents[4] = "KhasBattleManager;starcraftbot.proxybot.khasbot.battlema.BattleManagerAgent";
-    khasbot_agents[5] = "KhasMapManager;starcraftbot.proxybot.khasbot.mapma.MapManagerAgent";
-    khasbot_agents[6] = "KhasResourceManager;starcraftbot.proxybot.khasbot.resourcema.ResourceManagerAgent";
+    khasbot_agents[1] = getAID().getLocalName();
+    khasbot_agents[2] = "KhasBuildingManager;starcraftbot.proxybot.khasbot.buildingma.BuildingManagerAgent";
+    khasbot_agents[3] = "KhasStructureManager;starcraftbot.proxybot.khasbot.structurema.StructureManagerAgent";
+    khasbot_agents[4] = "KhasUnitManager;starcraftbot.proxybot.khasbot.unitma.UnitManagerAgent";
+    khasbot_agents[5] = "KhasBattleManager;starcraftbot.proxybot.khasbot.battlema.BattleManagerAgent";
+    khasbot_agents[6] = "KhasMapManager;starcraftbot.proxybot.khasbot.mapma.MapManagerAgent";
+    khasbot_agents[7] = "KhasResourceManager;starcraftbot.proxybot.khasbot.resourcema.ResourceManagerAgent";
     
     //register the SL codec with the content manager
     getContentManager().registerLanguage(codec);
@@ -116,14 +118,22 @@ public class ProxyBotAgent extends Agent{
 
     public void action() {
       //TODO: this will end up being the Game Object
-      String game = (String) getO2AObject();
+      GameObject game = (GameObject) getO2AObject();
       if (game != null) {
         
         //now create a message and send it to the CommanderAgent
         // Fill the REQUEST message
     		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);  
         msg.addReceiver(new AID(commander_name, AID.ISLOCALNAME));
-        msg.setContent(game);
+
+        try{
+          msg.setContentObject(game);
+        }catch(Exception e) {
+          System.out.println(agent.getLocalName() + " FAIL: failed to serialize Game object!!! >>>");
+          e.printStackTrace();
+          System.out.println(agent.getLocalName() + " FAIL: failed to serialize Game object!!! <<<");
+        }
+
         agent.send(msg);
       } else {
         block();

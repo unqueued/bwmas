@@ -17,6 +17,7 @@ import jade.wrapper.*;
 import starcraftbot.proxybot.bot.ExampleStarCraftBot;
 import starcraftbot.proxybot.bot.StarCraftBot;
 import starcraftbot.proxybot.command.Command.StarCraftCommand;
+import starcraftbot.proxybot.game.GameObject;
 import starcraftbot.proxybot.wmes.UnitTypeWME;
 
 /**
@@ -28,9 +29,7 @@ import starcraftbot.proxybot.wmes.UnitTypeWME;
  * @see ProxyBotAgent
  */
 public class ProxyBot {
-  private Logger out = Logger.getLogger(getClass().getName());
- 
-	/** port to start the server socket on */
+  /** port to start the server socket on */
 	public static int port = 12345;
 	
 	/** allow the user to control units */
@@ -47,6 +46,10 @@ public class ProxyBot {
 
 	/** run the game very fast ? */
 	public static boolean speedUp = true;
+	
+  private ProxyBotAgentClient pba = null;
+
+  private GameObject gameObj = null;
 
 	public static void main(String[] args) {		
 		new ProxyBot().start();
@@ -58,25 +61,14 @@ public class ProxyBot {
 	 * A server socket is opened and waits for client connections.
 	 */
 	public void start() { 
-    out.setLevel(Level.FINE);
 
     //AA: This is just test code for ensure back and forth communication 
     //AA: with the JADE platform and this Java application
-    ProxyBotAgentClient pba = new ProxyBotAgentClient();
+    pba = new ProxyBotAgentClient();
+    gameObj = new GameObject();
     pba.startClient("localhost", "1099", "KhasProxyBot");
      
-    //FIX: This wait i here to simulate the time it takes to start the Starcraft game
-		try {			
-      Thread.sleep(5000);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-    pba.sendUpdate("Game is starting");
-    pba.sendUpdate("Game going");
-    pba.sendUpdate("Game ended");
-
-    /*
+    
 		try {			
 		    ServerSocket serverSocket = new ServerSocket(port);
 		    
@@ -90,15 +82,14 @@ public class ProxyBot {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-  
-    */
-	}	
+
+	}//end start
 
 	/**
 	 * Manages communication with StarCraft.
 	 */
 	private void runGame(Socket socket) {		
-		final StarCraftBot bot = new ExampleStarCraftBot();
+		//final StarCraftBot bot = new ExampleStarCraftBot();
     Game gameRef = null;
 
     //AA: i will uncomment this when i have properly tested it
@@ -112,7 +103,8 @@ public class ProxyBot {
 			// 1. get the initial game information
 		    BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 	    	String playerData = reader.readLine();
-	
+        gameObj.parsePlayersData(playerData);
+
 	    	// 2. respond with bot options
 	    	String botOptions = (allowUserControl ? "1" : "0") 
 	    					  + (completeInformation ? "1" : "0")
@@ -137,11 +129,13 @@ public class ProxyBot {
 	    	}
 
 	    	final Game game = new Game(playerData, locationData, mapData, chokesData, basesData, regionsData);
+        
+
 	    	gameRef = game;
 	    	boolean firstFrame = true;
 
 	    	if (speedUp) {
-	    		game.getCommandQueue().setGameSpeed(0);
+	    		game.getCommandQueue().setGameSpeed(20);
 	    	}
 	    	// 4. game updates
 	    	while (true) {
@@ -156,47 +150,50 @@ public class ProxyBot {
 	    			game.updateData(update);	    			
             
             //AA: here is where ProxyBot will send data to ProxyBotAgent (maybe?)
-
-	    			if (firstFrame) {	    				
-	    				firstFrame = false;
+            //pba.sendUpdate(game);
+            
+	    			//if (firstFrame) {
+	    			//	firstFrame = false;
 	    					    				
-	    				// start the agent
-	    				new Thread() {
-	    					public void run() {
-	    	    				bot.start(game);
-	    					}
-	    				}.start();
-	    			}
+	    			//	 start the agent
+            //   new Thread() {
+	    			//		public void run() {
+	    	    //				bot.start(game);
+	    			//		}
+	    			//	}.start();
+	    			//}
 
 	    			// 5. send commands
 	    			//System.out.println(":::::::::::::::::PROXYBOT:::::::::::::: sending commands to AIModule:");
-	    			/*String com = game.getCommandQueue().getCommands();
-	    			if(!com.isEmpty() && !com.trim().matches("commands"))
-	    			{
-		    			//System.out.println("Unparsed game commands-"+com+"----");
-		    			String coms[] = com.split(":");
-		    			for(String c : coms)
-		    			{
-		    				if(!c.endsWith("commands"))
-		    				{
-			    				String command[] = c.split(";");
-			    				if(command.length == 5)
-			    				{
-			    					System.out.print("	Command Name: "+StarCraftCommand.values()[Integer.parseInt(command[0])].name());
-			    					if(Integer.parseInt(command[1]) < game.getUnits().size())
-			    					{
-			    						System.out.print(" on unit["+ game.getUnits().get(Integer.parseInt(command[1])).getType().getName()+":#"+Integer.parseInt(command[1])+"]");
-			    						System.out.println("|arg1:"+command[2]+"|arg2:"+ command[3]+"|arg3:"+command[4]);
-			    					}
-			    					else
-			    						System.out.println(" on unit that is out of bounds...->"+command[1]+" with game.getUnits().size()="+game.getUnits().size());
-			    				}
-			    				else
-			    					System.out.println("weird lengthon command[]");
-		    				}
-		    			}
-		    			System.out.println("--------------------------------------------------------------------");
-	    			}*/
+
+//            String com = commandQueue.getCommands();
+//	    			if(!com.isEmpty() && !com.trim().matches("commands"))
+//	    			{
+//		    			//System.out.println("Unparsed game commands-"+com+"----");
+//		    			String coms[] = com.split(":");
+//		    			for(String c : coms)
+//		    			{
+//		    				if(!c.endsWith("commands"))
+//		    				{
+//			    				String command[] = c.split(";");
+//			    				if(command.length == 5)
+//			    				{
+//			    					System.out.print("	Command Name: "+StarCraftCommand.values()[Integer.parseInt(command[0])].name());
+//			    					if(Integer.parseInt(command[1]) < game.getUnits().size())
+//			    					{
+//			    						System.out.print(" on unit["+ game.getUnits().get(Integer.parseInt(command[1])).getType().getName()+":#"+Integer.parseInt(command[1])+"]");
+//			    						System.out.println("|arg1:"+command[2]+"|arg2:"+ command[3]+"|arg3:"+command[4]);
+//			    					}
+//			    					else
+//			    						System.out.println(" on unit that is out of bounds...->"+command[1]+" with game.getUnits().size()="+game.getUnits().size());
+//			    				}
+//			    				else
+//			    					System.out.println("weird lengthon command[]");
+//		    				}
+//		    			}
+//		    			System.out.println("--------------------------------------------------------------------");
+//	    			}
+
 	    			socket.getOutputStream().write(game.getCommandQueue().getCommands().getBytes());
 	    		}
 	    	}
@@ -212,10 +209,10 @@ public class ProxyBot {
 			// stop update thread 
 			gameRef.stop();
 			
-			// stop the bot
-			if (bot != null) {
-				bot.stop();
-			}
+			//stop the bot
+//			if (bot != null) {
+//				bot.stop();
+//			}
 		}
 	}
   /**
@@ -289,11 +286,12 @@ public class ProxyBot {
      * them to commander for dispersal.
      *
      */
-    //public void sendUpdate(Game game){
-    public void sendUpdate(String game){
+    public void sendUpdate(GameObject game){
+      
+    //public void sendUpdate(String game){
       try{
         ac.putO2AObject(game,AgentController.ASYNC); 
-      }catch(StaleProxyException e){
+       }catch(Exception e){
         e.printStackTrace();
       }
     }//end sendUpdate
