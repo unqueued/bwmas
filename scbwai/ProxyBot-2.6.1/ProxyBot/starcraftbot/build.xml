@@ -114,6 +114,12 @@
     </exec>
   </target>
 
+  <target name="khasbot-docs">
+    <exec executable="doxygen" dir="${src-proxybot}">
+      <arg value="doc_config.doxy"/>
+    </exec>
+  </target>
+
 
 </project>
 

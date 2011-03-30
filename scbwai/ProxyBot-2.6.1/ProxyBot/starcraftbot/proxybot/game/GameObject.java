@@ -16,7 +16,7 @@ public class GameObject implements Serializable {
   private PlayerObject khasbotPlayer = null;
 
   /** all players */
-	private PlayerObject[] playersInGame;
+	private ArrayList<PlayerObject> playersInGame;
 
 	/** map information */
 	private MapObject map = null;
@@ -32,6 +32,9 @@ public class GameObject implements Serializable {
 
 	private String update;
 
+  /**
+   * Default Constructor. Does nothing.
+   */
   public GameObject () {
     
   }
@@ -48,38 +51,17 @@ public class GameObject implements Serializable {
    *
    */
 	public GameObject(String playersData, String startingLocationsData, String mapData, String chokePointsData, String baseLocationsData, String regionsData){
-
-
-    //map = new MapObject(startingLocationsData, mapData);
+    
+    playersInGame = PlayerObject.parsePlayersData(playersData);
+    
+    map = new MapObject(startingLocationsData, mapData);
+    //future work
     //map = new MapObject(startingLocationsData, mapData, baseLocationsData, chokepointsData, regionsData);
-
+  
   }//end Constructor
 
-  public void parsePlayersData(String playersData ){//, String startingLocationsData, String mapData, String chokePointsData, String baseLocationsData, String regionsData){
-//    System.out.println(playersData);
-//    int num1 = playersData.split(":").length;
-//    String[] players = new String[num1];
-//    players = playersData.split(":");
-     String[] players = playersData.split(":");
-    playersInGame = new PlayerObject[players.length-1];
+   
 
-//    for (PlayerObject itr : playersInGame)
-//      System.out.println("playersInGame[]: " + itr);
-
-    System.out.println("num of players: " + playersInGame.length);
-    for(int i = 1, j=0 ; i < players.length; i++,j++){
-//      System.out.println(players[i]);
-//      int num2 = players[i].split(";").length;
-//      String[] player_att = new String[num2];
-//      player_att = players[i].split(";");
-      String[] player_att = players[i].split(";");
-      playersInGame[j] = new PlayerObject();
-      playersInGame[j].parseData(player_att);
-    }
-    
-
-    //System.out.println("done: parsePlayersData");
-  }
 	/**
 	 * Updates the state of the game.
 	 */
@@ -99,6 +81,9 @@ public class GameObject implements Serializable {
 //		unitMap = newMap;
 	}
 
+  public void printMapInfo(){
+    map.print();
+  }
 
 }//end GameObject
 

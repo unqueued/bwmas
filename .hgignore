@@ -5,5 +5,10 @@ syntax: glob
 *.classpath
 *.class
 *.swp
+*.bak
+*.orig
+*.old
 *~ 
 *log.txt
+documentation/**
+

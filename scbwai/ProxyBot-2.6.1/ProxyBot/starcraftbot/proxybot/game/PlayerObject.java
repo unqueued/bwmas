@@ -2,6 +2,7 @@
 package starcraftbot.proxybot.game;
 
 import java.io.*;
+import java.util.*;
 
 public class PlayerObject implements Serializable {
 
@@ -22,22 +23,22 @@ public class PlayerObject implements Serializable {
   /**
    * This will split the string of the playerData to determine how many players there are
    */
-  public void parseData(String[] player_att) {
-//    System.out.println("In parsePlayerData(), player_att is:");
-//    for(String att : player_att)    {
-//      System.out.println("  "+att);
-//    }
+  public static ArrayList<PlayerObject> parsePlayersData(String playersData) {
+    ArrayList<PlayerObject> playersInGame = new ArrayList<PlayerObject>();
+    
+    String[] players = playersData.split(":");
+    PlayerObject temp = new PlayerObject();
 
-      //System.out.println("Setting playerID");
-      playerID = Integer.parseInt(player_att[0]);
-      //System.out.println("Setting Player Race");
-      setPlayerRace(player_att[1]);
-      //System.out.println("Setting player Name");
-      setPlayerName(player_att[2]);
-      //setPlayerType(player_att[3]);
-      //setPlayerAlly(player_att[4]);
+    for(int i = 1; i < players.length; i++){
+      String[] player_att = players[i].split(";");
 
-    //System.out.println("done parsePlayers ");
+      temp.setPlayerID(Integer.parseInt(player_att[0]));
+      temp.setPlayerRace(player_att[1]);
+      temp.setPlayerName(player_att[2]);
+
+    }
+  
+    return playersInGame;
   }
 
   public void setPlayerID(int num){
