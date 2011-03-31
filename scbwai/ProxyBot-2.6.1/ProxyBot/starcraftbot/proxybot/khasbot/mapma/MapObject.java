@@ -1,9 +1,10 @@
 
 package starcraftbot.proxybot.khasbot.mapma;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class MapObject {
+public class MapObject implements Serializable{
 
 	/** a list of the starting locations */
 	private ArrayList<MapLocation> startingLocations;
@@ -76,6 +77,13 @@ public class MapObject {
 			startingLocations.add(loc);
 		}
   }
+  	/**
+  	 * @return MapObject
+  	 */
+  	public String toString()
+  	{
+  		return "MapObject";
+  	}
 
 	/**
 	 * Displays the main properties.

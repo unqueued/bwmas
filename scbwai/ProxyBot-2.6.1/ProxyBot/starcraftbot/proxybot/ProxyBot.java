@@ -160,6 +160,10 @@ public class ProxyBot {
         } else {	    				    			
           // update the game
           game.updateData(update);	    			
+          gameObj.processGameUpdate(update);
+          
+          pba.sendGameUpdateToJADE(gameObj);
+          
           
           //AA: here is where ProxyBot will send data to ProxyBotAgent (maybe?)
           //pba.sendUpdate(game);

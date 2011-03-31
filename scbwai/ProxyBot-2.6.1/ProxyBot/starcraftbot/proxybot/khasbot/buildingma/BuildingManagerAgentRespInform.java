@@ -10,14 +10,15 @@ import jade.domain.FIPAAgentManagement.*;
 import jade.lang.acl.*;
 import jade.proto.*;
 
+import starcraftbot.proxybot.game.GameObject;
 import starcraftbot.proxybot.khasbot.ParseACLMessage;
 
 @SuppressWarnings("serial")
 public class BuildingManagerAgentRespInform extends CyclicBehaviour{
-	Agent agent=null;	
+	BuildingManagerAgent agent=null;	
   MessageTemplate mt = null;
 
-  public BuildingManagerAgentRespInform(Agent a, MessageTemplate mt) {
+  public BuildingManagerAgentRespInform(BuildingManagerAgent a, MessageTemplate mt) {
     super(a);
     agent=a;
     this.mt=mt;
@@ -33,11 +34,19 @@ public class BuildingManagerAgentRespInform extends CyclicBehaviour{
         
         //handle the messages that come from CommanderAgent which will be the game object 
         if(ParseACLMessage.isSenderCommander(msg)) {
-          System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + msg.getContent());
+
 
           //
           //process the game update that was received
           //
+          
+          try {
+            System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + ((GameObject)(msg.getContentObject())).toString());
+			agent.setGameObject((GameObject) msg.getContentObject());
+		} catch (UnreadableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         }
       }

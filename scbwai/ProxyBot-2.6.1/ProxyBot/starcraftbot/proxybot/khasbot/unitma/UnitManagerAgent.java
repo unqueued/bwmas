@@ -21,6 +21,7 @@
  */
 package starcraftbot.proxybot.khasbot.unitma;
 
+import starcraftbot.proxybot.game.GameObject;
 import jade.content.ContentManager;
 import jade.content.lang.Codec;
 import jade.content.lang.sl.SLCodec;
@@ -35,6 +36,8 @@ import jade.proto.*;
 public class UnitManagerAgent extends Agent{
 	private ContentManager manager = (ContentManager) getContentManager();
 	private Codec codec = new SLCodec();
+	
+	private GameObject game;
 
   AID commander = null;
   AID building_manager = null;
@@ -96,6 +99,14 @@ public class UnitManagerAgent extends Agent{
 
     addBehaviour(root_behaviour);
 
+	}
+
+	public void setGameObject(GameObject game) {
+		this.game = game;
+	}
+
+	public GameObject getGameObject() {
+		return game;
 	}
   
 }//end UnitManagerAgent

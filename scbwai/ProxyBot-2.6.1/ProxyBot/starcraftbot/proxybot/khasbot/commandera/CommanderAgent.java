@@ -59,7 +59,7 @@ public class CommanderAgent extends Agent{
 
     khasbot_agents = new String[args.length-1];
     khasbot_agent_names = new String[args.length-1];
-    game_update_agents = new AID[2]; //HARDCODE: predefined agents that will get game updates
+    game_update_agents = new AID[6]; //HARDCODE: predefined agents that will get game updates
     //
     //now strip out the khasbot agents that the commander will create from the arguments passed in
     //
@@ -78,13 +78,25 @@ public class CommanderAgent extends Agent{
         game_update_agents[k++] = unit_manager;
       }
       else if(khasbot_agent_names[j].matches(".*[Ss]tructure[Mm]anager.*"))
+      {
         structure_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
+        game_update_agents[k++] = structure_manager;
+      }
       else if(khasbot_agent_names[j].matches(".*[Bb]attle[Mm]anager.*"))
-        battle_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
+      {
+    	  battle_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
+    	  game_update_agents[k++] = battle_manager;
+      }
       else if(khasbot_agent_names[j].matches(".*[Rr]esource[Mm]anager.*"))
-        resource_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
+      {
+    	  resource_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
+    	  game_update_agents[k++] = resource_manager;
+      }
       else if(khasbot_agent_names[j].matches(".*[Mm]ap[Mm]anager.*"))
-        map_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
+      {
+    	  map_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
+    	  game_update_agents[k++] = map_manager;
+      }
     } 
 
     //this template will only respond to INFORM messages 

@@ -1,8 +1,10 @@
 
 package starcraftbot.proxybot.khasbot.mapma;
 
+import java.io.Serializable;
 
-public class MapLocation {
+
+public class MapLocation implements Serializable{
 
   private int x; 
   private int y; 

@@ -1,7 +1,9 @@
 
 package starcraftbot.proxybot.khasbot.structurema;
 
-public class TechUpgradeObject {
+import java.io.Serializable;
+
+public class TechUpgradeObject implements Serializable{
 
 
 

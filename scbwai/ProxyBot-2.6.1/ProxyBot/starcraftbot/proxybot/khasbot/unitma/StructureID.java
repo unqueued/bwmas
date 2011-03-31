@@ -1,7 +1,9 @@
 
 package starcraftbot.proxybot.khasbot.unitma;
 
-public class StructureID {
+import java.io.Serializable;
+
+public class StructureID implements Serializable{
 
  
   /* Terran Structures */

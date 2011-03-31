@@ -19,6 +19,7 @@
 
 package starcraftbot.proxybot.khasbot.buildingma;
 
+import starcraftbot.proxybot.game.GameObject;
 import jade.content.ContentManager;
 import jade.content.lang.Codec;
 import jade.content.lang.sl.SLCodec;
@@ -34,6 +35,8 @@ import jade.proto.*;
 public class BuildingManagerAgent extends Agent {
 	private ContentManager manager = (ContentManager) getContentManager();
 	private Codec codec = new SLCodec();
+	
+	private GameObject game;
 
 	protected void setup(){
     System.out.println(getAID().getLocalName() + ": is alive !!!");
@@ -61,6 +64,15 @@ public class BuildingManagerAgent extends Agent {
 
     addBehaviour(root_behaviour);
 	}//end setup
+	
+	public GameObject getGame()
+	{
+		return game;
+	}
+	public void setGameObject(GameObject g)
+	{
+		game = g;
+	}
 
 }//end BuildingManagerAgent
 

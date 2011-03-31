@@ -32,6 +32,7 @@ public class CommanderAgentRespInform extends CyclicBehaviour{
     if (msg != null) {
       try{
         System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + msg.getContentObject());
+        sendGameUpdate2Agents(msg);
       }catch(Exception e) {
         System.out.println(agent.getLocalName() + "FAIL: Unable to get message ContentObject");
       }
@@ -70,15 +71,18 @@ public class CommanderAgentRespInform extends CyclicBehaviour{
     //
     //game updates go to game_update_agents[]
     //
-    for( int i=0; i < game_update_agents.length; i++){
-      ACLMessage msg_gameObj = new ACLMessage(ACLMessage.INFORM); 
-      msg_gameObj.addReceiver(game_update_agents[i]);
+ 
+	for( int i=0; i < game_update_agents.length; i++){ 
+	  ACLMessage msg_gameObj = new ACLMessage(ACLMessage.INFORM);
+	  msg_gameObj.clearAllReceiver();
       try{
-        msg_gameObj.setContentObject(msg.getContentObject());
-      }catch(Exception e){
-        System.out.println("Failed to serialize the Game object!!!");
+          msg_gameObj.setContentObject(msg.getContentObject());
+        }catch(Exception e){
+          System.out.println("Failed to serialize the Game object!!!");
       }
-      agent.send(msg_gameObj);
+        msg_gameObj.addReceiver(game_update_agents[i]);
+        System.out.println("Commander Sending Game update to: "+ game_update_agents[i].getLocalName());
+        agent.send(msg_gameObj);
     }
 
   }

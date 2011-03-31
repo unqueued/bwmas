@@ -1,9 +1,24 @@
 
 package starcraftbot.proxybot.khasbot.unitma;
 
-public class UnitID {
+import java.io.Serializable;
 
- 
+public class UnitID implements Serializable{
+
+  private int myID;
+  public UnitID(int i)
+  {
+	  myID = i;
+  }
+  public int getID()
+  {
+	  return myID;
+  }
+  public void setID(int i)
+  {
+	  myID = i;
+  }
+	
   /* Terran Units */
   public enum TerranID {
     Terran_Marine(0),

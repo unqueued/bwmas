@@ -1,7 +1,9 @@
 
 package starcraftbot.proxybot.khasbot.resourcema;
 
-public class PlayerResources {
+import java.io.Serializable;
+
+public class PlayerResources implements Serializable {
 
   private String minerals;
   private String gas;
@@ -15,7 +17,10 @@ public class PlayerResources {
     supplyTotal = in_supplyTotal;
   }
 
-  
+  public String toString()
+  {
+	  return "PlayerResources";
+  }
 
 }
 

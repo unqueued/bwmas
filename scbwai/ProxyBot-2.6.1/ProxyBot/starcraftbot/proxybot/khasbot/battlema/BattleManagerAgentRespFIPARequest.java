@@ -12,14 +12,15 @@ import jade.domain.FIPAAgentManagement.*;
 import jade.lang.acl.*;
 import jade.proto.*;
 
+import starcraftbot.proxybot.game.GameObject;
 import starcraftbot.proxybot.khasbot.ParseACLMessage;
 
 @SuppressWarnings("serial")
 public class BattleManagerAgentRespFIPARequest extends AchieveREResponder {
-	Agent agent=null;	
+	BattleManagerAgent agent=null;	
   MessageTemplate mt = null;
 
-  public BattleManagerAgentRespFIPARequest(Agent a, MessageTemplate mt) {
+  public BattleManagerAgentRespFIPARequest(BattleManagerAgent a, MessageTemplate mt) {
     super(a, mt);
     agent=a;
     this.mt=mt;
