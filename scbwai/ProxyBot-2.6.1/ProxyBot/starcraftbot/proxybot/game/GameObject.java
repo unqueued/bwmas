@@ -13,7 +13,7 @@ import starcraftbot.proxybot.khasbot.structurema.TechObject;
  */
 public class GameObject implements Serializable {
 
-  private PlayerObject khasbotPlayer = null;
+  private PlayerObject myPlayer = null;
 
   /** all players */
 	private ArrayList<PlayerObject> playersInGame;
@@ -50,7 +50,12 @@ public class GameObject implements Serializable {
    * @param regionsData lists the regions on the map
    *
    */
-	public GameObject(String playersData, String startingLocationsData, String mapData, String chokePointsData, String baseLocationsData, String regionsData){
+	public GameObject(String playersData, 
+                    String startingLocationsData, 
+                    String mapData, 
+                    String chokePointsData, 
+                    String baseLocationsData, 
+                    String regionsData){
     
     playersInGame = PlayerObject.parsePlayersData(playersData);
     
@@ -63,13 +68,18 @@ public class GameObject implements Serializable {
    
 
 	/**
-	 * Updates the state of the game.
+	 * Updates the state of the game from the info passed to us by ProxyBot.java.
+   * It looks like the string contains data that is only relevant to us.
 	 */
-	public void processGameUpdate(String updateData) {
+	public void processGameUpdate(String update) {
 
+		String[] parsed_update = update.split(":")[0].split(";");
 
-//    frame++;
-//		player.update(updateData, enemy);
+    /* may have to change, not sure */
+    myPlayer.updateAttributes(parsed_update[1],parsed_update[2],parsed_update[3],parsed_update[4],parsed_update[5],parsed_update[6]);
+
+//
+//
 //		units = UnitWME.getUnits(this, updateData, unitTypes, playerID, playerArray);
 //		lastGameUpdate = System.currentTimeMillis();
 //
@@ -81,6 +91,9 @@ public class GameObject implements Serializable {
 //		unitMap = newMap;
 	}
 
+  /**
+   * This method is used to printout the map data visually.
+   */
   public void printMapInfo(){
     map.print();
   }

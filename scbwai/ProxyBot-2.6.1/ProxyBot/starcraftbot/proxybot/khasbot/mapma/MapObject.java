@@ -22,8 +22,14 @@ public class MapObject {
   private boolean[][] walkable; 
 
   public MapObject(String startingLocationsData, String mapData){
-      
-    /* parsing mapData */
+     
+    parseMapData(mapData);
+
+    parseStartingLocationsData(startingLocationsData);
+  }
+
+  private void parseMapData(String mapData){
+  
     String[] map = mapData.split(":"); 
 
     String map_data = map[3];
@@ -49,11 +55,14 @@ public class MapObject {
 			walkable[h][w] = (1 == Integer.parseInt(tile.substring(2, 3)));
   
     }
+  }
 
-    /* parsing startingLocationsData */
+  private void parseStartingLocationsData(String starting_location_data){
+
     startingLocations = new ArrayList<MapLocation>();
-		String[] locs = startingLocationsData.split(":");
-		boolean first = true;
+		String[] locs = starting_location_data.split(":");
+		
+    boolean first = true;
 
 		for (String location : locs) {
 			if (first) {
@@ -66,8 +75,6 @@ public class MapObject {
 			MapLocation loc = new MapLocation(Integer.parseInt(coords[0]) + 2, Integer.parseInt(coords[1]) + 1);
 			startingLocations.add(loc);
 		}
-
-
   }
 
 	/**

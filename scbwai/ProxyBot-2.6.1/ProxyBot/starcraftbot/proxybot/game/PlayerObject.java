@@ -4,6 +4,9 @@ package starcraftbot.proxybot.game;
 import java.io.*;
 import java.util.*;
 
+import starcraftbot.proxybot.khasbot.resourcema.PlayerResources;
+import starcraftbot.proxybot.khasbot.structurema.PlayerTech;
+
 public class PlayerObject implements Serializable {
 
 	private int playerID;
@@ -12,12 +15,17 @@ public class PlayerObject implements Serializable {
 
   private String playerName;
 
+  private PlayerResources myResources;
+  private PlayerTech myTech;
+
   public PlayerObject(){
 
     playerID = -10;
     playerRace = null;
     playerName = null;
 
+    myResources = new PlayerResources();
+    myTech = new PlayerTech();
   }
 
   /**
@@ -57,6 +65,12 @@ public class PlayerObject implements Serializable {
   public void setPlayerName(String name){
     playerName = name;
   }
+
+  public void updateAttributes(String in_minerals, String in_gas, String in_supplyUsed, String in_supplyTotal, String in_researchUpdate, String in_upgradeUpdate){
+    myResources.update(in_minerals,in_gas, in_supplyUsed, in_supplyTotal); 
+    myTech.update(in_researchUpdate,in_upgradeUpdate);
+  }
+
 
   @Override
   public String toString(){

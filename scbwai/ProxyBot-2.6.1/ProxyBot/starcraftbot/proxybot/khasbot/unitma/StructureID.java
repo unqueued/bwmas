@@ -1,4 +1,6 @@
 
+package starcraftbot.proxybot.khasbot.unitma;
+
 public class StructureID {
 
  

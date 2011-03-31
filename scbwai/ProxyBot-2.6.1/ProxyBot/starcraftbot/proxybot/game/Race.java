@@ -12,8 +12,5 @@ public enum Race {
     race_name = name; 
   }
 
-  public String getName(){
-    return race_name;
-  }
-
 }
+
