@@ -86,11 +86,11 @@ public class PlayerWME extends WME {
 	public void update(String playerData, PlayerWME enemy) {
 		String[] attributes = playerData.split(":")[0].split(";");
 
-		/*System.out.println(playerData);
-		for(String s : attributes){
-			System.out.print("["+s+"]");
-		
-		}*/
+//		System.out.println(playerData);
+//		for(String s : attributes){
+//			System.out.print("PlayerWME: update() -> ["+s+"]");
+//		}
+
 		//System.out.println( );
 		minerals = Integer.parseInt(attributes[1]);
 		gas = Integer.parseInt(attributes[2]);
@@ -111,9 +111,13 @@ public class PlayerWME extends WME {
 		for (int i = 0; i < r; i++) {
 			t = researchUpdate.charAt(i);
 			v = Integer.parseInt(""+t);
+      //System.out.print("t: "+t);
+      //System.out.print(" v: "+v + " ");
 			hasResearched[i] = v > 3;
 			isResearching[i] = (v > 0) && (v < 3);
 		}
+    
+    System.out.println();
 
 		//for (int i=0; i<r; i++) {
 		//	isResearching[i] = Integer.parseInt("" + researchUpdate.charAt(r)) > 0 && Integer.parseInt(""+ researchUpdate.charAt(r)) < 3;

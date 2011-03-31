@@ -17,10 +17,15 @@ public class PlayerResources implements Serializable {
     supplyTotal = in_supplyTotal;
   }
 
-  public String toString()
-  {
-	  return "PlayerResources";
+  
+  public String toString() {
+    return "PlayerResources:Obj: " + "Minerals: " + minerals + " " +
+                                     "Gas: " + gas + " " +
+                                     "supplyUsed: " + supplyUsed + " " +
+                                     "supplyTotal: " + supplyTotal ;
   }
+
+  
 
 }
 

@@ -10,9 +10,8 @@ public class PlayerTech implements Serializable{
      
   }
   
-  public String toString()
-  {
-	  return "PlayerTech";
+  public String toString() {
+    return "PlayerTech:Obj: " + "NOTHING";
   }
 
 }//end Tech Object
