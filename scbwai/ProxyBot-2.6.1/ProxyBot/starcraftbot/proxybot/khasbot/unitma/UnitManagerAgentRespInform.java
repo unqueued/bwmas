@@ -29,6 +29,7 @@ public class UnitManagerAgentRespInform extends CyclicBehaviour{
   public void action() {
 	    //process only the Inform messages
 	    ACLMessage msg = agent.receive(mt);
+	    while(agent.receive(mt) != null){System.out.println(agent.getLocalName() + " is purging queue!");}
 	   // System.out.println(agent.getLocalName()+" action called, have a msg...");
 	    if (msg != null) {
 	      //System.out.println(agent.getLocalName() + ": MSG not null.");// : " + msg.getContent() ); 
@@ -69,6 +70,9 @@ public class UnitManagerAgentRespInform extends CyclicBehaviour{
 				e.printStackTrace();
 			}
 	  		agent.send(response);
+	  		
+	  		msg.reset();
+	  		response.reset();
 			
 	        }
 	      }

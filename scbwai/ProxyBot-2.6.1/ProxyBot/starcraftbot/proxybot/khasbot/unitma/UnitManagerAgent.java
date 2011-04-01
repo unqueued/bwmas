@@ -138,8 +138,11 @@ public class UnitManagerAgent extends Agent{
 					//int c = Command.StarCraftCommand.train.ordinal();
 					if(u.getOrder() != Order.Train.ordinal())
 					{
-						if(game.getMyPlayer().getResources().getMinerals() >= 50)
+						if(game.getMyPlayer().getResources().getMinerals() >= 50  && game.getMyPlayer().getResources().getSupply() < game.getMyPlayer().getResources().getSupplyTotal())
+						{
 							game.getCommandsToDo().add(new Command(Command.StarCraftCommand.train, u.getID(), UnitID.ProtossID.Protoss_Probe.getID(), 0, 0));
+							System.out.println("Command( train, unitID:"+u.getID()+", Protoss_Probe ID, 0, 0:: Supply Used|Total ["+game.getMyPlayer().getResources().getSupply()+"|"+game.getMyPlayer().getResources().getSupplyTotal()+"]");
+						}
 						//System.out.println("Command( train, unitID:"+u.getID()+", Protoss_Probe ID->"+UnitID.ProtossID.Protoss_Probe.getID()+", 0, 0");
 						//System.out.flush();
 					}

@@ -49,6 +49,8 @@ public class BuildingManagerAgentRespInform extends CyclicBehaviour{
 			e.printStackTrace();
 		}
         
+		msg.reset();
+		
         }
       }
     } else {

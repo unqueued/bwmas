@@ -48,7 +48,7 @@ public class StructureManagerAgentRespInform extends CyclicBehaviour{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
+        msg.reset();
         }
       }
     } else {

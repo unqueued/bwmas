@@ -16,6 +16,8 @@ import jade.wrapper.*;
 
 import starcraftbot.proxybot.bot.ExampleStarCraftBot;
 import starcraftbot.proxybot.bot.StarCraftBot;
+import starcraftbot.proxybot.command.*;
+import starcraftbot.proxybot.command.Command;
 import starcraftbot.proxybot.command.Command.StarCraftCommand;
 import starcraftbot.proxybot.game.GameObject;
 import starcraftbot.proxybot.wmes.UnitTypeWME;
@@ -146,14 +148,17 @@ public class ProxyBot {
       //gameObj.printMapInfo();
 
       if (speedUp) {
-        game.getCommandQueue().setGameSpeed(20);
+        game.getCommandQueue().setGameSpeed(0);
+        
+        gameObj.getCommandsToDo().add(new Command(Command.StarCraftCommand.gameSpeed, 0, 0,0,0));
+        
       }
 
       // 4. game updates
       while (true) {
         //get update from StarCraft via the socket
     	
-    	  Thread.sleep( (1000 / 24) );
+    	  //Thread.sleep( (long)(1000 / (24 * 3) ));
     	  
         String update = reader.readLine();
         if (update.startsWith("ended")) {

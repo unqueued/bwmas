@@ -77,10 +77,11 @@ public class CommanderAgentRespInform extends CyclicBehaviour{
 			e.printStackTrace();
 		}
           agent.send(msg_gameObj_update);
+          msg_gameObj_update.reset();
 
         }//end if UnitManager
       }//end if ACLMessage.INFORM
-      
+      msg.reset();
     } else {
       block();
     }

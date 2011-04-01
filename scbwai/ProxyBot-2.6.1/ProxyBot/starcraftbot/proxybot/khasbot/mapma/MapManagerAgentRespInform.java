@@ -27,6 +27,7 @@ public class MapManagerAgentRespInform extends CyclicBehaviour{
   public void action() {
     //process only the Inform messages
     ACLMessage msg = agent.receive(mt);
+    while(agent.receive(mt) != null){System.out.println(agent.getLocalName() + " is purging queue!");}
     if (msg != null) {
       //System.out.println(agent.getLocalName() + ": MSG RX : " + msg.getContent() ); 
       if (msg.getPerformative() == ACLMessage.INFORM) {
@@ -47,7 +48,7 @@ public class MapManagerAgentRespInform extends CyclicBehaviour{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
+        msg.reset();
         }
       }
     } else {
