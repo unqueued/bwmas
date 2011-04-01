@@ -3,11 +3,10 @@ package starcraftbot.proxybot.game;
 import java.util.*;
 import java.io.*;
 
-
 import starcraftbot.proxybot.command.Command;
 import starcraftbot.proxybot.khasbot.mapma.MapObject;
 import starcraftbot.proxybot.khasbot.unitma.UnitsObject;
-import starcraftbot.proxybot.khasbot.structurema.TechObject;
+
 
 /**
  * This is our take on the "Game" object given in the original ProxyBot source.
@@ -36,9 +35,6 @@ public class GameObject implements Serializable {
 
   /** Units in Game */
   private UnitsObject game_units = null;
-
-  /** Tech Objects we have */
-  private TechObject tech = null;
 
   /** String given from Socket dll information*/
   private String update;
