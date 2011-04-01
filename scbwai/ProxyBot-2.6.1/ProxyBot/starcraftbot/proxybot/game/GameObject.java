@@ -4,6 +4,7 @@ import java.util.*;
 import java.io.*;
 
 
+import starcraftbot.proxybot.command.Command;
 import starcraftbot.proxybot.khasbot.mapma.MapObject;
 import starcraftbot.proxybot.khasbot.unitma.UnitsObject;
 import starcraftbot.proxybot.khasbot.structurema.TechObject;
@@ -27,6 +28,8 @@ public class GameObject implements Serializable {
   private ArrayList<PlayerObject> playersInGame;
   
   private ArrayList<UnitsObject> unitsInGame;
+  
+  private ArrayList<Command> CommandsToDo;
 
   /** map information */
   private MapObject map = null;
@@ -37,6 +40,13 @@ public class GameObject implements Serializable {
   /** Tech Objects we have */
   private TechObject tech = null;
 
+  /** timestamp of when the game state was last changed */
+  private long lastGameUpdate = 0;
+
+  int frame = 0;
+
+  /** String given from Socket dll information*/
+  private String update;
 
   /**
    * Default Constructor. Does nothing.
@@ -63,6 +73,8 @@ public class GameObject implements Serializable {
                     String baseLocationsData, 
                     String regionsData){
     
+
+		
     playersInGame = PlayerObject.parsePlayersData(playersData);
     
     String[] playerDatas = playersData.split(":");
@@ -77,10 +89,11 @@ public class GameObject implements Serializable {
     }
 
 	unitsInGame = new ArrayList<UnitsObject>();
+	
+	CommandsToDo = new ArrayList<Command>();
 
     map = new MapObject(startingLocationsData, mapData);
-
-    //future work for the MapObject to incorporate AI
+    //future work
     //map = new MapObject(startingLocationsData, mapData, baseLocationsData, chokepointsData, regionsData);
   
   }//end Constructor
@@ -89,19 +102,22 @@ public class GameObject implements Serializable {
 
 	/**
 	 * Updates the state of the game from the info passed to us by ProxyBot.java.
-   * It looks like the string contains data that is only relevant to us.
+     * It looks like the string contains data that is only relevant to us.
+	 *
+	 * @param update String from socket with BWAPI
 	 */
 	public void processGameUpdate(String update) {
 
 		String[] parsed_update = update.split(":")[0].split(";");
-
-    /* may have to change, not sure, just don't like the args of array elements, will fix later */
+		//System.out.println("parsed data for updateAttributes()");
+    /* may have to change, not sure */
     myPlayer.updateAttributes(parsed_update[1],parsed_update[2],parsed_update[3],parsed_update[4],parsed_update[5],parsed_update[6]);
-
-	unitsInGame = UnitsObject.parseUpdateUnits(update, this);
-    System.out.println("done w/ parseUpdateUnits()!");
-    //DEBUG
-    //System.out.println("myPlayer> " + myPlayer);
+    	//System.out.println("Attributes done, about to parseUpdateUnits()...");
+    unitsInGame = UnitsObject.parseUpdateUnits(update, this);
+    	//System.out.println("done w/ parseUpdateUnits()!");
+    
+    lastGameUpdate = System.currentTimeMillis();	
+    	
 //
 //
 //		units = UnitWME.getUnits(this, updateData, unitTypes, playerID, playerArray);
@@ -161,5 +177,45 @@ public class GameObject implements Serializable {
   {
 	  return "GameObject";
   }
+
+public void setCommandsToDo(ArrayList<Command> commandsToDo) {
+	CommandsToDo = commandsToDo;
+}
+
+public ArrayList<Command> getCommandsToDo() {
+	return CommandsToDo;
+}
+
+public String getCommandString(){
+	String commandData = new String("commands");
+
+	for(int i = 0; i < CommandsToDo.size(); i++)
+	{
+		Command command = CommandsToDo.get(i);
+		
+		commandData += (":" + command.getCommand() + ";"
+				+ command.getUnitID() + ";" + command.getArg0() + ";"
+				+ command.getArg1() + ";" + command.getArg2());
+	}
+	
+	return commandData;
+	
+	/*	int commandsAdded = 0;
+
+		while (commandQueue.size() > 0
+				&& commandsAdded < maxCommandsPerMessage) {
+			commandsAdded++;
+			Command command = commandQueue.remove(commandQueue.size() - 1);
+			commandData.append(":" + command.getCommand() + ";"
+					+ command.getUnitID() + ";" + command.getArg0() + ";"
+					+ command.getArg1() + ";" + command.getArg2());
+		}
+	}*/
+}
+
+public void clearCommands() {
+	// TODO Auto-generated method stub
+	CommandsToDo.clear();
+}
 }//end GameObject
 

@@ -41,7 +41,7 @@ public class ResourceManagerAgentRespInform extends CyclicBehaviour{
           //
           
           try {
-            System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + ((GameObject)(msg.getContentObject())).toString());
+            //sSystem.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + ((GameObject)(msg.getContentObject())).toString());
 			agent.setGameObject((GameObject) msg.getContentObject());
 		} catch (UnreadableException e) {
 			// TODO Auto-generated catch block

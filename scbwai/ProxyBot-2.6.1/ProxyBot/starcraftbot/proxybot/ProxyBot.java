@@ -152,6 +152,9 @@ public class ProxyBot {
       // 4. game updates
       while (true) {
         //get update from StarCraft via the socket
+    	
+    	  Thread.sleep( (1000 / 24) );
+    	  
         String update = reader.readLine();
         if (update.startsWith("ended")) {
           break;
@@ -164,6 +167,13 @@ public class ProxyBot {
           
           pba.sendGameUpdateToJADE(gameObj);
           
+          gameObj = pba.getGameUpdateFromJADE();
+          
+          //socket.getOutputStream().write(game.getCommandQueue().getCommands().getBytes());
+          
+          socket.getOutputStream().write(gameObj.getCommandString().getBytes());
+          
+          gameObj.clearCommands();
           
           //AA: here is where ProxyBot will send data to ProxyBotAgent (maybe?)
           //pba.sendUpdate(game);
@@ -211,7 +221,7 @@ public class ProxyBot {
 //		    		System.out.println("--------------------------------------------------------------------");
 //	    		}
 
-          socket.getOutputStream().write(game.getCommandQueue().getCommands().getBytes());
+          //socket.getOutputStream().write(game.getCommandQueue().getCommands().getBytes());
         }
       }//end while - game update loop
 		} catch (SocketException e) {
@@ -251,7 +261,7 @@ public class ProxyBot {
 
     //This will be used to communicate back and forth
     //\todo the return type, currently String must be finalized
-    ArrayBlockingQueue<String> jadeReplyQueue = null;
+    ArrayBlockingQueue<GameObject> jadeReplyQueue = null;
 
     /**
      * Empty Constructor.
@@ -283,7 +293,7 @@ public class ProxyBot {
       Object[] agentArgs = new Object[2];
 
       //array queue of 20 for ProxyBot to Tx & RX with ProxyBotAgent
-      jadeReplyQueue = new ArrayBlockingQueue<String>(20); 
+      jadeReplyQueue = new ArrayBlockingQueue<GameObject>(20); 
     
       //pass a wait switch so that we can communicate with the agent once it has
       //been created
@@ -333,10 +343,10 @@ public class ProxyBot {
      * \return String the updated information from JADE
      * \throws InterruptedException
      */
-    public String getGameUpdateFromJADE(){
-      String reply = null;
+    public GameObject getGameUpdateFromJADE(){
+      GameObject reply = null;
       try {
-        reply = (String)jadeReplyQueue.take();
+        reply = (GameObject)jadeReplyQueue.take();
       } catch(InterruptedException ie) {
         ie.printStackTrace();
       }

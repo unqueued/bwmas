@@ -74,6 +74,13 @@ public class PlayerObject implements Serializable {
   public void setPlayerID(int num){
     playerID = num;
   }
+  /**
+   * 
+   * @return playerID
+   */
+  public int getPlayerID(){
+	  return playerID;
+  }
 
   /**
    * 
@@ -97,9 +104,9 @@ public class PlayerObject implements Serializable {
   }
 
   /* Accessors */
-  public int getPlayerID(){
+  /*public int getPlayerID(){
     return playerID;
-  }
+  }*/
 
   public Race getPlayerRace(){
     return playerRace;
@@ -136,6 +143,16 @@ public class PlayerObject implements Serializable {
            myResources + " " +
            myTech ;
   }
-
+  
+  public PlayerResources getResources()
+  {
+	  return myResources;
+  }
+  public PlayerTech getTech()
+  {
+	  return myTech;
+  }
+  
+  
 }//end PlayerObject
 

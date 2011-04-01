@@ -35,7 +35,7 @@ public class ProxyBotAgent extends Agent{
   private Ontology ontology = JADEManagementOntology.getInstance();
 
   // A queue for passing back a reply to the ProxyBot.java 
-  ArrayBlockingQueue<String> jadeReplyQueue = null;
+  ArrayBlockingQueue<GameObject> jadeReplyQueue = null;
   
   //an array of strings will be used to store the agent names and paths
   //the values will be split via a ;
@@ -83,7 +83,7 @@ public class ProxyBotAgent extends Agent{
 
     //Now read in the arguments and make sure to set the 
     //jadeReplyQueue to communicate back to the AgentClient app
-    jadeReplyQueue = (ArrayBlockingQueue<String>) args[0];
+    jadeReplyQueue = (ArrayBlockingQueue<GameObject>) args[0];
 
     ReadyToGo flip_switch = (ReadyToGo) args[1];
     
@@ -211,18 +211,26 @@ public class ProxyBotAgent extends Agent{
         if (msg.getPerformative() == ACLMessage.INFORM) {
           //DEBUG
           //System.out.println(agent.getLocalName() + ": MSG INFORM : " + msg.getContent() ); 
-          //System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + msg.getContent());
+          /*try {
+			System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + msg.getContentObject());
+		} catch (UnreadableException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}*/
 
           //
           // Process the game update that was received. Pass on the information to ProxyBot client 
           // application by placing data onto the reply queue
           //
           try {
-            jadeReplyQueue.put( msg.getContent() );
+            jadeReplyQueue.put( (GameObject) msg.getContentObject() );
           } catch( InterruptedException ie ) {
             System.err.println( "ERROR while sending reply '" + msg + "' back to caller thread..." );
             ie.printStackTrace();
-          }
+          } catch (UnreadableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         }
       } else {
         block();

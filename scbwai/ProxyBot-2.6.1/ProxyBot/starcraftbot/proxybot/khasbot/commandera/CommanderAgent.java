@@ -100,10 +100,10 @@ public class CommanderAgent extends Agent{
     } 
 
     //this template will only respond to INFORM messages 
-    proxybotagent_inform_mt = MessageTemplate.and(
-                                                MessageTemplate.MatchPerformative(ACLMessage.INFORM),
-                                                MessageTemplate.MatchSender(proxybotagent)
-                                                );
+    proxybotagent_inform_mt = /*MessageTemplate.and(*/
+                                                MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+                                                /*MessageTemplate.MatchSender(proxybotagent)
+                                                );*/
 
     unitmanager_inform_mt = MessageTemplate.and(
                                                 MessageTemplate.MatchPerformative(ACLMessage.INFORM),

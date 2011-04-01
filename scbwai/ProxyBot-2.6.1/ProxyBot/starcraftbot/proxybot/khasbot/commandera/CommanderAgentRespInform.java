@@ -1,5 +1,7 @@
 package starcraftbot.proxybot.khasbot.commandera;
 
+import java.io.IOException;
+
 import jade.content.ContentManager;
 import jade.content.lang.Codec;
 import jade.content.lang.sl.SLCodec;
@@ -29,38 +31,56 @@ public class CommanderAgentRespInform extends CyclicBehaviour{
   public void action() {
     //process only the Inform messages
     ACLMessage msg = agent.receive(mt);
-    if (msg != null) {
-      try{
+    if (msg != null){// && msg.getPerformative() == ACLMessage.INFORM) {
+      /*try{
         System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + msg.getContentObject());
         sendGameUpdate2Agents(msg);
       }catch(Exception e) {
         System.out.println(agent.getLocalName() + "FAIL: Unable to get message ContentObject");
-      }
+      }*/
       //System.out.println(agent.getLocalName() + ": MSG RX : " + msg.getContent() ); 
-      /*if (msg.getPerformative() == ACLMessage.INFORM) {
+      if (msg.getPerformative() == ACLMessage.INFORM) {
         //System.out.println(agent.getLocalName() + ": MSG INFORM : " + msg.getContent() ); 
         
         //handle the messages that come from Proxybot and send them to agents that need the game object update
         if(ParseACLMessage.isSenderProxyBot(msg)) {
-          System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + msg.getContent());
+          /*try {
+			System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + msg.getContentObject());
+		} catch (UnreadableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
           proxybot_agent_name = ParseACLMessage.getProxyBotName(msg);
 
-          //sendGameUpdate2Agents(msg);
+          sendGameUpdate2Agents(msg);
 
         }//end if ProxyBot
         //handle the messages that come from UnitManager and send them to ProxyBot 
         if(ParseACLMessage.isSenderUnitManager(msg)) {
-          System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + msg.getContent());
+         /* try {
+			System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + msg.getContentObject());
+		} catch (UnreadableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
           
           ACLMessage msg_gameObj_update = new ACLMessage(ACLMessage.INFORM); 
           msg_gameObj_update.addReceiver(new AID(proxybot_agent_name, AID.ISLOCALNAME));
           //msg_gameObj.setContent(gameObject);
-          msg_gameObj_update.setContent("Game Object Update");
+          try {
+			msg_gameObj_update.setContentObject(msg.getContentObject());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnreadableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
           agent.send(msg_gameObj_update);
 
         }//end if UnitManager
       }//end if ACLMessage.INFORM
-      */
+      
     } else {
       block();
     }
@@ -71,20 +91,18 @@ public class CommanderAgentRespInform extends CyclicBehaviour{
     //
     //game updates go to game_update_agents[]
     //
- 
-	for( int i=0; i < game_update_agents.length; i++){ 
 	  ACLMessage msg_gameObj = new ACLMessage(ACLMessage.INFORM);
-	  msg_gameObj.clearAllReceiver();
-      try{
+	  try{
           msg_gameObj.setContentObject(msg.getContentObject());
         }catch(Exception e){
           System.out.println("Failed to serialize the Game object!!!");
       }
-        msg_gameObj.addReceiver(game_update_agents[i]);
-        System.out.println("Commander Sending Game update to: "+ game_update_agents[i].getLocalName());
-        agent.send(msg_gameObj);
+	for( int i=0; i < game_update_agents.length; i++){ 
+	  msg_gameObj.clearAllReceiver();
+      msg_gameObj.addReceiver(game_update_agents[i]);
+      //System.out.println("Commander Sending Game update to: "+ game_update_agents[i].getLocalName());
+      agent.send(msg_gameObj);
     }
-
   }
 
 

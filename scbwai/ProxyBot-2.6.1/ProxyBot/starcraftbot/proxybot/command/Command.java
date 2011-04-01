@@ -1,5 +1,7 @@
 package starcraftbot.proxybot.command;
 
+import java.io.Serializable;
+
 /**
  * Representation of a command (Order) in StarCraft. The list of commands is
  * enumerated here: http://code.google.com/p/bwapi/wiki/Orders
@@ -33,7 +35,7 @@ package starcraftbot.proxybot.command;
  * 
  * In StarCraft, commands take up to 3 arguments.
  */
-public class Command {
+public class Command implements Serializable {
 
 	/** the command to execute, as defined by StarCraftCommand */
 	private int command;
