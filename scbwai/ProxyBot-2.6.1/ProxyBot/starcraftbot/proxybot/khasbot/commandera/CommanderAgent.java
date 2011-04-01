@@ -34,7 +34,8 @@ public class CommanderAgent extends Agent{
   AID unit_manager = null;
 
   public void setup() {
-    System.out.println(getAID().getLocalName() + ": is alive !!!");
+    //DEBUG
+    //System.out.println(getAID().getLocalName() + ": is alive !!!");
 
     //
     //Message Templates
@@ -51,7 +52,6 @@ public class CommanderAgent extends Agent{
     //arguments passed into agent
     Object[] args = getArguments();
     
-    //System.out.println(getAID().getLocalName() + ": RX " + args.length + " arguments");
     
     //set the proxy bot agent name, this index is HARDCODE
     String temp = (String)args[0];
@@ -60,6 +60,7 @@ public class CommanderAgent extends Agent{
     khasbot_agents = new String[args.length-1];
     khasbot_agent_names = new String[args.length-1];
     game_update_agents = new AID[6]; //HARDCODE: predefined agents that will get game updates
+    
     //
     //now strip out the khasbot agents that the commander will create from the arguments passed in
     //
@@ -77,23 +78,19 @@ public class CommanderAgent extends Agent{
         unit_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
         game_update_agents[k++] = unit_manager;
       }
-      else if(khasbot_agent_names[j].matches(".*[Ss]tructure[Mm]anager.*"))
-      {
+      else if(khasbot_agent_names[j].matches(".*[Ss]tructure[Mm]anager.*")) {
         structure_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
         game_update_agents[k++] = structure_manager;
       }
-      else if(khasbot_agent_names[j].matches(".*[Bb]attle[Mm]anager.*"))
-      {
+      else if(khasbot_agent_names[j].matches(".*[Bb]attle[Mm]anager.*")) {
     	  battle_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
     	  game_update_agents[k++] = battle_manager;
       }
-      else if(khasbot_agent_names[j].matches(".*[Rr]esource[Mm]anager.*"))
-      {
+      else if(khasbot_agent_names[j].matches(".*[Rr]esource[Mm]anager.*")) {
     	  resource_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
     	  game_update_agents[k++] = resource_manager;
       }
-      else if(khasbot_agent_names[j].matches(".*[Mm]ap[Mm]anager.*"))
-      {
+      else if(khasbot_agent_names[j].matches(".*[Mm]ap[Mm]anager.*")) {
     	  map_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
     	  game_update_agents[k++] = map_manager;
       }

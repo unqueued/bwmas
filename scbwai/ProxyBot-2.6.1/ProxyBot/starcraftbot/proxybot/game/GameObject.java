@@ -40,11 +40,6 @@ public class GameObject implements Serializable {
   /** Tech Objects we have */
   private TechObject tech = null;
 
-  /** timestamp of when the game state was last changed */
-  private long lastGameUpdate = 0;
-
-  int frame = 0;
-
   /** String given from Socket dll information*/
   private String update;
 
@@ -73,8 +68,6 @@ public class GameObject implements Serializable {
                     String baseLocationsData, 
                     String regionsData){
     
-
-		
     playersInGame = PlayerObject.parsePlayersData(playersData);
     
     String[] playerDatas = playersData.split(":");
@@ -93,7 +86,8 @@ public class GameObject implements Serializable {
 	CommandsToDo = new ArrayList<Command>();
 
     map = new MapObject(startingLocationsData, mapData);
-    //future work
+
+    //future work for the MapObject to incorporate AI
     //map = new MapObject(startingLocationsData, mapData, baseLocationsData, chokepointsData, regionsData);
   
   }//end Constructor
@@ -109,15 +103,15 @@ public class GameObject implements Serializable {
 	public void processGameUpdate(String update) {
 
 		String[] parsed_update = update.split(":")[0].split(";");
-		//System.out.println("parsed data for updateAttributes()");
-    /* may have to change, not sure */
+
+    /* may have to change, not sure, just don't like the args of array elements, will fix later */
     myPlayer.updateAttributes(parsed_update[1],parsed_update[2],parsed_update[3],parsed_update[4],parsed_update[5],parsed_update[6]);
-    	//System.out.println("Attributes done, about to parseUpdateUnits()...");
+
     unitsInGame = UnitsObject.parseUpdateUnits(update, this);
-    	//System.out.println("done w/ parseUpdateUnits()!");
+
     
-    lastGameUpdate = System.currentTimeMillis();	
-    	
+    //DEBUG
+    //System.out.println("myPlayer> " + myPlayer);
 //
 //
 //		units = UnitWME.getUnits(this, updateData, unitTypes, playerID, playerArray);

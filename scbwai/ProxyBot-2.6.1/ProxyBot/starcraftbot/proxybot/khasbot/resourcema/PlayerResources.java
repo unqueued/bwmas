@@ -10,6 +10,15 @@ public class PlayerResources implements Serializable {
   private int supplyUsed;
   private int supplyTotal;
 
+  /**
+   * This is to update the attributes the player has. This is
+   * not related to any of the gas or mineral objects. This is
+   * just player game environment changes.
+   * @param in_minerals
+   * @param in_gas
+   * @param in_supplyUsed
+   * @param in_supplyTotal
+   */
   public void update(String in_minerals, String in_gas, String in_supplyUsed, String in_supplyTotal){
     minerals = Integer.parseInt(in_minerals);
     gas = Integer.parseInt(in_gas);

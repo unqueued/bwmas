@@ -52,7 +52,8 @@ public class UnitManagerAgent extends Agent{
   AID map_manager = null;
   
 	protected void setup(){
-    System.out.println(getAID().getLocalName() + ": is alive !!!");
+    //DEBUG 
+    //System.out.println(getAID().getLocalName() + ": is alive !!!");
    
     //arguments passed into agent
     Object[] args = getArguments();

@@ -20,7 +20,8 @@ public class MapManagerAgent extends Agent{
 	private GameObject game;
 	
 	protected void setup(){
-    System.out.println(getAID().getLocalName() + ": is alive !!!");
+    //DEBUG
+    //System.out.println(getAID().getLocalName() + ": is alive !!!");
 
     MessageTemplate fipa_request_mt = null;
     MessageTemplate inform_mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);

@@ -41,6 +41,7 @@ public class BattleManagerAgentRespInform extends CyclicBehaviour{
           //
           
           try {
+            //DEBUG
             //System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + ((GameObject)(msg.getContentObject())).toString());
 			agent.setGameObject((GameObject) msg.getContentObject());
 		} catch (UnreadableException e) {

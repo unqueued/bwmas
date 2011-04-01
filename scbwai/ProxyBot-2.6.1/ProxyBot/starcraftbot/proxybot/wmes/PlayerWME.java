@@ -111,13 +111,13 @@ public class PlayerWME extends WME {
 		for (int i = 0; i < r; i++) {
 			t = researchUpdate.charAt(i);
 			v = Integer.parseInt(""+t);
-      //System.out.print("t: "+t);
-      //System.out.print(" v: "+v + " ");
+//          System.out.print("t: "+t);
+//          System.out.print(" v: "+v + " ");
 			hasResearched[i] = v > 3;
 			isResearching[i] = (v > 0) && (v < 3);
 		}
     
-    System.out.println();
+//        System.out.println();
 
 		//for (int i=0; i<r; i++) {
 		//	isResearching[i] = Integer.parseInt("" + researchUpdate.charAt(r)) > 0 && Integer.parseInt(""+ researchUpdate.charAt(r)) < 3;

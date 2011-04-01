@@ -39,7 +39,8 @@ public class BuildingManagerAgent extends Agent {
 	private GameObject game;
 
 	protected void setup(){
-    System.out.println(getAID().getLocalName() + ": is alive !!!");
+    //DEBUG
+    //System.out.println(getAID().getLocalName() + ": is alive !!!");
 
     //
     //Message Templates

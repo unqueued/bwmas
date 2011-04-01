@@ -152,9 +152,11 @@ public class UnitWME extends WME {
 	/**
 	 * Parses the unit data.
 	 */
-	public static ArrayList<UnitWME> getUnits(Game game, String unitData,
-			HashMap<Integer, UnitTypeWME> types, int playerID,
-			PlayerWME[] players) {
+	public static ArrayList<UnitWME> getUnits(Game game,
+                                            String unitData,
+                                            HashMap<Integer, UnitTypeWME> types,
+                                            int playerID,
+                                            PlayerWME[] players) {
 
 		ArrayList<UnitWME> units = new ArrayList<UnitWME>();
 		String[] unitDatas = unitData.split(":");

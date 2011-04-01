@@ -71,7 +71,8 @@ public class ProxyBotAgentCreateAgents {
     
       agent.addBehaviour(new AchieveREInitiator(agent, request) {
         protected void handleInform(ACLMessage inform) {
-          System.out.println(agent.getAID().getLocalName() + ": " + ca.getAgentName() + " successfully created");
+          //DEBUG
+          //System.out.println(agent.getAID().getLocalName() + ": " + ca.getAgentName() + " successfully created");
         }
         protected void handleFailure(ACLMessage failure) {
           System.out.println("Error creating agent.");

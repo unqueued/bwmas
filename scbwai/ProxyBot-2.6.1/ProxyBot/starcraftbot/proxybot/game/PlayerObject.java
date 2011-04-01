@@ -27,7 +27,7 @@ public class PlayerObject implements Serializable {
   private PlayerTech myTech = null;
 
   /**
-   * Default no arg constructor
+   * Default no arg constructor.
    * 
    * Sets up PlayerObject which includes ID, Race, Name, Resources, and Tech...
    */
@@ -76,14 +76,6 @@ public class PlayerObject implements Serializable {
   }
   /**
    * 
-   * @return playerID
-   */
-  public int getPlayerID(){
-	  return playerID;
-  }
-
-  /**
-   * 
    * @param race_name
    */
   public void setPlayerRace(String race_name){
@@ -104,9 +96,9 @@ public class PlayerObject implements Serializable {
   }
 
   /* Accessors */
-  /*public int getPlayerID(){
+  public int getPlayerID(){
     return playerID;
-  }*/
+  }
 
   public Race getPlayerRace(){
     return playerRace;

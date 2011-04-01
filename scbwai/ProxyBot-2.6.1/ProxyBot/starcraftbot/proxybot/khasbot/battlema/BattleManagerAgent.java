@@ -21,7 +21,8 @@ public class BattleManagerAgent extends Agent{
 	private GameObject game;
 	
 	protected void setup(){
-    System.out.println(getAID().getLocalName() + ": is alive !!!");
+    //DEBUG 
+    //System.out.println(getAID().getLocalName() + ": is alive !!!");
 
     MessageTemplate inform_mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
     
