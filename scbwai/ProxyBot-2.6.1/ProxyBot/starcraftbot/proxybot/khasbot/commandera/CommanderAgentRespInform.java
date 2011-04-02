@@ -20,12 +20,27 @@ public class CommanderAgentRespInform extends CyclicBehaviour{
   MessageTemplate mt = null;
   AID[] game_update_agents = null;
   String proxybot_agent_name = null;
+  
+  private boolean sentOnce = false;
+  private AID unit = null;
 
   public CommanderAgentRespInform(Agent a, MessageTemplate mt, AID[] game_update_agents) {
     super(a);
     agent=a;
     this.mt=mt;
     this.game_update_agents = game_update_agents;
+    
+    for(int i= 0; i < game_update_agents.length; i++)
+    {
+    	if(game_update_agents[i].getLocalName().matches(".*[Uu]nit[Mm]anager.*"))
+    		unit = game_update_agents[i];
+    }
+    /*(khasbot_agent_names[j].matches(".*[Uu]nit[Mm]anager.*")){
+        unit_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
+        game_update_agents[k++] = unit_manager;
+      }*/
+    
+    
   }
 
   public void action() {
@@ -54,6 +69,8 @@ public class CommanderAgentRespInform extends CyclicBehaviour{
 
           sendGameUpdate2Agents(msg);
 
+          sentOnce = true;
+          
         }//end if ProxyBot
         //handle the messages that come from UnitManager and send them to ProxyBot 
         if(ParseACLMessage.isSenderUnitManager(msg)) {
@@ -88,6 +105,8 @@ public class CommanderAgentRespInform extends CyclicBehaviour{
 
   }//end action
 
+
+  
   private void sendGameUpdate2Agents(ACLMessage msg){
     //
     //game updates go to game_update_agents[]
@@ -98,12 +117,25 @@ public class CommanderAgentRespInform extends CyclicBehaviour{
         }catch(Exception e){
           System.out.println("Failed to serialize the Game object!!!");
       }
-	for( int i=0; i < game_update_agents.length; i++){ 
-	  msg_gameObj.clearAllReceiver();
-      msg_gameObj.addReceiver(game_update_agents[i]);
-      //System.out.println("Commander Sending Game update to: "+ game_update_agents[i].getLocalName());
-      agent.send(msg_gameObj);
+    
+    if(sentOnce)
+    {
+    	msg_gameObj.clearAllReceiver();
+    	msg_gameObj.addReceiver(unit);
+    	//System.out.println("Command Sending Game update ONLY to: "+ unit.getLocalName());
+    	agent.send(msg_gameObj);
     }
+     
+    else
+    {
+		for( int i=0; i < game_update_agents.length; i++){ 
+		  msg_gameObj.clearAllReceiver();
+	      msg_gameObj.addReceiver(game_update_agents[i]);
+	      //System.out.println("Commander Sending Game update to: "+ game_update_agents[i].getLocalName());
+	      agent.send(msg_gameObj);
+	    }
+    }
+    msg_gameObj.reset();
   }
 
 
