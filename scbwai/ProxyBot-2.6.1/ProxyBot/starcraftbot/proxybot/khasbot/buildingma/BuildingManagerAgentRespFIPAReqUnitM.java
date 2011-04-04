@@ -1,34 +1,39 @@
 /**
  * 
  */
-package starcraftbot.proxybot.khasbot.commandera;
+package starcraftbot.proxybot.khasbot.buildingma;
 
 import jade.core.*;
 import jade.domain.FIPAAgentManagement.*;
 import jade.lang.acl.*;
 import jade.proto.*;
 
+import starcraftbot.proxybot.ConverId;
 
 @SuppressWarnings("serial")
-public class CommanderAgentRespFIPARequest extends AchieveREResponder {
-	Agent agent=null;	
+public class BuildingManagerAgentRespFIPAReqUnitM extends AchieveREResponder {
+	BuildingManagerAgent agent=null;
   MessageTemplate mt = null;
 
-  public CommanderAgentRespFIPARequest(Agent a, MessageTemplate mt) {
+  public BuildingManagerAgentRespFIPAReqUnitM(BuildingManagerAgent a, MessageTemplate mt) {
     super(a, mt);
     agent=a;
     this.mt=mt;
-
   }
 
   protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
-    //System.out.println("MSG_H: " + agent.getLocalName() + ": REQUEST RX from " + request.getSender().getLocalName() + " Action: " + request.getContent());
-    ACLMessage agree = request.createReply();
-    agree.setPerformative(ACLMessage.AGREE);
-    return agree;
+    ACLMessage reply = request.createReply();
+    //check the conversation id
+    if( request.getConversationId().equals(ConverId.UnitM.NewStructureToBuild.getConId()) ){
+      //new structure requested
 
-   
+      //addBehaviour();//Request worker to build it
+      //or
+      //agent.buildNewStructure(worker,structure_id)
 
+      reply.setPerformative(ACLMessage.AGREE);
+    }
+    return reply; 
   }//end handleRequest
 
   protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) throws FailureException {

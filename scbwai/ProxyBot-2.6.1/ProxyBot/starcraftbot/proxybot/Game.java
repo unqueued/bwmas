@@ -3,8 +3,6 @@ package starcraftbot.proxybot;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import starcraftbot.proxybot.Constants.Race;
-import starcraftbot.proxybot.command.CommandQueue;
 import starcraftbot.proxybot.wmes.BaseLocationWME;
 import starcraftbot.proxybot.wmes.ChokePointWME;
 import starcraftbot.proxybot.wmes.MapWME;
@@ -63,9 +61,6 @@ public class Game {
 	/** list of upgrade types */
 	private ArrayList<UpgradeTypeWME> upgradeTypes = UpgradeTypeWME.getUpgradeTypes();
 
-	/** queue of commands to execute */
-	private CommandQueue commandQueue = new CommandQueue();
-
 	/** timestamp of when the game state was last changed */
 	private long lastGameUpdate = 0;
 
@@ -85,7 +80,8 @@ public class Game {
 	 * The game object will not have units until update is called.
 	 */
 	public Game(String playerData, String locationData, String mapData,String chokesData,String basesData,String regionData){
-		//System.out.println(locationData);
+		/*
+    //System.out.println(locationData);
 		String[] playerDatas = playerData.split(":");
 		playerID = Integer.parseInt(playerDatas[0].split(";")[1]);
 		players = PlayerWME.getPlayers(playerData);
@@ -95,7 +91,7 @@ public class Game {
 
 			if (playerID == p.getPlayerID()) {
 				player = p;
-		    	playerRace = Race.valueOf(p.getRace()).ordinal();
+		    	//playerRace = Race.valueOf(p.getRace()).ordinal();
 			}
 			else if (enemy == null) {
 				enemy = p;
@@ -111,7 +107,7 @@ public class Game {
 		baseLocations = BaseLocationWME.getLocations(basesData);
 		regions = RegionWME.getRegions(regionData);
 		chokePoints = ChokePointWME.getLocations(chokesData, regions);
-
+    */
 		new Thread() {
 			public void run() {
 				while (true) {
@@ -141,12 +137,6 @@ public class Game {
 		}
 	}
 
-	/**
-	 * Returns the command queue.
-	 */
-	public CommandQueue getCommandQueue() {
-		return commandQueue;
-	}
 
 	public int getGameFrame() {
 		return frame;
@@ -164,6 +154,7 @@ public class Game {
 	 * Updates the state of the game.
 	 */
 	public void updateData(String updateData) {
+    /*
 		frame++;
 		player.update(updateData, enemy);
 		units = UnitWME.getUnits(this, updateData, unitTypes, playerID, playerArray);
@@ -174,7 +165,8 @@ public class Game {
 			newMap.put(unit.getID(), unit);
 		}
 
-		unitMap = newMap;
+		unitMap = newMap;  
+    */
 	}
 
 	/**

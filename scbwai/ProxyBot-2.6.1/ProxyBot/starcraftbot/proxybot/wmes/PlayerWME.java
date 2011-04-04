@@ -2,7 +2,7 @@ package starcraftbot.proxybot.wmes;
 
 import java.util.ArrayList;
 
-import starcraftbot.proxybot.Constants.Race;
+
 import starcraftbot.proxybot.wmes.TechTypeWME.TechType;
 import starcraftbot.proxybot.wmes.UpgradeTypeWME.UpgradeType;
 
@@ -33,7 +33,7 @@ public class PlayerWME extends WME {
 	private String name;
 
 	/** the players race */
-	private Race race;
+	//private Race race;
 
 	private int raceID;
 
@@ -66,8 +66,8 @@ public class PlayerWME extends WME {
 			String[] attributes = data.split(";");
 			PlayerWME player = new PlayerWME();
 			player.playerID = Integer.parseInt(attributes[0]);
-			player.race = Race.valueOf(attributes[1]);
-			player.raceID = player.race.ordinal();
+//			player.race = Race.valueOf(attributes[1]);
+//			player.raceID = player.race.ordinal();
 			player.name = attributes[2];
 			player.type = Integer.parseInt(attributes[3]);
 			player.ally = attributes[4].equals("1");
@@ -246,13 +246,13 @@ public class PlayerWME extends WME {
 	/**
 	 * Returns the players race.
 	 */
-	public String getRace() {
-		return race.toString();
-	}
-
-	public Race getPlayerRace() {
-		return race;
-	}
+//	public String getRace() {
+//		return race.toString();
+//	}
+//
+//	public Race getPlayerRace() {
+//		return race;
+//	}
 
 	/**
 	 * Returns the players race ID.

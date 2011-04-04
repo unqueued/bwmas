@@ -2,7 +2,6 @@ package starcraftbot.proxybot.wmes;
 
 import java.util.ArrayList;
 
-import starcraftbot.proxybot.Constants.Race;
 
 /**
  * Reference data about the tech types in StarCraft.
@@ -120,9 +119,10 @@ public class TechTypeWME extends WME {
 		Stim_Packs, Lockdown, EMP_Shockwave, Spider_Mines, Scanner_Sweep, Tank_Siege_Mode, Defensive_Matrix, Irradiate, Yamato_Gun, Cloaking_Field, Personnel_Cloaking, Burrowing, Infestation, Spawn_Broodlings, Dark_Swarm, Plague, Consume, Ensnare, Parasite, Psionic_Storm, Hallucination, Recall, Stasis_Field, Archon_Warp, Restoration, Disruption_Web, undefined0, Mind_Control, Dark_Archon_Meld, Feedback, Optical_Flare, Maelstrom, Lurker_Aspect, undefined1, Healing, undefined2, undefined3, undefined4, undefined5, undefined6, undefined7, undefined8, undefined9, undefined10, None, Unknown, Nuclear_Strike,
 	};
 
-	public static ArrayList<TechType> getTypes(Race race) {
+	public static ArrayList<TechType> getTypes() {
 		ArrayList<TechType> types = new ArrayList<TechType>();
 
+    /*
 		switch (race) {
 		case Protoss:
 			types.add(TechType.Psionic_Storm);
@@ -165,7 +165,7 @@ public class TechTypeWME extends WME {
 			types.add(TechType.Lurker_Aspect);
 			break;
 		}
-
+    */
 		return types;
 	}
 

@@ -6,22 +6,20 @@ import jade.core.behaviours.*;
 import jade.content.lang.Codec;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.*;
-import jade.content.*;
 
-import jade.domain.FIPANames;
 import jade.domain.FIPANames.InteractionProtocol.*;
-import jade.domain.FIPAAgentManagement.*;
 import jade.domain.JADEAgentManagement.*;
 import jade.lang.acl.*;
-import jade.proto.*;
 
 import java.lang.reflect.*;
-import java.util.*;
-import java.util.logging.*;
 import java.util.concurrent.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import starcraftbot.proxybot.khasbot.ParseACLMessage;
 import starcraftbot.proxybot.game.GameObject;
+import starcraftbot.proxybot.game.GameObjectUpdate;
+import starcraftbot.proxybot.command.GameCommand;
+
 
 /**
  * This is the Agent that the Java Application ( ProxyBot.java ) will talk to.
@@ -35,7 +33,7 @@ public class ProxyBotAgent extends Agent{
   private Ontology ontology = JADEManagementOntology.getInstance();
 
   // A queue for passing back a reply to the ProxyBot.java 
-  ArrayBlockingQueue<GameObject> jadeReplyQueue = null;
+  ArrayBlockingQueue<GameCommand> jadeReplyQueue = null;
   
   //an array of strings will be used to store the agent names and paths
   //the values will be split via a ;
@@ -83,7 +81,7 @@ public class ProxyBotAgent extends Agent{
 
     //Now read in the arguments and make sure to set the 
     //jadeReplyQueue to communicate back to the AgentClient app
-    jadeReplyQueue = (ArrayBlockingQueue<GameObject>) args[0];
+    jadeReplyQueue = (ArrayBlockingQueue<GameCommand>) args[0];
 
     ReadyToGo flip_switch = (ReadyToGo) args[1];
     
@@ -111,8 +109,9 @@ public class ProxyBotAgent extends Agent{
     //create the commander agent, which will then create all the remaining agents that will be
     //used in the system
     agents.createAgents(this);
-  
-    
+
+    //MainWindow sniffer_gui = new MainWindow()
+
     /* 
      * This ParallelBehaviour will process all the incoming messages from the proxy bot client application
      * NOTE: all behaviours must block to keep the cpu cycles from just being busy waits
@@ -157,22 +156,45 @@ public class ProxyBotAgent extends Agent{
      */
     public void action(){
       //GameObject gets passed to the CommanderAgent
-      GameObject game = (GameObject) getO2AObject();
+      Object obj = getO2AObject();
+      GameObject game = null;
+      GameObjectUpdate game_update = null;
 
-      if(game != null){
-        //now create a message and send it to the CommanderAgent
-        //MUST use ACLMessage.INFORM 
-    		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);  
-        msg.addReceiver(commander);
-
-        try{
-          msg.setContentObject(game);
-        } catch(Exception e) {
-          e.printStackTrace();
+      if( obj != null ){
+        //System.out.println("Object received!");
+        if(obj instanceof GameObject){
+          //System.out.println("Object is GameObject!");
+          game = (GameObject)obj;
+        }else if(obj instanceof GameObjectUpdate){
+          //System.out.println("Object is GameObjectUpdate!");
+          game_update = (GameObjectUpdate)obj;
+        }else{
+          System.out.println("Object is unknown!");
+          System.out.println("Object" + obj.toString());
         }
-        //send the message
-        agent.send(msg);
-      } else {
+
+        if(game != null || game_update != null){
+          //now create a message and send it to the CommanderAgent
+          //MUST use ACLMessage.INFORM
+          ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+          msg.addReceiver(commander);
+          try{
+            if(game != null){
+              msg.setConversationId(ConverId.Game.InitGameObj.getConId());
+              msg.setContentObject(game);
+              //send the message
+              agent.send(msg);
+            } else if(game_update != null){
+              msg.setConversationId(ConverId.Game.GameObjUpdate.getConId());
+              msg.setContentObject(game_update);
+              //send the message
+              agent.send(msg);
+            }
+          } catch(Exception e) {
+            e.printStackTrace();
+          }
+        }
+      }else{
         block();
       }
     }//end action
@@ -206,36 +228,24 @@ public class ProxyBotAgent extends Agent{
     public void action() {
       ACLMessage msg = agent.receive(mt);
       if (msg != null) {
-        //DEBUG
-        //System.out.println(agent.getLocalName() + ": MSG RX : " + msg.getContent() ); 
-        if (msg.getPerformative() == ACLMessage.INFORM) {
-          //DEBUG
-          //System.out.println(agent.getLocalName() + ": MSG INFORM : " + msg.getContent() ); 
-          /*try {
-			System.out.println(agent.getLocalName() + "$ INFORM RX from " + msg.getSender().getLocalName() + " Action: " + msg.getContentObject());
-		} catch (UnreadableException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}*/
-
-          //
-          // Process the game update that was received. Pass on the information to ProxyBot client 
-          // application by placing data onto the reply queue
-          //
+        if (msg.getConversationId().equals(ConverId.Commands.ExecuteCommand.getConId())) {
           try {
-            jadeReplyQueue.put( (GameObject) msg.getContentObject() );
-          } catch( InterruptedException ie ) {
-            System.err.println( "ERROR while sending reply '" + msg + "' back to caller thread..." );
-            ie.printStackTrace();
-          } catch (UnreadableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+              //
+              // Process the game update that was received. Pass on the information to ProxyBot client
+              // application by placing command data onto the reply queue
+              //
+              jadeReplyQueue.put((GameCommand)msg.getContentObject());
+            } catch (UnreadableException ex) {
+              Logger.getLogger(ProxyBotAgent.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+              Logger.getLogger(ProxyBotAgent.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
       } else {
         block();
       }     
     }//end action
+
   }//end ProxyBotAgentA2PB
 }//end ProxyBotAgent
 

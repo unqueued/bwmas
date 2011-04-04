@@ -34,7 +34,7 @@ public class CommanderAgentCreateAgents {
     for( int i = 0; i < khasbot_agent_names.length; i++)
       ca.addArguments(khasbot_agent_names[i]);
 
-    //Only creates the Building and Structure managers for now
+    //go thru the list of agents and build them all
     for( int i = 0; i < khasbot_agents.length ; i++) {
       ca.setAgentName((String)Array.get(khasbot_agents[i].split(";"),0));
       ca.setClassName((String)Array.get(khasbot_agents[i].split(";"),1));

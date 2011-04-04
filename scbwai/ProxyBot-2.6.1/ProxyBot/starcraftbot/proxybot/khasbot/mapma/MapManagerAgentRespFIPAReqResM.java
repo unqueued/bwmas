@@ -1,20 +1,20 @@
 /**
  * 
  */
-package starcraftbot.proxybot.khasbot.commandera;
+package starcraftbot.proxybot.khasbot.mapma;
 
-import jade.core.*;
 import jade.domain.FIPAAgentManagement.*;
 import jade.lang.acl.*;
 import jade.proto.*;
 
+import starcraftbot.proxybot.ConverId;
 
 @SuppressWarnings("serial")
-public class CommanderAgentRespFIPARequest extends AchieveREResponder {
-	Agent agent=null;	
+public class MapManagerAgentRespFIPAReqResM extends AchieveREResponder {
+	MapManagerAgent agent=null;
   MessageTemplate mt = null;
 
-  public CommanderAgentRespFIPARequest(Agent a, MessageTemplate mt) {
+  public MapManagerAgentRespFIPAReqResM(MapManagerAgent a, MessageTemplate mt) {
     super(a, mt);
     agent=a;
     this.mt=mt;
@@ -22,12 +22,16 @@ public class CommanderAgentRespFIPARequest extends AchieveREResponder {
   }
 
   protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
-    //System.out.println("MSG_H: " + agent.getLocalName() + ": REQUEST RX from " + request.getSender().getLocalName() + " Action: " + request.getContent());
-    ACLMessage agree = request.createReply();
-    agree.setPerformative(ACLMessage.AGREE);
-    return agree;
-
-   
+    ACLMessage reply = request.createReply();
+    //check the conversation id
+    if( request.getConversationId().equals(ConverId.MapM.NearestMinerals.getConId()) ){
+      agent.NearestMinerals();
+      reply.setPerformative(ACLMessage.AGREE);
+    }else if( request.getConversationId().equals(ConverId.MapM.NearestGas.getConId()) ){
+      agent.NearestGas();
+      reply.setPerformative(ACLMessage.AGREE);
+    }
+    return reply;  
 
   }//end handleRequest
 
@@ -38,5 +42,5 @@ public class CommanderAgentRespFIPARequest extends AchieveREResponder {
     return inform;
 	}//end prepareResultNotification
 
-
 }
+

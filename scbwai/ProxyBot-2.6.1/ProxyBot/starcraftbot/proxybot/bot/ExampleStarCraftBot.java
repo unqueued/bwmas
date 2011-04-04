@@ -5,8 +5,6 @@ import java.io.IOException;
 import javax.swing.JPanel;
 
 import starcraftbot.proxybot.Game;
-import starcraftbot.proxybot.Constants.Order;
-import starcraftbot.proxybot.Constants.Race;
 import starcraftbot.proxybot.wmes.UnitTypeWME;
 import starcraftbot.proxybot.wmes.UnitTypeWME.UnitType;
 import starcraftbot.proxybot.wmes.unit.UnitWME;
@@ -65,7 +63,7 @@ public class ExampleStarCraftBot implements StarCraftBot {
 			
 			powered = new boolean[game.getMap().getMapHeight()][game.getMap().getMapWidth()];
 			
-			game.getCommandQueue().setColor(1);
+			//game.getCommandQueue().setColor(1);
 			
 			for(int i = 0; i < game.getMap().getMapHeight();i++)
 			{
@@ -77,7 +75,7 @@ public class ExampleStarCraftBot implements StarCraftBot {
 			}
 			
 
-			
+			/*
 			UnitWME Nexus = null;
 			for(UnitWME unit : game.getPlayerUnits()){
 				if(unit.getIsCenter())
@@ -164,7 +162,8 @@ public class ExampleStarCraftBot implements StarCraftBot {
 					}
 				}
 			}
-			
+      */
+			/*
 			for (UnitWME unit : game.getPlayerUnits()) {
 				if (unit.getTypeID() == UnitTypeWME.Protoss_Zealot || unit.getTypeID() == UnitTypeWME.Protoss_Dragoon)
 				{
@@ -241,6 +240,8 @@ public class ExampleStarCraftBot implements StarCraftBot {
 					}
 				}
 			}
+      */
+      /*
 			// build more workers
 			//UnitWME center = new UnitWME();
 			if (game.getPlayer().getMinerals() >= 50  && !probecount  && (gatewayBuild || NonBuildingUnits < 8)) {
@@ -273,7 +274,8 @@ public class ExampleStarCraftBot implements StarCraftBot {
 					}
 				}
 			}
-
+      */
+      /*
 			//if we have a gateway, build a cybernetics core
 			if(gatewayBuild && !cybercoreBuilding && !cybercoreBuild)
 			{
@@ -368,6 +370,9 @@ public class ExampleStarCraftBot implements StarCraftBot {
 					}
 				}
 			}
+      */
+
+      /*
 			//if we have a gateway, build an assimilator
 			if(gatewayBuild && !buildingGas && !canGas)
 			{
@@ -400,6 +405,8 @@ public class ExampleStarCraftBot implements StarCraftBot {
 					}
 				}
 			}
+      */
+      /*
 			//if we have pylons, build a gateway
 			if(game.getPlayer().getMinerals() >= 150 && !gatewayBuild && !gatewayBuilding)
 			{
@@ -495,7 +502,8 @@ public class ExampleStarCraftBot implements StarCraftBot {
 				}
 				
 			}
-			
+			*/
+      /*
 			// build more supply
 
 			NonBuildingUnits = 0;
@@ -593,7 +601,7 @@ public class ExampleStarCraftBot implements StarCraftBot {
 						}
 					}
 				}
-
+       */
 		}
 	}
 

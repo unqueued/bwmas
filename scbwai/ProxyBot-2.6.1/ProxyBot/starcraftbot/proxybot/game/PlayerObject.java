@@ -121,7 +121,12 @@ public class PlayerObject implements Serializable {
    * @param String in_upgradeUpdate
    * 
    */
-  public void updateAttributes(String in_minerals, String in_gas, String in_supplyUsed, String in_supplyTotal, String in_researchUpdate, String in_upgradeUpdate){
+  public void updateAttributes(String in_minerals,
+                               String in_gas,
+                               String in_supplyUsed,
+                               String in_supplyTotal,
+                               String in_researchUpdate,
+                               String in_upgradeUpdate){
     myResources.update(in_minerals,in_gas, in_supplyUsed, in_supplyTotal); 
     myTech.update(in_researchUpdate,in_upgradeUpdate);
   }

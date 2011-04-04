@@ -4,7 +4,6 @@ import java.util.*;
 import java.io.*;
 
 import starcraftbot.proxybot.command.GameCommand;
-import starcraftbot.proxybot.khasbot.mapma.MapObject;
 import starcraftbot.proxybot.khasbot.unitma.Units;
 
 
@@ -19,68 +18,24 @@ import starcraftbot.proxybot.khasbot.unitma.Units;
  * 
  * 
  */
-public class GameObject implements Serializable {
+public class GameObjectUpdate implements Serializable {
 
   private PlayerObject myPlayer = null;
-  private int myPlayerId;
-
+  
   /** all players */
   private ArrayList<PlayerObject> playersInGame;
   
   private Units unitsInGame;
 
-  /** map information */
-  private MapObject map = null;
-
   /**
    * Default Constructor. Does nothing.
    */
-  public GameObject () {
-    
-  }
-  
-  /**
-   * @param playerData lists the players in the game (maybe)
-   * @param locationData this will have the starting location of the players
-   * @param mapData lists the map data
-   *
-   * Optional params
-   * @param chokePointData lists the choke points on the map
-   * @param baseLocationsData lists the bases on the map
-   * @param regionsData lists the regions on the map
-   *
-   */
-	public GameObject(String playersData, 
-                    String startingLocationsData, 
-                    String mapData, 
-                    String chokePointsData, 
-                    String baseLocationsData, 
-                    String regionsData){
-    
-    playersInGame = PlayerObject.parsePlayersData(playersData);
-    
-    String[] playerDatas = playersData.split(":");
-    int my_player_id = Integer.parseInt(playerDatas[0].split(";")[1]);
-
-    //set myPlayer from the players on our list
-    for(PlayerObject tmp : playersInGame) {
-      if(tmp.getPlayerID() == my_player_id) {
-        myPlayer = tmp;
-        break;
-      } 
-    }
-
+  public GameObjectUpdate (GameObject game) {
+    myPlayer = game.getMyPlayer();
+    playersInGame = game.getPlayersInGame();
     unitsInGame = new Units();
-
-    map = new MapObject(startingLocationsData, mapData);
-
-    //future work for the MapObject to incorporate AI
-    //map = new MapObject(startingLocationsData, mapData, baseLocationsData, chokepointsData, regionsData);
-  
-  }//end Constructor
-
-   
-
+  }
+ 
 	/**
 	 * Updates the state of the game from the info passed to us by ProxyBot.java.
      * It looks like the string contains data that is only relevant to us.
@@ -113,9 +68,9 @@ public class GameObject implements Serializable {
     return unitsInGame;
   }
 
-  public ArrayList<PlayerObject> getPlayersInGame(){
+public ArrayList<PlayerObject> getPlayersInGame(){
     return playersInGame;
   }
-
-}//end GameObject
+ 
+}//end GameObjectUpdate
 

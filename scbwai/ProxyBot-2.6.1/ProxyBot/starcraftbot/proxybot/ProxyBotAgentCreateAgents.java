@@ -36,20 +36,17 @@ public class ProxyBotAgentCreateAgents {
     final CreateAgent ca = new CreateAgent();
     final CreateAgent ca2 = new CreateAgent();
     Action actExpr = new Action();
-  
-    Action actExpr2 = new Action();
-    
+	Action actExpr2 = new Action();
+    /*
+     * Now create the agents for our application
+     */
     //pass a wait switch so that we can communicate with the agent once it has
     //been created
-    ReadyToGo commander_ready = new ReadyToGo();
- 
     ca.setAgentName(agent_name);
     ca.setClassName(agent_classname);
 
     ca2.setAgentName("SnifferBot");
     ca2.setClassName("jade.tools.sniffer.Sniffer");
-    
-    
     
     //now send the khasbot agents as individual strings. I wasn't able
     //to get the String[] to work (I'm also too tired to figure it out now,
@@ -103,7 +100,7 @@ public class ProxyBotAgentCreateAgents {
       agent.addBehaviour(new AchieveREInitiator(agent, request) {
         protected void handleInform(ACLMessage inform) {
           //DEBUG
-          System.out.println(agent.getAID().getLocalName() + ": " + ca.getAgentName() + " successfully created");
+          //System.out.println(agent.getAID().getLocalName() + ": " + ca.getAgentName() + " successfully created");
         }
         protected void handleFailure(ACLMessage failure) {
           System.out.println("Error creating agent.");
@@ -113,6 +110,8 @@ public class ProxyBotAgentCreateAgents {
     } catch (Exception e) {
       e.printStackTrace();
     }//end try-catch
+
+
 
   }//end createAgents
 

@@ -1,20 +1,21 @@
 /**
  * 
  */
-package starcraftbot.proxybot.khasbot.commandera;
+package starcraftbot.proxybot.khasbot.unitma;
 
-import jade.core.*;
 import jade.domain.FIPAAgentManagement.*;
 import jade.lang.acl.*;
 import jade.proto.*;
 
 
+import starcraftbot.proxybot.ConverId;
+
 @SuppressWarnings("serial")
-public class CommanderAgentRespFIPARequest extends AchieveREResponder {
-	Agent agent=null;	
+public class UnitManagerAgentRespFIPAReqCmd extends AchieveREResponder {
+	UnitManagerAgent agent=null;	
   MessageTemplate mt = null;
 
-  public CommanderAgentRespFIPARequest(Agent a, MessageTemplate mt) {
+  public UnitManagerAgentRespFIPAReqCmd(UnitManagerAgent a, MessageTemplate mt) {
     super(a, mt);
     agent=a;
     this.mt=mt;
@@ -22,13 +23,13 @@ public class CommanderAgentRespFIPARequest extends AchieveREResponder {
   }
 
   protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
-    //System.out.println("MSG_H: " + agent.getLocalName() + ": REQUEST RX from " + request.getSender().getLocalName() + " Action: " + request.getContent());
-    ACLMessage agree = request.createReply();
-    agree.setPerformative(ACLMessage.AGREE);
-    return agree;
-
-   
-
+    ACLMessage reply = request.createReply();
+    //check the conversation id
+    if( request.getConversationId().equals(ConverId.UnitM.UnitsLost.getConId()) ){
+      agent.UnitsLost();
+      reply.setPerformative(ACLMessage.AGREE);
+    }
+    return reply; 
   }//end handleRequest
 
   protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) throws FailureException {
@@ -40,3 +41,4 @@ public class CommanderAgentRespFIPARequest extends AchieveREResponder {
 
 
 }
+

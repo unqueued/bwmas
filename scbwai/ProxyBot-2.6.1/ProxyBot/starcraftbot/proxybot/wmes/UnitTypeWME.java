@@ -3,7 +3,6 @@ package starcraftbot.proxybot.wmes;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import starcraftbot.proxybot.Constants.Race;
 
 /**
  * Represents a unit type in StarCraft.
@@ -19,14 +18,15 @@ public class UnitTypeWME extends WME {
 	 * Returns the worker type for the given race.
 	 */
 	public static int getWorkerType(int race) {
-		switch (Race.values()[race]) {
-		case Zerg:
-			return Zerg_Drone;
-		case Terran:
-			return Terran_SCV;
-		case Protoss:
-			return Protoss_Probe;
-		}
+
+//		switch (Race.values()[race]) {
+//		case Zerg:
+//			return Zerg_Drone;
+//		case Terran:
+//			return Terran_SCV;
+//		case Protoss:
+//			return Protoss_Probe;
+//		}
 
 		return -1;
 	}
@@ -35,14 +35,14 @@ public class UnitTypeWME extends WME {
 	 * Returns the supply type (farm) for the given race.
 	 */
 	public static int getSupplyType(int race) {
-		switch (Race.values()[race]) {
-		case Zerg:
-			return Zerg_Overlord;
-		case Terran:
-			return Terran_Supply_Depot;
-		case Protoss:
-			return Protoss_Pylon;
-		}
+//		switch (Race.values()[race]) {
+//		case Zerg:
+//			return Zerg_Overlord;
+//		case Terran:
+//			return Terran_Supply_Depot;
+//		case Protoss:
+//			return Protoss_Pylon;
+//		}
 
 		return -1;
 	}
@@ -51,14 +51,14 @@ public class UnitTypeWME extends WME {
 	 * Returns the main hall for the given race.
 	 */
 	public static int getCenterType(int race) {
-		switch (Race.values()[race]) {
-		case Zerg:
-			return Zerg_Hatchery;
-		case Terran:
-			return Terran_Command_Center;
-		case Protoss:
-			return Protoss_Nexus;
-		}
+//		switch (Race.values()[race]) {
+//		case Zerg:
+//			return Zerg_Hatchery;
+//		case Terran:
+//			return Terran_Command_Center;
+//		case Protoss:
+//			return Protoss_Nexus;
+//		}
 
 		return -1;
 	}
@@ -281,63 +281,63 @@ public class UnitTypeWME extends WME {
 	/** id of the unit type that produces this */
 	private int whatBuilds;
 
-	public UnitTypeWME(int id, Race race, String name, int mineralsCost,
-			int gasCost, int maxHitPoints, int maxShields, int maxEnergy,
-			int buildTime, boolean canAttack, boolean canMove, int tileWidth,
-			int tileHeight, int supplyRequired, int supplyProvided,
-			int sightRange, int groundMinRange, int groundMaxRange,
-			int groundDamage, int airRange, int airDamage, boolean building,
-			boolean flyer, boolean spellCaster, boolean worker, int whatBuilds) {
+//	public UnitTypeWME(int id, Race race, String name, int mineralsCost,
+//			int gasCost, int maxHitPoints, int maxShields, int maxEnergy,
+//			int buildTime, boolean canAttack, boolean canMove, int tileWidth,
+//			int tileHeight, int supplyRequired, int supplyProvided,
+//			int sightRange, int groundMinRange, int groundMaxRange,
+//			int groundDamage, int airRange, int airDamage, boolean building,
+//			boolean flyer, boolean spellCaster, boolean worker, int whatBuilds) {
+//
+//		this.id = id;
+//		this.race = race.ordinal();
+//		this.name = name;
+//		this.mineralsCost = mineralsCost;
+//		this.gasCost = gasCost;
+//		this.maxHitPoints = maxHitPoints;
+//		this.maxShields = maxShields;
+//		this.maxEnergy = maxEnergy;
+//		this.buildTime = buildTime;
+//		this.canAttack = canAttack;
+//		this.canMove = canMove;
+//		this.tileWidth = tileWidth;
+//		this.tileHeight = tileHeight;
+//		this.supplyRequired = supplyRequired;
+//		this.supplyProvided = supplyProvided;
+//		this.sightRange = sightRange;
+//		this.groundMinRange = groundMinRange;
+//		this.groundMaxRange = groundMaxRange;
+//		this.groundDamage = groundDamage;
+//		this.airRange = airRange;
+//		this.airDamage = airDamage;
+//		this.building = building;
+//		this.flyer = flyer;
+//		this.spellCaster = spellCaster;
+//		this.worker = worker;
+//		this.whatBuilds = whatBuilds;
+//	}
 
-		this.id = id;
-		this.race = race.ordinal();
-		this.name = name;
-		this.mineralsCost = mineralsCost;
-		this.gasCost = gasCost;
-		this.maxHitPoints = maxHitPoints;
-		this.maxShields = maxShields;
-		this.maxEnergy = maxEnergy;
-		this.buildTime = buildTime;
-		this.canAttack = canAttack;
-		this.canMove = canMove;
-		this.tileWidth = tileWidth;
-		this.tileHeight = tileHeight;
-		this.supplyRequired = supplyRequired;
-		this.supplyProvided = supplyProvided;
-		this.sightRange = sightRange;
-		this.groundMinRange = groundMinRange;
-		this.groundMaxRange = groundMaxRange;
-		this.groundDamage = groundDamage;
-		this.airRange = airRange;
-		this.airDamage = airDamage;
-		this.building = building;
-		this.flyer = flyer;
-		this.spellCaster = spellCaster;
-		this.worker = worker;
-		this.whatBuilds = whatBuilds;
-	}
-
-	public static ArrayList<UnitType> getTypes(Race race) {
-		ArrayList<UnitType> types = new ArrayList<UnitType>();
-
-		for (UnitType type : UnitType.values()) {
-			if (race.equals(Race.Protoss)) {
-				if (type.name().startsWith("Protoss")) {
-					types.add(type);
-				}
-			} else if (race.equals(Race.Terran)) {
-				if (type.name().startsWith("Terran")) {
-					types.add(type);
-				}
-			} else if (race.equals(Race.Zerg)) {
-				if (type.name().startsWith("Zerg")) {
-					types.add(type);
-				}
-			}
-		}
-
-		return types;
-	}
+//	public static ArrayList<UnitType> getTypes(Race race) {
+//		ArrayList<UnitType> types = new ArrayList<UnitType>();
+//
+//		for (UnitType type : UnitType.values()) {
+//			if (race.equals(Race.Protoss)) {
+//				if (type.name().startsWith("Protoss")) {
+//					types.add(type);
+//				}
+//			} else if (race.equals(Race.Terran)) {
+//				if (type.name().startsWith("Terran")) {
+//					types.add(type);
+//				}
+//			} else if (race.equals(Race.Zerg)) {
+//				if (type.name().startsWith("Zerg")) {
+//					types.add(type);
+//				}
+//			}
+//		}
+//
+//		return types;
+//	}
 
 	/**
 	 * Returns the ID of the type.
@@ -522,9 +522,9 @@ public class UnitTypeWME extends WME {
 	 * Is this a center type?
 	 */
 	public boolean isCenter() {
-		if (race == Race.Zerg.ordinal()) {
-			return (id == Zerg_Hatchery || id == Zerg_Lair || id == Zerg_Hive);
-		}
+//		if (race == Race.Zerg.ordinal()) {
+//			return (id == Zerg_Hatchery || id == Zerg_Lair || id == Zerg_Hive);
+//		}
 		return id == getCenterType(race);
 	}
 
@@ -589,404 +589,404 @@ public class UnitTypeWME extends WME {
 	 */
 	public static ArrayList<UnitTypeWME> getUnitTypes() {
 		ArrayList<UnitTypeWME> types = new ArrayList<UnitTypeWME>();
-		types.add(new UnitTypeWME(0, Race.Terran, "Terran_Marine", 50, 0, 40,
-				0, 0, 360, false, false, 1, 1, 2, 0, 7, 128, 0, 6, 128, 6,
-				false, false, false, false, 111));
-		types.add(new UnitTypeWME(1, Race.Terran, "Terran_Ghost", 25, 75, 45,
-				0, 200, 750, false, false, 1, 1, 2, 0, 9, 224, 0, 10, 224, 10,
-				false, false, false, false, 111));
-		types.add(new UnitTypeWME(2, Race.Terran, "Terran_Vulture", 75, 0, 80,
-				0, 0, 450, false, false, 1, 1, 4, 0, 8, 160, 0, 20, 0, 0,
-				false, false, false, false, 113));
-		types.add(new UnitTypeWME(3, Race.Terran, "Terran_Goliath", 100, 50,
-				125, 0, 0, 600, false, false, 1, 1, 4, 0, 8, 192, 0, 12, 160,
-				10, false, false, false, false, 113));
-		types.add(new UnitTypeWME(5, Race.Terran,
-				"Terran_Siege_Tank_Tank_Mode", 150, 100, 150, 0, 0, 750, false,
-				false, 1, 1, 4, 0, 10, 224, 0, 30, 0, 0, false, false, false,
-				false, 113));
-		types.add(new UnitTypeWME(7, Race.Terran, "Terran_SCV", 50, 0, 60, 0,
-				0, 300, false, false, 1, 1, 2, 0, 7, 10, 0, 5, 0, 0, false,
-				false, false, true, 106));
-		types.add(new UnitTypeWME(8, Race.Terran, "Terran_Wraith", 150, 100,
-				120, 0, 200, 900, false, false, 1, 1, 4, 0, 7, 160, 0, 8, 160,
-				20, false, true, false, false, 114));
-		types.add(new UnitTypeWME(9, Race.Terran, "Terran_Science_Vessel", 100,
-				225, 200, 0, 200, 1200, false, false, 2, 2, 4, 0, 10, 0, 0, 0,
-				0, 0, false, true, false, false, 114));
-		types.add(new UnitTypeWME(11, Race.Terran, "Terran_Dropship", 100, 100,
-				150, 0, 0, 750, false, false, 2, 2, 4, 0, 8, 0, 0, 0, 0, 0,
-				false, true, false, false, 114));
-		types.add(new UnitTypeWME(12, Race.Terran, "Terran_Battlecruiser", 400,
-				300, 244, 0, 200, 2000, false, false, 2, 2, 12, 0, 11, 192, 0,
-				25, 192, 25, false, true, false, false, 114));
-		types.add(new UnitTypeWME(13, Race.Terran,
-				"Terran_Vulture_Spider_Mine", 1, 0, 20, 0, 0, 1, false, false,
-				1, 1, 0, 0, 3, 10, 0, 125, 0, 0, false, false, false, false,
-				228));
-		types.add(new UnitTypeWME(14, Race.Terran, "Terran_Nuclear_Missile",
-				200, 200, 100, 0, 0, 1500, false, false, 1, 1, 16, 0, 3, 0, 0,
-				0, 0, 0, false, false, false, false, 228));
-		types.add(new UnitTypeWME(30, Race.Terran,
-				"Terran_Siege_Tank_Siege_Mode", 150, 100, 150, 0, 0, 750,
-				false, false, 1, 1, 4, 0, 10, 384, 64, 70, 0, 0, false, false,
-				false, false, 113));
-		types.add(new UnitTypeWME(32, Race.Terran, "Terran_Firebat", 50, 25,
-				50, 0, 0, 360, false, false, 1, 1, 2, 0, 7, 32, 0, 8, 0, 0,
-				false, false, false, false, 111));
-		types.add(new UnitTypeWME(33, Race.Terran, "Spell_Scanner_Sweep", 0, 0,
-				0, 0, 0, 1, false, false, 1, 1, 0, 0, 10, 0, 0, 0, 0, 0, false,
-				false, false, false, 228));
-		types.add(new UnitTypeWME(34, Race.Terran, "Terran_Medic", 50, 25, 60,
-				0, 200, 450, false, false, 1, 1, 2, 0, 9, 0, 0, 0, 0, 0, false,
-				false, false, false, 111));
-		types.add(new UnitTypeWME(35, Race.Zerg, "Zerg_Larva", 1, 1, 25, 0, 0,
-				1, false, false, 1, 1, 0, 0, 4, 0, 0, 0, 0, 0, false, false,
-				false, false, 131));
-		types.add(new UnitTypeWME(36, Race.Zerg, "Zerg_Egg", 1, 1, 200, 0, 0,
-				1, false, false, 1, 1, 0, 0, 4, 0, 0, 0, 0, 0, false, false,
-				false, false, 35));
-		types.add(new UnitTypeWME(37, Race.Zerg, "Zerg_Zergling", 50, 0, 35, 0,
-				0, 420, false, false, 1, 1, 1, 0, 5, 15, 0, 5, 0, 0, false,
-				false, false, false, 35));
-		types.add(new UnitTypeWME(38, Race.Zerg, "Zerg_Hydralisk", 75, 25, 80,
-				0, 0, 420, false, false, 1, 1, 2, 0, 6, 128, 0, 10, 128, 10,
-				false, false, false, false, 35));
-		types.add(new UnitTypeWME(39, Race.Zerg, "Zerg_Ultralisk", 200, 200,
-				144, 0, 0, 900, false, false, 2, 2, 8, 0, 7, 25, 0, 20, 0, 0,
-				false, false, false, false, 35));
-		types.add(new UnitTypeWME(40, Race.Zerg, "Zerg_Broodling", 1, 1, 30, 0,
-				0, 1, false, false, 1, 1, 0, 0, 5, 2, 0, 4, 0, 0, false, false,
-				false, false, 228));
-		types.add(new UnitTypeWME(41, Race.Zerg, "Zerg_Drone", 50, 0, 40, 0, 0,
-				300, false, false, 1, 1, 2, 0, 7, 32, 0, 5, 0, 0, false, false,
-				false, true, 35));
-		types.add(new UnitTypeWME(42, Race.Zerg, "Zerg_Overlord", 100, 0, 200,
-				0, 0, 600, false, false, 2, 2, 0, 16, 9, 0, 0, 0, 0, 0, false,
-				true, false, false, 35));
-		types.add(new UnitTypeWME(43, Race.Zerg, "Zerg_Mutalisk", 100, 100,
-				120, 0, 0, 600, false, false, 2, 2, 4, 0, 7, 96, 0, 9, 96, 9,
-				false, true, false, false, 35));
-		types.add(new UnitTypeWME(44, Race.Zerg, "Zerg_Guardian", 50, 100, 150,
-				0, 0, 600, false, false, 2, 2, 4, 0, 11, 256, 0, 20, 0, 0,
-				false, true, false, false, 43));
-		types.add(new UnitTypeWME(45, Race.Zerg, "Zerg_Queen", 100, 100, 120,
-				0, 200, 750, false, false, 2, 2, 4, 0, 10, 0, 0, 0, 0, 0,
-				false, true, false, false, 35));
-		types.add(new UnitTypeWME(46, Race.Zerg, "Zerg_Defiler", 50, 150, 80,
-				0, 200, 750, false, false, 1, 1, 4, 0, 10, 0, 0, 0, 0, 0,
-				false, false, false, false, 35));
-		types.add(new UnitTypeWME(47, Race.Zerg, "Zerg_Scourge", 25, 75, 25, 0,
-				0, 450, false, false, 1, 1, 1, 0, 5, 0, 0, 0, 3, 110, false,
-				true, false, false, 35));
-		types.add(new UnitTypeWME(50, Race.Zerg, "Zerg_Infested_Terran", 100,
-				50, 60, 0, 0, 600, false, false, 1, 1, 2, 0, 5, 3, 0, 500, 0,
-				0, false, false, false, false, 130));
-		types.add(new UnitTypeWME(58, Race.Terran, "Terran_Valkyrie", 250, 125,
-				200, 0, 0, 750, false, false, 2, 2, 6, 0, 8, 0, 0, 0, 192, 6,
-				false, true, false, false, 114));
-		types.add(new UnitTypeWME(59, Race.Zerg, "Zerg_Cocoon", 1, 1, 200, 0,
-				0, 1, false, false, 1, 1, 0, 0, 4, 0, 0, 0, 0, 0, false, false,
-				false, false, 43));
-		types.add(new UnitTypeWME(60, Race.Protoss, "Protoss_Corsair", 150,
-				100, 100, 80, 200, 600, false, false, 1, 1, 4, 0, 9, 0, 0, 0,
-				160, 5, false, true, false, false, 167));
-		types.add(new UnitTypeWME(61, Race.Protoss, "Protoss_Dark_Templar",
-				125, 100, 80, 40, 0, 750, false, false, 1, 1, 4, 0, 7, 15, 0,
-				40, 0, 0, false, false, false, false, 160));
-		types.add(new UnitTypeWME(62, Race.Zerg, "Zerg_Devourer", 150, 50, 250,
-				0, 0, 600, false, false, 2, 2, 4, 0, 10, 0, 0, 0, 192, 25,
-				false, true, false, false, 43));
-		types.add(new UnitTypeWME(63, Race.Protoss, "Protoss_Dark_Archon", 0,
-				0, 25, 200, 200, 300, false, false, 1, 1, 8, 0, 10, 0, 0, 0, 0,
-				0, false, false, false, false, 61));
-		types.add(new UnitTypeWME(64, Race.Protoss, "Protoss_Probe", 50, 0, 20,
-				20, 0, 300, false, false, 1, 1, 2, 0, 8, 32, 0, 5, 0, 0, false,
-				false, false, true, 154));
-		types.add(new UnitTypeWME(65, Race.Protoss, "Protoss_Zealot", 100, 0,
-				100, 60, 0, 600, false, false, 1, 1, 4, 0, 7, 15, 0, 8, 0, 0,
-				false, false, false, false, 160));
-		types.add(new UnitTypeWME(66, Race.Protoss, "Protoss_Dragoon", 125, 50,
-				100, 80, 0, 750, false, false, 1, 1, 4, 0, 8, 128, 0, 20, 128,
-				20, false, false, false, false, 160));
-		types.add(new UnitTypeWME(67, Race.Protoss, "Protoss_High_Templar", 50,
-				150, 40, 40, 200, 750, false, false, 1, 1, 4, 0, 7, 0, 0, 0, 0,
-				0, false, false, false, false, 160));
-		types.add(new UnitTypeWME(68, Race.Protoss, "Protoss_Archon", 0, 0, 10,
-				350, 0, 300, false, false, 1, 1, 8, 0, 8, 64, 0, 30, 64, 30,
-				false, false, false, false, 67));
-		types.add(new UnitTypeWME(69, Race.Protoss, "Protoss_Shuttle", 200, 0,
-				80, 60, 0, 900, false, false, 2, 1, 4, 0, 8, 0, 0, 0, 0, 0,
-				false, true, false, false, 155));
-		types.add(new UnitTypeWME(70, Race.Protoss, "Protoss_Scout", 275, 125,
-				150, 100, 0, 1200, false, false, 2, 1, 6, 0, 8, 128, 0, 8, 128,
-				14, false, true, false, false, 167));
-		types.add(new UnitTypeWME(71, Race.Protoss, "Protoss_Arbiter", 100,
-				350, 200, 150, 200, 2400, false, false, 2, 2, 8, 0, 9, 160, 0,
-				10, 160, 10, false, true, false, false, 167));
-		types.add(new UnitTypeWME(72, Race.Protoss, "Protoss_Carrier", 350,
-				250, 44, 150, 0, 2100, false, false, 2, 2, 12, 0, 11, 0, 0, 0,
-				0, 0, false, true, false, false, 167));
-		types.add(new UnitTypeWME(73, Race.Protoss, "Protoss_Interceptor", 25,
-				0, 40, 40, 0, 300, false, false, 1, 1, 0, 0, 6, 128, 0, 6, 128,
-				6, false, true, false, false, 72));
-		types.add(new UnitTypeWME(83, Race.Protoss, "Protoss_Reaver", 200, 100,
-				100, 80, 0, 1050, false, false, 1, 1, 8, 0, 10, 0, 0, 0, 0, 0,
-				false, false, false, false, 155));
-		types.add(new UnitTypeWME(84, Race.Protoss, "Protoss_Observer", 25, 75,
-				40, 20, 0, 600, false, false, 1, 1, 2, 0, 9, 0, 0, 0, 0, 0,
-				false, true, false, false, 155));
-		types.add(new UnitTypeWME(85, Race.Protoss, "Protoss_Scarab", 15, 0,
-				20, 10, 0, 105, false, false, 1, 1, 0, 0, 5, 128, 0, 100, 0, 0,
-				false, false, false, false, 83));
-		types.add(new UnitTypeWME(89, Race.Other, "Critter_Rhynadon", 1, 1, 60,
-				0, 0, 1, false, false, 1, 1, 0, 0, 7, 0, 0, 0, 0, 0, false,
-				false, false, false, 228));
-		types.add(new UnitTypeWME(90, Race.Other, "Critter_Bengalaas", 1, 1,
-				60, 0, 0, 1, false, false, 1, 1, 0, 0, 7, 0, 0, 0, 0, 0, false,
-				false, false, false, 228));
-		types.add(new UnitTypeWME(93, Race.Other, "Critter_Scantid", 1, 1, 60,
-				0, 0, 1, false, false, 1, 1, 0, 0, 7, 0, 0, 0, 0, 0, false,
-				false, false, false, 228));
-		types.add(new UnitTypeWME(94, Race.Other, "Critter_Kakaru", 1, 1, 60,
-				0, 0, 1, false, false, 1, 1, 0, 0, 7, 0, 0, 0, 0, 0, false,
-				true, false, false, 228));
-		types.add(new UnitTypeWME(95, Race.Other, "Critter_Ragnasaur", 1, 1,
-				60, 0, 0, 1, false, false, 1, 1, 0, 0, 7, 0, 0, 0, 0, 0, false,
-				false, false, false, 228));
-		types.add(new UnitTypeWME(96, Race.Other, "Critter_Ursadon", 1, 1, 60,
-				0, 0, 1, false, false, 1, 1, 0, 0, 7, 0, 0, 0, 0, 0, false,
-				false, false, false, 228));
-		types.add(new UnitTypeWME(97, Race.Zerg, "Zerg_Lurker_Egg", 1, 1, 200,
-				0, 0, 1, false, false, 1, 1, 0, 0, 4, 0, 0, 0, 0, 0, false,
-				false, false, false, 38));
-		types.add(new UnitTypeWME(103, Race.Zerg, "Zerg_Lurker", 50, 100, 125,
-				0, 0, 600, false, false, 1, 1, 4, 0, 8, 192, 0, 20, 0, 0,
-				false, false, false, false, 38));
-		types.add(new UnitTypeWME(105, Race.Other, "Spell_Disruption_Web", 250,
-				250, 32, 0, 0, 2400, false, false, 4, 3, 0, 0, 8, 0, 0, 0, 0,
-				0, false, false, false, false, 228));
-		types.add(new UnitTypeWME(106, Race.Terran, "Terran_Command_Center",
-				400, 0, 220, 0, 0, 1800, false, false, 4, 3, 0, 20, 10, 0, 0,
-				0, 0, 0, true, false, false, false, 7));
-		types.add(new UnitTypeWME(107, Race.Terran, "Terran_Comsat_Station",
-				50, 50, 244, 0, 200, 600, false, false, 2, 2, 0, 0, 10, 0, 0,
-				0, 0, 0, true, false, false, false, 106));
-		types.add(new UnitTypeWME(108, Race.Terran, "Terran_Nuclear_Silo", 100,
-				100, 88, 0, 0, 1200, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0,
-				0, true, false, false, false, 106));
-		types.add(new UnitTypeWME(109, Race.Terran, "Terran_Supply_Depot", 100,
-				0, 244, 0, 0, 600, false, false, 3, 2, 0, 16, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 7));
-		types.add(new UnitTypeWME(110, Race.Terran, "Terran_Refinery", 100, 0,
-				238, 0, 0, 600, false, false, 4, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 7));
-		types.add(new UnitTypeWME(111, Race.Terran, "Terran_Barracks", 150, 0,
-				232, 0, 0, 1200, false, false, 4, 3, 0, 0, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 7));
-		types.add(new UnitTypeWME(112, Race.Terran, "Terran_Academy", 150, 0,
-				88, 0, 0, 1200, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 7));
-		types.add(new UnitTypeWME(113, Race.Terran, "Terran_Factory", 200, 100,
-				226, 0, 0, 1200, false, false, 4, 3, 0, 0, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 7));
-		types.add(new UnitTypeWME(114, Race.Terran, "Terran_Starport", 150,
-				100, 20, 0, 0, 1050, false, false, 4, 3, 0, 0, 10, 0, 0, 0, 0,
-				0, true, false, false, false, 7));
-		types.add(new UnitTypeWME(115, Race.Terran, "Terran_Control_Tower", 50,
-				50, 244, 0, 0, 600, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 114));
-		types.add(new UnitTypeWME(116, Race.Terran, "Terran_Science_Facility",
-				100, 150, 82, 0, 0, 900, false, false, 4, 3, 0, 0, 10, 0, 0, 0,
-				0, 0, true, false, false, false, 7));
-		types.add(new UnitTypeWME(117, Race.Terran, "Terran_Covert_Ops", 50,
-				50, 238, 0, 0, 600, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 116));
-		types.add(new UnitTypeWME(118, Race.Terran, "Terran_Physics_Lab", 50,
-				50, 88, 0, 0, 600, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 116));
-		types.add(new UnitTypeWME(120, Race.Terran, "Terran_Machine_Shop", 50,
-				50, 238, 0, 0, 600, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 113));
-		types.add(new UnitTypeWME(122, Race.Terran, "Terran_Engineering_Bay",
-				125, 0, 82, 0, 0, 900, false, false, 4, 3, 0, 0, 8, 0, 0, 0, 0,
-				0, true, false, false, false, 7));
-		types.add(new UnitTypeWME(123, Race.Terran, "Terran_Armory", 100, 50,
-				238, 0, 0, 1200, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 7));
-		types.add(new UnitTypeWME(124, Race.Terran, "Terran_Missile_Turret",
-				75, 0, 200, 0, 0, 450, false, false, 2, 2, 0, 0, 11, 0, 0, 0,
-				224, 20, true, false, false, false, 7));
-		types.add(new UnitTypeWME(125, Race.Terran, "Terran_Bunker", 100, 0,
-				94, 0, 0, 450, false, false, 3, 2, 0, 0, 10, 0, 0, 0, 0, 0,
-				true, false, false, false, 7));
-		types.add(new UnitTypeWME(126, Race.None, "Special_Crashed_Norad_II",
-				800, 600, 188, 0, 0, 4800, false, false, 3, 2, 0, 0, 10, 0, 0,
-				0, 0, 0, false, false, false, false, 228));
-		types.add(new UnitTypeWME(127, Race.None, "Special_Ion_Cannon", 200, 0,
-				208, 0, 0, 900, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				false, false, false, false, 228));
-		types.add(new UnitTypeWME(130, Race.Zerg,
-				"Zerg_Infested_Command_Center", 1, 1, 220, 0, 0, 1800, false,
-				false, 4, 3, 0, 0, 10, 0, 0, 0, 0, 0, false, false, false,
-				false, 228));
-		types.add(new UnitTypeWME(131, Race.Zerg, "Zerg_Hatchery", 300, 0, 226,
-				0, 0, 1800, false, false, 4, 3, 0, 2, 9, 0, 0, 0, 0, 0, true,
-				false, false, false, 41));
-		types.add(new UnitTypeWME(132, Race.Zerg, "Zerg_Lair", 150, 100, 8, 0,
-				0, 1500, false, false, 4, 3, 0, 2, 10, 0, 0, 0, 0, 0, true,
-				false, false, false, 131));
-		types.add(new UnitTypeWME(133, Race.Zerg, "Zerg_Hive", 200, 150, 196,
-				0, 0, 1800, false, false, 4, 3, 0, 2, 11, 0, 0, 0, 0, 0, true,
-				false, false, false, 132));
-		types.add(new UnitTypeWME(134, Race.Zerg, "Zerg_Nydus_Canal", 150, 0,
-				250, 0, 0, 600, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 41));
-		types.add(new UnitTypeWME(135, Race.Zerg, "Zerg_Hydralisk_Den", 100,
-				50, 82, 0, 0, 600, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 41));
-		types.add(new UnitTypeWME(136, Race.Zerg, "Zerg_Defiler_Mound", 100,
-				100, 82, 0, 0, 900, false, false, 4, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 41));
-		types.add(new UnitTypeWME(137, Race.Zerg, "Zerg_Greater_Spire", 100,
-				150, 232, 0, 0, 1800, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0,
-				0, true, false, false, false, 141));
-		types.add(new UnitTypeWME(138, Race.Zerg, "Zerg_Queen_s_Nest", 150,
-				100, 82, 0, 0, 900, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 41));
-		types.add(new UnitTypeWME(139, Race.Zerg, "Zerg_Evolution_Chamber", 75,
-				0, 238, 0, 0, 600, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 41));
-		types.add(new UnitTypeWME(140, Race.Zerg, "Zerg_Ultralisk_Cavern", 150,
-				200, 88, 0, 0, 1200, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0,
-				0, true, false, false, false, 41));
-		types.add(new UnitTypeWME(141, Race.Zerg, "Zerg_Spire", 200, 150, 88,
-				0, 0, 1800, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0, 0, true,
-				false, false, false, 41));
-		types.add(new UnitTypeWME(142, Race.Zerg, "Zerg_Spawning_Pool", 200, 0,
-				238, 0, 0, 1200, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 41));
-		types.add(new UnitTypeWME(143, Race.Zerg, "Zerg_Creep_Colony", 75, 0,
-				144, 0, 0, 300, false, false, 2, 2, 0, 0, 10, 0, 0, 0, 0, 0,
-				true, false, false, false, 41));
-		types.add(new UnitTypeWME(144, Race.Zerg, "Zerg_Spore_Colony", 50, 0,
-				144, 0, 0, 300, false, false, 2, 2, 0, 0, 10, 0, 0, 0, 224, 15,
-				true, false, false, false, 143));
-		types.add(new UnitTypeWME(146, Race.Zerg, "Zerg_Sunken_Colony", 50, 0,
-				44, 0, 0, 300, false, false, 2, 2, 0, 0, 10, 224, 0, 40, 0, 0,
-				true, false, false, false, 143));
-		types.add(new UnitTypeWME(147, Race.None,
-				"Special_Overmind_With_Shell", 1, 1, 136, 0, 0, 1, false,
-				false, 5, 3, 0, 0, 8, 0, 0, 0, 0, 0, false, false, false,
-				false, 228));
-		types.add(new UnitTypeWME(148, Race.None, "Special_Overmind", 1, 1,
-				196, 0, 0, 1, false, false, 5, 3, 0, 0, 8, 0, 0, 0, 0, 0,
-				false, false, false, false, 228));
-		types.add(new UnitTypeWME(149, Race.Zerg, "Zerg_Extractor", 50, 0, 238,
-				0, 0, 600, false, false, 4, 2, 0, 0, 7, 0, 0, 0, 0, 0, false,
-				false, false, false, 41));
-		types.add(new UnitTypeWME(150, Race.None, "Special_Mature_Chrysalis",
-				0, 0, 250, 0, 0, 0, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				false, false, false, false, 228));
-		types.add(new UnitTypeWME(151, Race.None, "Special_Cerebrate", 0, 0,
-				220, 0, 0, 0, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				false, false, false, false, 228));
-		types.add(new UnitTypeWME(152, Race.None, "Special_Cerebrate_Daggoth",
-				0, 0, 220, 0, 0, 0, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
-				false, false, false, false, 228));
-		types.add(new UnitTypeWME(154, Race.Protoss, "Protoss_Nexus", 400, 0,
-				238, 750, 0, 1800, false, false, 4, 3, 0, 18, 11, 0, 0, 0, 0,
-				0, true, false, false, false, 64));
-		types.add(new UnitTypeWME(155, Race.Protoss,
-				"Protoss_Robotics_Facility", 200, 200, 244, 500, 0, 1200,
-				false, false, 3, 2, 0, 0, 10, 0, 0, 0, 0, 0, true, false,
-				false, false, 64));
-		types.add(new UnitTypeWME(156, Race.Protoss, "Protoss_Pylon", 100, 0,
-				44, 300, 0, 450, false, false, 2, 2, 0, 16, 8, 0, 0, 0, 0, 0,
-				true, false, false, false, 64));
-		types.add(new UnitTypeWME(157, Race.Protoss, "Protoss_Assimilator",
-				100, 0, 194, 450, 0, 600, false, false, 4, 2, 0, 0, 10, 0, 0,
-				0, 0, 0, true, false, false, false, 64));
-		types.add(new UnitTypeWME(159, Race.Protoss, "Protoss_Observatory", 50,
-				100, 250, 250, 0, 450, false, false, 3, 2, 0, 0, 10, 0, 0, 0,
-				0, 0, true, false, false, false, 64));
-		types.add(new UnitTypeWME(160, Race.Protoss, "Protoss_Gateway", 150, 0,
-				244, 500, 0, 900, false, false, 4, 3, 0, 0, 10, 0, 0, 0, 0, 0,
-				true, false, false, false, 64));
-		types.add(new UnitTypeWME(162, Race.Protoss, "Protoss_Photon_Cannon",
-				150, 0, 100, 100, 0, 750, false, false, 2, 2, 0, 0, 11, 224, 0,
-				20, 224, 20, true, false, false, false, 64));
-		types.add(new UnitTypeWME(163, Race.Protoss, "Protoss_Citadel_of_Adun",
-				150, 100, 194, 450, 0, 900, false, false, 3, 2, 0, 0, 10, 0, 0,
-				0, 0, 0, true, false, false, false, 64));
-		types.add(new UnitTypeWME(164, Race.Protoss,
-				"Protoss_Cybernetics_Core", 200, 0, 244, 500, 0, 900, false,
-				false, 3, 2, 0, 0, 10, 0, 0, 0, 0, 0, true, false, false,
-				false, 64));
-		types.add(new UnitTypeWME(165, Race.Protoss,
-				"Protoss_Templar_Archives", 150, 200, 244, 500, 0, 900, false,
-				false, 3, 2, 0, 0, 10, 0, 0, 0, 0, 0, true, false, false,
-				false, 64));
-		types.add(new UnitTypeWME(166, Race.Protoss, "Protoss_Forge", 150, 0,
-				38, 550, 0, 600, false, false, 3, 2, 0, 0, 10, 0, 0, 0, 0, 0,
-				true, false, false, false, 64));
-		types.add(new UnitTypeWME(167, Race.Protoss, "Protoss_Stargate", 150,
-				150, 88, 600, 0, 1050, false, false, 4, 3, 0, 0, 10, 0, 0, 0,
-				0, 0, true, false, false, false, 64));
-		types.add(new UnitTypeWME(168, Race.None, "Special_Stasis_Cell_Prison",
-				150, 0, 208, 0, 0, 1, false, false, 4, 3, 0, 0, 8, 0, 0, 0, 0,
-				0, true, false, false, false, 228));
-		types.add(new UnitTypeWME(169, Race.Protoss, "Protoss_Fleet_Beacon",
-				300, 200, 244, 500, 0, 900, false, false, 3, 2, 0, 0, 10, 0, 0,
-				0, 0, 0, true, false, false, false, 64));
-		types.add(new UnitTypeWME(170, Race.Protoss,
-				"Protoss_Arbiter_Tribunal", 200, 150, 244, 500, 0, 900, false,
-				false, 3, 2, 0, 0, 10, 0, 0, 0, 0, 0, true, false, false,
-				false, 64));
-		types.add(new UnitTypeWME(171, Race.Protoss,
-				"Protoss_Robotics_Support_Bay", 150, 100, 194, 450, 0, 450,
-				false, false, 3, 2, 0, 0, 10, 0, 0, 0, 0, 0, true, false,
-				false, false, 64));
-		types.add(new UnitTypeWME(172, Race.Protoss, "Protoss_Shield_Battery",
-				100, 0, 200, 200, 200, 450, false, false, 3, 2, 0, 0, 10, 0, 0,
-				0, 0, 0, true, false, false, false, 64));
-		types.add(new UnitTypeWME(173, Race.None,
-				"Special_Khaydarin_Crystal_Form", 250, 0, 160, 0, 0, 1, false,
-				false, 4, 3, 0, 0, 10, 0, 0, 0, 0, 0, false, false, false,
-				false, 228));
-		types.add(new UnitTypeWME(174, Race.None, "Special_Protoss_Temple",
-				250, 0, 220, 0, 0, 1, false, false, 7, 3, 0, 0, 10, 0, 0, 0, 0,
-				0, false, false, false, false, 228));
-		types.add(new UnitTypeWME(175, Race.None, "Special_XelNaga_Temple",
-				1500, 500, 136, 0, 0, 4800, false, false, 5, 4, 0, 0, 10, 0, 0,
-				0, 0, 0, false, false, false, false, 228));
-		types.add(new UnitTypeWME(176, Race.Other, "Resource_Mineral_Field", 1,
-				1, 160, 0, 0, 1, false, false, 2, 1, 0, 0, 9, 0, 0, 0, 0, 0,
-				false, false, false, false, 228));
-		types.add(new UnitTypeWME(188, Race.Other, "Resource_Vespene_Geyser",
-				1, 1, 160, 0, 0, 1, false, false, 4, 2, 0, 0, 9, 0, 0, 0, 0, 0,
-				false, false, false, false, 228));
-		types.add(new UnitTypeWME(189, Race.None, "Special_Warp_Gate", 600,
-				200, 188, 0, 0, 2400, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0,
-				0, false, false, false, false, 228));
-		types.add(new UnitTypeWME(190, Race.None, "Special_Psi_Disrupter",
-				1000, 400, 208, 0, 0, 4800, false, false, 5, 3, 0, 0, 10, 0, 0,
-				0, 0, 0, false, false, false, false, 228));
-		types.add(new UnitTypeWME(200, Race.None, "Special_Power_Generator",
-				200, 50, 32, 0, 0, 2400, false, false, 4, 3, 0, 0, 8, 0, 0, 0,
-				0, 0, false, false, false, false, 228));
-		types.add(new UnitTypeWME(201, Race.None, "Special_Overmind_Cocoon",
-				1000, 500, 196, 0, 0, 2400, false, false, 3, 2, 0, 0, 10, 0, 0,
-				0, 0, 0, false, false, false, false, 228));
-		types.add(new UnitTypeWME(202, Race.Other, "Spell_Dark_Swarm", 250,
-				200, 32, 0, 0, 2400, false, false, 5, 5, 0, 0, 8, 0, 0, 0, 0,
-				0, false, false, false, false, 228));
-		types.add(new UnitTypeWME(228, Race.None, "None", 0, 0, 0, 0, 0, 0,
-				false, false, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false,
-				false, false, 228));
-		types.add(new UnitTypeWME(229, Race.Unknown, "Unknown", 0, 0, 0, 0, 0,
-				0, false, false, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false,
-				false, false, 229));
+//		types.add(new UnitTypeWME(0, Race.Terran, "Terran_Marine", 50, 0, 40,
+//				0, 0, 360, false, false, 1, 1, 2, 0, 7, 128, 0, 6, 128, 6,
+//				false, false, false, false, 111));
+//		types.add(new UnitTypeWME(1, Race.Terran, "Terran_Ghost", 25, 75, 45,
+//				0, 200, 750, false, false, 1, 1, 2, 0, 9, 224, 0, 10, 224, 10,
+//				false, false, false, false, 111));
+//		types.add(new UnitTypeWME(2, Race.Terran, "Terran_Vulture", 75, 0, 80,
+//				0, 0, 450, false, false, 1, 1, 4, 0, 8, 160, 0, 20, 0, 0,
+//				false, false, false, false, 113));
+//		types.add(new UnitTypeWME(3, Race.Terran, "Terran_Goliath", 100, 50,
+//				125, 0, 0, 600, false, false, 1, 1, 4, 0, 8, 192, 0, 12, 160,
+//				10, false, false, false, false, 113));
+//		types.add(new UnitTypeWME(5, Race.Terran,
+//				"Terran_Siege_Tank_Tank_Mode", 150, 100, 150, 0, 0, 750, false,
+//				false, 1, 1, 4, 0, 10, 224, 0, 30, 0, 0, false, false, false,
+//				false, 113));
+//		types.add(new UnitTypeWME(7, Race.Terran, "Terran_SCV", 50, 0, 60, 0,
+//				0, 300, false, false, 1, 1, 2, 0, 7, 10, 0, 5, 0, 0, false,
+//				false, false, true, 106));
+//		types.add(new UnitTypeWME(8, Race.Terran, "Terran_Wraith", 150, 100,
+//				120, 0, 200, 900, false, false, 1, 1, 4, 0, 7, 160, 0, 8, 160,
+//				20, false, true, false, false, 114));
+//		types.add(new UnitTypeWME(9, Race.Terran, "Terran_Science_Vessel", 100,
+//				225, 200, 0, 200, 1200, false, false, 2, 2, 4, 0, 10, 0, 0, 0,
+//				0, 0, false, true, false, false, 114));
+//		types.add(new UnitTypeWME(11, Race.Terran, "Terran_Dropship", 100, 100,
+//				150, 0, 0, 750, false, false, 2, 2, 4, 0, 8, 0, 0, 0, 0, 0,
+//				false, true, false, false, 114));
+//		types.add(new UnitTypeWME(12, Race.Terran, "Terran_Battlecruiser", 400,
+//				300, 244, 0, 200, 2000, false, false, 2, 2, 12, 0, 11, 192, 0,
+//				25, 192, 25, false, true, false, false, 114));
+//		types.add(new UnitTypeWME(13, Race.Terran,
+//				"Terran_Vulture_Spider_Mine", 1, 0, 20, 0, 0, 1, false, false,
+//				1, 1, 0, 0, 3, 10, 0, 125, 0, 0, false, false, false, false,
+//				228));
+//		types.add(new UnitTypeWME(14, Race.Terran, "Terran_Nuclear_Missile",
+//				200, 200, 100, 0, 0, 1500, false, false, 1, 1, 16, 0, 3, 0, 0,
+//				0, 0, 0, false, false, false, false, 228));
+//		types.add(new UnitTypeWME(30, Race.Terran,
+//				"Terran_Siege_Tank_Siege_Mode", 150, 100, 150, 0, 0, 750,
+//				false, false, 1, 1, 4, 0, 10, 384, 64, 70, 0, 0, false, false,
+//				false, false, 113));
+//		types.add(new UnitTypeWME(32, Race.Terran, "Terran_Firebat", 50, 25,
+//				50, 0, 0, 360, false, false, 1, 1, 2, 0, 7, 32, 0, 8, 0, 0,
+//				false, false, false, false, 111));
+//		types.add(new UnitTypeWME(33, Race.Terran, "Spell_Scanner_Sweep", 0, 0,
+//				0, 0, 0, 1, false, false, 1, 1, 0, 0, 10, 0, 0, 0, 0, 0, false,
+//				false, false, false, 228));
+//		types.add(new UnitTypeWME(34, Race.Terran, "Terran_Medic", 50, 25, 60,
+//				0, 200, 450, false, false, 1, 1, 2, 0, 9, 0, 0, 0, 0, 0, false,
+//				false, false, false, 111));
+//		types.add(new UnitTypeWME(35, Race.Zerg, "Zerg_Larva", 1, 1, 25, 0, 0,
+//				1, false, false, 1, 1, 0, 0, 4, 0, 0, 0, 0, 0, false, false,
+//				false, false, 131));
+//		types.add(new UnitTypeWME(36, Race.Zerg, "Zerg_Egg", 1, 1, 200, 0, 0,
+//				1, false, false, 1, 1, 0, 0, 4, 0, 0, 0, 0, 0, false, false,
+//				false, false, 35));
+//		types.add(new UnitTypeWME(37, Race.Zerg, "Zerg_Zergling", 50, 0, 35, 0,
+//				0, 420, false, false, 1, 1, 1, 0, 5, 15, 0, 5, 0, 0, false,
+//				false, false, false, 35));
+//		types.add(new UnitTypeWME(38, Race.Zerg, "Zerg_Hydralisk", 75, 25, 80,
+//				0, 0, 420, false, false, 1, 1, 2, 0, 6, 128, 0, 10, 128, 10,
+//				false, false, false, false, 35));
+//		types.add(new UnitTypeWME(39, Race.Zerg, "Zerg_Ultralisk", 200, 200,
+//				144, 0, 0, 900, false, false, 2, 2, 8, 0, 7, 25, 0, 20, 0, 0,
+//				false, false, false, false, 35));
+//		types.add(new UnitTypeWME(40, Race.Zerg, "Zerg_Broodling", 1, 1, 30, 0,
+//				0, 1, false, false, 1, 1, 0, 0, 5, 2, 0, 4, 0, 0, false, false,
+//				false, false, 228));
+//		types.add(new UnitTypeWME(41, Race.Zerg, "Zerg_Drone", 50, 0, 40, 0, 0,
+//				300, false, false, 1, 1, 2, 0, 7, 32, 0, 5, 0, 0, false, false,
+//				false, true, 35));
+//		types.add(new UnitTypeWME(42, Race.Zerg, "Zerg_Overlord", 100, 0, 200,
+//				0, 0, 600, false, false, 2, 2, 0, 16, 9, 0, 0, 0, 0, 0, false,
+//				true, false, false, 35));
+//		types.add(new UnitTypeWME(43, Race.Zerg, "Zerg_Mutalisk", 100, 100,
+//				120, 0, 0, 600, false, false, 2, 2, 4, 0, 7, 96, 0, 9, 96, 9,
+//				false, true, false, false, 35));
+//		types.add(new UnitTypeWME(44, Race.Zerg, "Zerg_Guardian", 50, 100, 150,
+//				0, 0, 600, false, false, 2, 2, 4, 0, 11, 256, 0, 20, 0, 0,
+//				false, true, false, false, 43));
+//		types.add(new UnitTypeWME(45, Race.Zerg, "Zerg_Queen", 100, 100, 120,
+//				0, 200, 750, false, false, 2, 2, 4, 0, 10, 0, 0, 0, 0, 0,
+//				false, true, false, false, 35));
+//		types.add(new UnitTypeWME(46, Race.Zerg, "Zerg_Defiler", 50, 150, 80,
+//				0, 200, 750, false, false, 1, 1, 4, 0, 10, 0, 0, 0, 0, 0,
+//				false, false, false, false, 35));
+//		types.add(new UnitTypeWME(47, Race.Zerg, "Zerg_Scourge", 25, 75, 25, 0,
+//				0, 450, false, false, 1, 1, 1, 0, 5, 0, 0, 0, 3, 110, false,
+//				true, false, false, 35));
+//		types.add(new UnitTypeWME(50, Race.Zerg, "Zerg_Infested_Terran", 100,
+//				50, 60, 0, 0, 600, false, false, 1, 1, 2, 0, 5, 3, 0, 500, 0,
+//				0, false, false, false, false, 130));
+//		types.add(new UnitTypeWME(58, Race.Terran, "Terran_Valkyrie", 250, 125,
+//				200, 0, 0, 750, false, false, 2, 2, 6, 0, 8, 0, 0, 0, 192, 6,
+//				false, true, false, false, 114));
+//		types.add(new UnitTypeWME(59, Race.Zerg, "Zerg_Cocoon", 1, 1, 200, 0,
+//				0, 1, false, false, 1, 1, 0, 0, 4, 0, 0, 0, 0, 0, false, false,
+//				false, false, 43));
+//		types.add(new UnitTypeWME(60, Race.Protoss, "Protoss_Corsair", 150,
+//				100, 100, 80, 200, 600, false, false, 1, 1, 4, 0, 9, 0, 0, 0,
+//				160, 5, false, true, false, false, 167));
+//		types.add(new UnitTypeWME(61, Race.Protoss, "Protoss_Dark_Templar",
+//				125, 100, 80, 40, 0, 750, false, false, 1, 1, 4, 0, 7, 15, 0,
+//				40, 0, 0, false, false, false, false, 160));
+//		types.add(new UnitTypeWME(62, Race.Zerg, "Zerg_Devourer", 150, 50, 250,
+//				0, 0, 600, false, false, 2, 2, 4, 0, 10, 0, 0, 0, 192, 25,
+//				false, true, false, false, 43));
+//		types.add(new UnitTypeWME(63, Race.Protoss, "Protoss_Dark_Archon", 0,
+//				0, 25, 200, 200, 300, false, false, 1, 1, 8, 0, 10, 0, 0, 0, 0,
+//				0, false, false, false, false, 61));
+//		types.add(new UnitTypeWME(64, Race.Protoss, "Protoss_Probe", 50, 0, 20,
+//				20, 0, 300, false, false, 1, 1, 2, 0, 8, 32, 0, 5, 0, 0, false,
+//				false, false, true, 154));
+//		types.add(new UnitTypeWME(65, Race.Protoss, "Protoss_Zealot", 100, 0,
+//				100, 60, 0, 600, false, false, 1, 1, 4, 0, 7, 15, 0, 8, 0, 0,
+//				false, false, false, false, 160));
+//		types.add(new UnitTypeWME(66, Race.Protoss, "Protoss_Dragoon", 125, 50,
+//				100, 80, 0, 750, false, false, 1, 1, 4, 0, 8, 128, 0, 20, 128,
+//				20, false, false, false, false, 160));
+//		types.add(new UnitTypeWME(67, Race.Protoss, "Protoss_High_Templar", 50,
+//				150, 40, 40, 200, 750, false, false, 1, 1, 4, 0, 7, 0, 0, 0, 0,
+//				0, false, false, false, false, 160));
+//		types.add(new UnitTypeWME(68, Race.Protoss, "Protoss_Archon", 0, 0, 10,
+//				350, 0, 300, false, false, 1, 1, 8, 0, 8, 64, 0, 30, 64, 30,
+//				false, false, false, false, 67));
+//		types.add(new UnitTypeWME(69, Race.Protoss, "Protoss_Shuttle", 200, 0,
+//				80, 60, 0, 900, false, false, 2, 1, 4, 0, 8, 0, 0, 0, 0, 0,
+//				false, true, false, false, 155));
+//		types.add(new UnitTypeWME(70, Race.Protoss, "Protoss_Scout", 275, 125,
+//				150, 100, 0, 1200, false, false, 2, 1, 6, 0, 8, 128, 0, 8, 128,
+//				14, false, true, false, false, 167));
+//		types.add(new UnitTypeWME(71, Race.Protoss, "Protoss_Arbiter", 100,
+//				350, 200, 150, 200, 2400, false, false, 2, 2, 8, 0, 9, 160, 0,
+//				10, 160, 10, false, true, false, false, 167));
+//		types.add(new UnitTypeWME(72, Race.Protoss, "Protoss_Carrier", 350,
+//				250, 44, 150, 0, 2100, false, false, 2, 2, 12, 0, 11, 0, 0, 0,
+//				0, 0, false, true, false, false, 167));
+//		types.add(new UnitTypeWME(73, Race.Protoss, "Protoss_Interceptor", 25,
+//				0, 40, 40, 0, 300, false, false, 1, 1, 0, 0, 6, 128, 0, 6, 128,
+//				6, false, true, false, false, 72));
+//		types.add(new UnitTypeWME(83, Race.Protoss, "Protoss_Reaver", 200, 100,
+//				100, 80, 0, 1050, false, false, 1, 1, 8, 0, 10, 0, 0, 0, 0, 0,
+//				false, false, false, false, 155));
+//		types.add(new UnitTypeWME(84, Race.Protoss, "Protoss_Observer", 25, 75,
+//				40, 20, 0, 600, false, false, 1, 1, 2, 0, 9, 0, 0, 0, 0, 0,
+//				false, true, false, false, 155));
+//		types.add(new UnitTypeWME(85, Race.Protoss, "Protoss_Scarab", 15, 0,
+//				20, 10, 0, 105, false, false, 1, 1, 0, 0, 5, 128, 0, 100, 0, 0,
+//				false, false, false, false, 83));
+//		types.add(new UnitTypeWME(89, Race.Other, "Critter_Rhynadon", 1, 1, 60,
+//				0, 0, 1, false, false, 1, 1, 0, 0, 7, 0, 0, 0, 0, 0, false,
+//				false, false, false, 228));
+//		types.add(new UnitTypeWME(90, Race.Other, "Critter_Bengalaas", 1, 1,
+//				60, 0, 0, 1, false, false, 1, 1, 0, 0, 7, 0, 0, 0, 0, 0, false,
+//				false, false, false, 228));
+//		types.add(new UnitTypeWME(93, Race.Other, "Critter_Scantid", 1, 1, 60,
+//				0, 0, 1, false, false, 1, 1, 0, 0, 7, 0, 0, 0, 0, 0, false,
+//				false, false, false, 228));
+//		types.add(new UnitTypeWME(94, Race.Other, "Critter_Kakaru", 1, 1, 60,
+//				0, 0, 1, false, false, 1, 1, 0, 0, 7, 0, 0, 0, 0, 0, false,
+//				true, false, false, 228));
+//		types.add(new UnitTypeWME(95, Race.Other, "Critter_Ragnasaur", 1, 1,
+//				60, 0, 0, 1, false, false, 1, 1, 0, 0, 7, 0, 0, 0, 0, 0, false,
+//				false, false, false, 228));
+//		types.add(new UnitTypeWME(96, Race.Other, "Critter_Ursadon", 1, 1, 60,
+//				0, 0, 1, false, false, 1, 1, 0, 0, 7, 0, 0, 0, 0, 0, false,
+//				false, false, false, 228));
+//		types.add(new UnitTypeWME(97, Race.Zerg, "Zerg_Lurker_Egg", 1, 1, 200,
+//				0, 0, 1, false, false, 1, 1, 0, 0, 4, 0, 0, 0, 0, 0, false,
+//				false, false, false, 38));
+//		types.add(new UnitTypeWME(103, Race.Zerg, "Zerg_Lurker", 50, 100, 125,
+//				0, 0, 600, false, false, 1, 1, 4, 0, 8, 192, 0, 20, 0, 0,
+//				false, false, false, false, 38));
+//		types.add(new UnitTypeWME(105, Race.Other, "Spell_Disruption_Web", 250,
+//				250, 32, 0, 0, 2400, false, false, 4, 3, 0, 0, 8, 0, 0, 0, 0,
+//				0, false, false, false, false, 228));
+//		types.add(new UnitTypeWME(106, Race.Terran, "Terran_Command_Center",
+//				400, 0, 220, 0, 0, 1800, false, false, 4, 3, 0, 20, 10, 0, 0,
+//				0, 0, 0, true, false, false, false, 7));
+//		types.add(new UnitTypeWME(107, Race.Terran, "Terran_Comsat_Station",
+//				50, 50, 244, 0, 200, 600, false, false, 2, 2, 0, 0, 10, 0, 0,
+//				0, 0, 0, true, false, false, false, 106));
+//		types.add(new UnitTypeWME(108, Race.Terran, "Terran_Nuclear_Silo", 100,
+//				100, 88, 0, 0, 1200, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0,
+//				0, true, false, false, false, 106));
+//		types.add(new UnitTypeWME(109, Race.Terran, "Terran_Supply_Depot", 100,
+//				0, 244, 0, 0, 600, false, false, 3, 2, 0, 16, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 7));
+//		types.add(new UnitTypeWME(110, Race.Terran, "Terran_Refinery", 100, 0,
+//				238, 0, 0, 600, false, false, 4, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 7));
+//		types.add(new UnitTypeWME(111, Race.Terran, "Terran_Barracks", 150, 0,
+//				232, 0, 0, 1200, false, false, 4, 3, 0, 0, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 7));
+//		types.add(new UnitTypeWME(112, Race.Terran, "Terran_Academy", 150, 0,
+//				88, 0, 0, 1200, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 7));
+//		types.add(new UnitTypeWME(113, Race.Terran, "Terran_Factory", 200, 100,
+//				226, 0, 0, 1200, false, false, 4, 3, 0, 0, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 7));
+//		types.add(new UnitTypeWME(114, Race.Terran, "Terran_Starport", 150,
+//				100, 20, 0, 0, 1050, false, false, 4, 3, 0, 0, 10, 0, 0, 0, 0,
+//				0, true, false, false, false, 7));
+//		types.add(new UnitTypeWME(115, Race.Terran, "Terran_Control_Tower", 50,
+//				50, 244, 0, 0, 600, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 114));
+//		types.add(new UnitTypeWME(116, Race.Terran, "Terran_Science_Facility",
+//				100, 150, 82, 0, 0, 900, false, false, 4, 3, 0, 0, 10, 0, 0, 0,
+//				0, 0, true, false, false, false, 7));
+//		types.add(new UnitTypeWME(117, Race.Terran, "Terran_Covert_Ops", 50,
+//				50, 238, 0, 0, 600, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 116));
+//		types.add(new UnitTypeWME(118, Race.Terran, "Terran_Physics_Lab", 50,
+//				50, 88, 0, 0, 600, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 116));
+//		types.add(new UnitTypeWME(120, Race.Terran, "Terran_Machine_Shop", 50,
+//				50, 238, 0, 0, 600, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 113));
+//		types.add(new UnitTypeWME(122, Race.Terran, "Terran_Engineering_Bay",
+//				125, 0, 82, 0, 0, 900, false, false, 4, 3, 0, 0, 8, 0, 0, 0, 0,
+//				0, true, false, false, false, 7));
+//		types.add(new UnitTypeWME(123, Race.Terran, "Terran_Armory", 100, 50,
+//				238, 0, 0, 1200, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 7));
+//		types.add(new UnitTypeWME(124, Race.Terran, "Terran_Missile_Turret",
+//				75, 0, 200, 0, 0, 450, false, false, 2, 2, 0, 0, 11, 0, 0, 0,
+//				224, 20, true, false, false, false, 7));
+//		types.add(new UnitTypeWME(125, Race.Terran, "Terran_Bunker", 100, 0,
+//				94, 0, 0, 450, false, false, 3, 2, 0, 0, 10, 0, 0, 0, 0, 0,
+//				true, false, false, false, 7));
+//		types.add(new UnitTypeWME(126, Race.None, "Special_Crashed_Norad_II",
+//				800, 600, 188, 0, 0, 4800, false, false, 3, 2, 0, 0, 10, 0, 0,
+//				0, 0, 0, false, false, false, false, 228));
+//		types.add(new UnitTypeWME(127, Race.None, "Special_Ion_Cannon", 200, 0,
+//				208, 0, 0, 900, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				false, false, false, false, 228));
+//		types.add(new UnitTypeWME(130, Race.Zerg,
+//				"Zerg_Infested_Command_Center", 1, 1, 220, 0, 0, 1800, false,
+//				false, 4, 3, 0, 0, 10, 0, 0, 0, 0, 0, false, false, false,
+//				false, 228));
+//		types.add(new UnitTypeWME(131, Race.Zerg, "Zerg_Hatchery", 300, 0, 226,
+//				0, 0, 1800, false, false, 4, 3, 0, 2, 9, 0, 0, 0, 0, 0, true,
+//				false, false, false, 41));
+//		types.add(new UnitTypeWME(132, Race.Zerg, "Zerg_Lair", 150, 100, 8, 0,
+//				0, 1500, false, false, 4, 3, 0, 2, 10, 0, 0, 0, 0, 0, true,
+//				false, false, false, 131));
+//		types.add(new UnitTypeWME(133, Race.Zerg, "Zerg_Hive", 200, 150, 196,
+//				0, 0, 1800, false, false, 4, 3, 0, 2, 11, 0, 0, 0, 0, 0, true,
+//				false, false, false, 132));
+//		types.add(new UnitTypeWME(134, Race.Zerg, "Zerg_Nydus_Canal", 150, 0,
+//				250, 0, 0, 600, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 41));
+//		types.add(new UnitTypeWME(135, Race.Zerg, "Zerg_Hydralisk_Den", 100,
+//				50, 82, 0, 0, 600, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 41));
+//		types.add(new UnitTypeWME(136, Race.Zerg, "Zerg_Defiler_Mound", 100,
+//				100, 82, 0, 0, 900, false, false, 4, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 41));
+//		types.add(new UnitTypeWME(137, Race.Zerg, "Zerg_Greater_Spire", 100,
+//				150, 232, 0, 0, 1800, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0,
+//				0, true, false, false, false, 141));
+//		types.add(new UnitTypeWME(138, Race.Zerg, "Zerg_Queen_s_Nest", 150,
+//				100, 82, 0, 0, 900, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 41));
+//		types.add(new UnitTypeWME(139, Race.Zerg, "Zerg_Evolution_Chamber", 75,
+//				0, 238, 0, 0, 600, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 41));
+//		types.add(new UnitTypeWME(140, Race.Zerg, "Zerg_Ultralisk_Cavern", 150,
+//				200, 88, 0, 0, 1200, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0,
+//				0, true, false, false, false, 41));
+//		types.add(new UnitTypeWME(141, Race.Zerg, "Zerg_Spire", 200, 150, 88,
+//				0, 0, 1800, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0, 0, true,
+//				false, false, false, 41));
+//		types.add(new UnitTypeWME(142, Race.Zerg, "Zerg_Spawning_Pool", 200, 0,
+//				238, 0, 0, 1200, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 41));
+//		types.add(new UnitTypeWME(143, Race.Zerg, "Zerg_Creep_Colony", 75, 0,
+//				144, 0, 0, 300, false, false, 2, 2, 0, 0, 10, 0, 0, 0, 0, 0,
+//				true, false, false, false, 41));
+//		types.add(new UnitTypeWME(144, Race.Zerg, "Zerg_Spore_Colony", 50, 0,
+//				144, 0, 0, 300, false, false, 2, 2, 0, 0, 10, 0, 0, 0, 224, 15,
+//				true, false, false, false, 143));
+//		types.add(new UnitTypeWME(146, Race.Zerg, "Zerg_Sunken_Colony", 50, 0,
+//				44, 0, 0, 300, false, false, 2, 2, 0, 0, 10, 224, 0, 40, 0, 0,
+//				true, false, false, false, 143));
+//		types.add(new UnitTypeWME(147, Race.None,
+//				"Special_Overmind_With_Shell", 1, 1, 136, 0, 0, 1, false,
+//				false, 5, 3, 0, 0, 8, 0, 0, 0, 0, 0, false, false, false,
+//				false, 228));
+//		types.add(new UnitTypeWME(148, Race.None, "Special_Overmind", 1, 1,
+//				196, 0, 0, 1, false, false, 5, 3, 0, 0, 8, 0, 0, 0, 0, 0,
+//				false, false, false, false, 228));
+//		types.add(new UnitTypeWME(149, Race.Zerg, "Zerg_Extractor", 50, 0, 238,
+//				0, 0, 600, false, false, 4, 2, 0, 0, 7, 0, 0, 0, 0, 0, false,
+//				false, false, false, 41));
+//		types.add(new UnitTypeWME(150, Race.None, "Special_Mature_Chrysalis",
+//				0, 0, 250, 0, 0, 0, false, false, 2, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				false, false, false, false, 228));
+//		types.add(new UnitTypeWME(151, Race.None, "Special_Cerebrate", 0, 0,
+//				220, 0, 0, 0, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				false, false, false, false, 228));
+//		types.add(new UnitTypeWME(152, Race.None, "Special_Cerebrate_Daggoth",
+//				0, 0, 220, 0, 0, 0, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0, 0,
+//				false, false, false, false, 228));
+//		types.add(new UnitTypeWME(154, Race.Protoss, "Protoss_Nexus", 400, 0,
+//				238, 750, 0, 1800, false, false, 4, 3, 0, 18, 11, 0, 0, 0, 0,
+//				0, true, false, false, false, 64));
+//		types.add(new UnitTypeWME(155, Race.Protoss,
+//				"Protoss_Robotics_Facility", 200, 200, 244, 500, 0, 1200,
+//				false, false, 3, 2, 0, 0, 10, 0, 0, 0, 0, 0, true, false,
+//				false, false, 64));
+//		types.add(new UnitTypeWME(156, Race.Protoss, "Protoss_Pylon", 100, 0,
+//				44, 300, 0, 450, false, false, 2, 2, 0, 16, 8, 0, 0, 0, 0, 0,
+//				true, false, false, false, 64));
+//		types.add(new UnitTypeWME(157, Race.Protoss, "Protoss_Assimilator",
+//				100, 0, 194, 450, 0, 600, false, false, 4, 2, 0, 0, 10, 0, 0,
+//				0, 0, 0, true, false, false, false, 64));
+//		types.add(new UnitTypeWME(159, Race.Protoss, "Protoss_Observatory", 50,
+//				100, 250, 250, 0, 450, false, false, 3, 2, 0, 0, 10, 0, 0, 0,
+//				0, 0, true, false, false, false, 64));
+//		types.add(new UnitTypeWME(160, Race.Protoss, "Protoss_Gateway", 150, 0,
+//				244, 500, 0, 900, false, false, 4, 3, 0, 0, 10, 0, 0, 0, 0, 0,
+//				true, false, false, false, 64));
+//		types.add(new UnitTypeWME(162, Race.Protoss, "Protoss_Photon_Cannon",
+//				150, 0, 100, 100, 0, 750, false, false, 2, 2, 0, 0, 11, 224, 0,
+//				20, 224, 20, true, false, false, false, 64));
+//		types.add(new UnitTypeWME(163, Race.Protoss, "Protoss_Citadel_of_Adun",
+//				150, 100, 194, 450, 0, 900, false, false, 3, 2, 0, 0, 10, 0, 0,
+//				0, 0, 0, true, false, false, false, 64));
+//		types.add(new UnitTypeWME(164, Race.Protoss,
+//				"Protoss_Cybernetics_Core", 200, 0, 244, 500, 0, 900, false,
+//				false, 3, 2, 0, 0, 10, 0, 0, 0, 0, 0, true, false, false,
+//				false, 64));
+//		types.add(new UnitTypeWME(165, Race.Protoss,
+//				"Protoss_Templar_Archives", 150, 200, 244, 500, 0, 900, false,
+//				false, 3, 2, 0, 0, 10, 0, 0, 0, 0, 0, true, false, false,
+//				false, 64));
+//		types.add(new UnitTypeWME(166, Race.Protoss, "Protoss_Forge", 150, 0,
+//				38, 550, 0, 600, false, false, 3, 2, 0, 0, 10, 0, 0, 0, 0, 0,
+//				true, false, false, false, 64));
+//		types.add(new UnitTypeWME(167, Race.Protoss, "Protoss_Stargate", 150,
+//				150, 88, 600, 0, 1050, false, false, 4, 3, 0, 0, 10, 0, 0, 0,
+//				0, 0, true, false, false, false, 64));
+//		types.add(new UnitTypeWME(168, Race.None, "Special_Stasis_Cell_Prison",
+//				150, 0, 208, 0, 0, 1, false, false, 4, 3, 0, 0, 8, 0, 0, 0, 0,
+//				0, true, false, false, false, 228));
+//		types.add(new UnitTypeWME(169, Race.Protoss, "Protoss_Fleet_Beacon",
+//				300, 200, 244, 500, 0, 900, false, false, 3, 2, 0, 0, 10, 0, 0,
+//				0, 0, 0, true, false, false, false, 64));
+//		types.add(new UnitTypeWME(170, Race.Protoss,
+//				"Protoss_Arbiter_Tribunal", 200, 150, 244, 500, 0, 900, false,
+//				false, 3, 2, 0, 0, 10, 0, 0, 0, 0, 0, true, false, false,
+//				false, 64));
+//		types.add(new UnitTypeWME(171, Race.Protoss,
+//				"Protoss_Robotics_Support_Bay", 150, 100, 194, 450, 0, 450,
+//				false, false, 3, 2, 0, 0, 10, 0, 0, 0, 0, 0, true, false,
+//				false, false, 64));
+//		types.add(new UnitTypeWME(172, Race.Protoss, "Protoss_Shield_Battery",
+//				100, 0, 200, 200, 200, 450, false, false, 3, 2, 0, 0, 10, 0, 0,
+//				0, 0, 0, true, false, false, false, 64));
+//		types.add(new UnitTypeWME(173, Race.None,
+//				"Special_Khaydarin_Crystal_Form", 250, 0, 160, 0, 0, 1, false,
+//				false, 4, 3, 0, 0, 10, 0, 0, 0, 0, 0, false, false, false,
+//				false, 228));
+//		types.add(new UnitTypeWME(174, Race.None, "Special_Protoss_Temple",
+//				250, 0, 220, 0, 0, 1, false, false, 7, 3, 0, 0, 10, 0, 0, 0, 0,
+//				0, false, false, false, false, 228));
+//		types.add(new UnitTypeWME(175, Race.None, "Special_XelNaga_Temple",
+//				1500, 500, 136, 0, 0, 4800, false, false, 5, 4, 0, 0, 10, 0, 0,
+//				0, 0, 0, false, false, false, false, 228));
+//		types.add(new UnitTypeWME(176, Race.Other, "Resource_Mineral_Field", 1,
+//				1, 160, 0, 0, 1, false, false, 2, 1, 0, 0, 9, 0, 0, 0, 0, 0,
+//				false, false, false, false, 228));
+//		types.add(new UnitTypeWME(188, Race.Other, "Resource_Vespene_Geyser",
+//				1, 1, 160, 0, 0, 1, false, false, 4, 2, 0, 0, 9, 0, 0, 0, 0, 0,
+//				false, false, false, false, 228));
+//		types.add(new UnitTypeWME(189, Race.None, "Special_Warp_Gate", 600,
+//				200, 188, 0, 0, 2400, false, false, 3, 2, 0, 0, 8, 0, 0, 0, 0,
+//				0, false, false, false, false, 228));
+//		types.add(new UnitTypeWME(190, Race.None, "Special_Psi_Disrupter",
+//				1000, 400, 208, 0, 0, 4800, false, false, 5, 3, 0, 0, 10, 0, 0,
+//				0, 0, 0, false, false, false, false, 228));
+//		types.add(new UnitTypeWME(200, Race.None, "Special_Power_Generator",
+//				200, 50, 32, 0, 0, 2400, false, false, 4, 3, 0, 0, 8, 0, 0, 0,
+//				0, 0, false, false, false, false, 228));
+//		types.add(new UnitTypeWME(201, Race.None, "Special_Overmind_Cocoon",
+//				1000, 500, 196, 0, 0, 2400, false, false, 3, 2, 0, 0, 10, 0, 0,
+//				0, 0, 0, false, false, false, false, 228));
+//		types.add(new UnitTypeWME(202, Race.Other, "Spell_Dark_Swarm", 250,
+//				200, 32, 0, 0, 2400, false, false, 5, 5, 0, 0, 8, 0, 0, 0, 0,
+//				0, false, false, false, false, 228));
+//		types.add(new UnitTypeWME(228, Race.None, "None", 0, 0, 0, 0, 0, 0,
+//				false, false, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false,
+//				false, false, 228));
+//		types.add(new UnitTypeWME(229, Race.Unknown, "Unknown", 0, 0, 0, 0, 0,
+//				0, false, false, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, false,
+//				false, false, 229));
 		return types;
 	}
 }

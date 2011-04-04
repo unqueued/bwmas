@@ -2,7 +2,6 @@ package starcraftbot.proxybot.wmes;
 
 import java.util.ArrayList;
 
-import starcraftbot.proxybot.Constants.Race;
 
 /**
  * Reference data about the upgrades in StarCraft.
@@ -106,9 +105,9 @@ public class UpgradeTypeWME extends WME {
 		this.gasFactor = gasFactor;
 	}
 
-	public static ArrayList<UpgradeType> getTypes(Race race) {
+	public static ArrayList<UpgradeType> getTypes() {
 		ArrayList<UpgradeType> types = new ArrayList<UpgradeType>();
-
+    /*
 		switch (race) {
 		case Protoss:
 			types.add(UpgradeType.Protoss_Armor);
@@ -167,7 +166,7 @@ public class UpgradeTypeWME extends WME {
 			types.add(UpgradeType.Metasynaptic_Node);
 			break;
 		}
-
+    */
 		return types;
 	}
 
