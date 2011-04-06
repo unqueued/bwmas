@@ -11,148 +11,110 @@ import jade.domain.FIPAAgentManagement.*;
 import jade.lang.acl.*;
 import jade.proto.*;
 import java.util.*;
+import starcraftbot.proxybot.ConverId;
+import starcraftbot.proxybot.ConverId.UnitM;
 
+import starcraftbot.proxybot.khasbot.KhasBotAgent;
 import starcraftbot.proxybot.game.GameObject;
 import starcraftbot.proxybot.game.GameObjectUpdate;
 import starcraftbot.proxybot.khasbot.unitma.UnitObject;
 
 @SuppressWarnings("serial")
-public class ResourceManagerAgent extends Agent{
-	private ContentManager manager = (ContentManager) getContentManager();
-	private Codec codec = new SLCodec();
+public class ResourceManagerAgent extends KhasBotAgent {
 
-  private GameObject gameObj;
-  private GameObjectUpdate gameObjUp;
-
-  AID commander = null;
-  AID building_manager = null;
-  AID structure_manager = null;
-  AID battle_manager = null;
-  AID resource_manager = null;
-  AID map_manager = null;
-  AID unit_manager = null;
-
-  ArrayList<UnitObject> my_units = null;
+  //this will maintain a list of worker units
+  //    this HashMap will use <k,v> as <unit id num,UnitObject>
+  HashMap<Integer,UnitObject> my_units = null;
 
   ResourceManagerAgentInitFIPAReqUnitM unitm_Init = null;
 
+  @Override
 	protected void setup(){
-  
-    my_units = new ArrayList<UnitObject>();
+    super.setup();
 
-     /*
-     * Message Template: ACLMessage.INFORM
-     */
-    MessageTemplate commander_inform_mt = null;
-
-    /*
-     * Message Template: FIPANames.InteractionProtocol.FIPA_REQUEST
-     */
-    MessageTemplate unitm_fipa_req_mt = null;
-    MessageTemplate mapm_fipa_req_mt = null;
-    MessageTemplate cmd_fipa_req_mt = null;
-
-
-    //arguments passed into agent
-    Object[] args = getArguments();
+    my_units = new HashMap<Integer,UnitObject>();
     
-    String temp = null;
+    ResourceManagerAgentRespInfCmd resp_inf_cmd =
+            new ResourceManagerAgentRespInfCmd(this,this.commander_inform_mt);
+    ResourceManagerAgentActionGatherResources gather_res =
+            new ResourceManagerAgentActionGatherResources(this);
+    ResourceManagerAgentRespFIPAReqUnitM resp_fipa_req_unitm =
+            new ResourceManagerAgentRespFIPAReqUnitM(this,this.unitm_fipa_req_mt);
+//    ResourceManagerAgentRespFIPAReqMapM resp_fipa_req_mapm =
+//            new ResourceManagerAgentRespFIPAReqMapM(this,mapm_fipa_req_mt);
 
-    //
-    //now strip out the khasbot agents that the commander will create from the arguments passed in
-    //
-    for(int i=0; i < args.length; i++){
-      temp = (String) args[i];
-      //add the agents that will get game updates
-      if(temp.matches(".*[Cc]ommander.*"))
-        commander = new AID(temp,AID.ISLOCALNAME);
-      else if(temp.matches(".*[Bb]uilding[Mm]anager.*"))
-        building_manager = new AID(temp,AID.ISLOCALNAME);
-      else if(temp.matches(".*[Ss]tructure[Mm]anager.*"))
-        structure_manager = new AID(temp,AID.ISLOCALNAME);
-      else if(temp.matches(".*[Bb]attle[Mm]anager.*"))
-        battle_manager = new AID(temp,AID.ISLOCALNAME);
-      else if(temp.matches(".*[Rr]esource[Mm]anager.*"))
-        resource_manager = new AID(temp,AID.ISLOCALNAME);
-      else if(temp.matches(".*[Mm]ap[Mm]anager.*"))
-        map_manager = new AID(temp,AID.ISLOCALNAME);
-    }
-
-    commander_inform_mt = MessageTemplate.and(
-                                               MessageTemplate.MatchPerformative(ACLMessage.INFORM),
-                                               MessageTemplate.MatchSender(commander)
-                                             );
-
-    unitm_fipa_req_mt = MessageTemplate.and(
-                                             MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-                                             MessageTemplate.and(
-                                                                  MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                                                                  MessageTemplate.MatchSender(unit_manager)
-                                             )
-                                           );
-
-    mapm_fipa_req_mt = MessageTemplate.and(
-                                             MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-                                             MessageTemplate.and(
-                                                                  MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                                                                  MessageTemplate.MatchSender(map_manager)
-                                              )
-                                            );
-
-    ParallelBehaviour root_behaviour = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
-
-    /* FIPA request initiators */
-    unitm_Init = new ResourceManagerAgentInitFIPAReqUnitM(this,unit_manager);
-
-    /* FIPA request responders */
-    //set a behaviour to handle all the inform messages from the commander
-    //right now handles:
-    //  GameObject
-    //  GameObjectUpdate
-    root_behaviour.addSubBehaviour(new ResourceManagerAgentRespInfCmd(this,commander_inform_mt));
-
-    root_behaviour.addSubBehaviour(new ResourceManagerAgentRespFIPAReqUnitM(this,unitm_fipa_req_mt));
+    gather_res.setDataStore(resp_inf_cmd.getDataStore());
+    resp_fipa_req_unitm.setDataStore(resp_inf_cmd.getDataStore());
+    
+    /* handle ACLMessgae.INFORM responders */
+    addThreadedBehaviour(resp_inf_cmd);
+    
+    /* handle FIPA request responders */
+    addThreadedBehaviour(gather_res);
+    addThreadedBehaviour(resp_fipa_req_unitm);
     //can't think of a good reason why MapManager is going to request something from ResourceManager
-    //root_behaviour.addSubBehaviour(new ResourceManagerAgentRespFIPAReqMapM(this,mapm_fipa_req_mt));
-
-    root_behaviour.addSubBehaviour(new ResourceManagerAgentActionGatherResources(this,3000));
-
-
-    addBehaviour(root_behaviour);
-
+    //addThreadedBehaviour(resp_fipa_req_mapm);
 	}
 
-	//may not need this, but we'll see
-  public GameObject getGameObject()
-	{
-		return gameObj;
-	}
-
+  /* agents data manipulation methods */
+  @Override
 	public void setGameObject(GameObject g)
 	{
-    System.out.println(this.getLocalName() + "> setting GameObject <");
 		gameObj = g;
 	}
 
-  //may not need this, but we'll see
- 	public GameObjectUpdate getGameObjectUpdate()
-	{
-		return gameObjUp;
-	}
-
+  @Override
   public void setGameObjectUpdate(GameObjectUpdate g)
 	{
-    System.out.println(this.getLocalName() + "> setting GameObjectUpdate <");
 		gameObjUp = g;
 	}
-  
+
+  public void addWorker(UnitObject worker){
+    my_units.put(worker.getID(),worker);
+  }
+
+  public int numOfWorkers(){
+    return my_units.size();
+  }
+
+  /* message request methods */
   public void canEnoughResourcesToBuild(){
 
   }
-
-  public void gatherMinerals(){
-    unitm_Init.sendRequestFor(ResMRequests.GatherMinerals);
+  
+  public void requestWorker(){
+    sendRequestFor(ResMRequests.RequestWorker,unit_manager);
   }
+
+  /* message processing methods */
+  public void sendRequestFor(ResMRequests request, AID receiver){
+
+//    ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+//    msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
+//   // msg.setReplyByDate(new Date(System.currentTimeMillis() + 1000));
+//
+//    if(request == ResMRequests.RequestWorker){
+//      //set a conversatinon id for this FIPA-Request
+//      msg.setConversationId(ConverId.UnitM.NeedWorker.getConId());
+//      //System.out.println(this.getLocalName() + " >>> REQUEST: for a worker");
+//    }
+//
+//    msg.addReceiver(receiver);
+//    this.send(msg);
+//    root_behaviour.addSubBehaviour(new ResourceManagerAgentInitFIPAReqUnitM(this,msg));
+
+    ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+    //if(request == ResMRequests.RequestWorker){
+      //set a conversatinon id for this FIPA-Request
+      msg.setConversationId(ConverId.UnitM.NeedWorker.getConId());
+      msg.setContent(ConverId.UnitM.NeedWorker.getConId());
+      //System.out.println(this.getLocalName() + " >>> REQUEST: for a worker");
+    //}
+   
+    msg.addReceiver(receiver);
+    this.send(msg);
+
+  }//end sendRequestFor
 
 }//end ResourceManagerAgent
 

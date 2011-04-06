@@ -230,14 +230,19 @@ public class ProxyBotAgent extends Agent{
       if (msg != null) {
         if (msg.getConversationId().equals(ConverId.Commands.ExecuteCommand.getConId())) {
           try {
+            GameCommand cmd = (GameCommand)msg.getContentObject();
+              if( cmd != null ){
               //
               // Process the game update that was received. Pass on the information to ProxyBot client
               // application by placing command data onto the reply queue
               //
-              jadeReplyQueue.put((GameCommand)msg.getContentObject());
+              jadeReplyQueue.put(cmd);
+            }
             } catch (UnreadableException ex) {
               Logger.getLogger(ProxyBotAgent.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
+              Logger.getLogger(ProxyBotAgent.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
               Logger.getLogger(ProxyBotAgent.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

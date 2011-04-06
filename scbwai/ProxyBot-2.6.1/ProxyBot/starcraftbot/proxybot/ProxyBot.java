@@ -166,7 +166,7 @@ public class ProxyBot {
         //at the game's fastest speed wait to run this loop once a second
     	  Thread.sleep( (1000 / 24) );
 
-        if( (game_counter < 5) )
+        if( (game_counter < 3) )
           game_counter++;
 
 
@@ -180,12 +180,12 @@ public class ProxyBot {
           // update the game
           //game.updateData(update);
 
-          if( game_counter < 5 )
+          if( game_counter < 3 )
             gameObj.processGameUpdate(update);
           else
             gameObjUp.processGameUpdate(update);
 
-          if( game_counter < 5 )
+          if( game_counter < 3 )
             pba.sendGameObjToJADE(gameObj);
           else
             pba.sendGameObjUpdateToJADE(gameObjUp);

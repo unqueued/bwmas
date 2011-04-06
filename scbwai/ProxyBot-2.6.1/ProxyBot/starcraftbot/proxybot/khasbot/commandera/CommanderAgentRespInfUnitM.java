@@ -1,12 +1,16 @@
 package starcraftbot.proxybot.khasbot.commandera;
 
-import java.io.IOException;
+
 
 import jade.core.*;
 import jade.core.behaviours.*;
 import jade.lang.acl.*;
 
+import java.io.*;
+import java.util.logging.*;
+
 import starcraftbot.proxybot.ConverId;
+import starcraftbot.proxybot.command.GameCommand;
 
 /**
  * This class/behaviour will only process messages it receives from the
@@ -36,13 +40,18 @@ public class CommanderAgentRespInfUnitM extends CyclicBehaviour{
         //OPTIONAL
         //I might want to override it or change it, depending on my overall view of how
         //the game is going.
+        try{
+          if( (GameCommand)msg.getContentObject() != null){
+            //Send the command to ProxyBotAgent
+            ACLMessage msg_cmd = new ACLMessage(ACLMessage.INFORM);
+            msg_cmd.addReceiver(proxybot_agent);
+            msg_cmd.setConversationId(ConverId.Commands.ExecuteCommand.getConId());
 
-        //Send the command to ProxyBotAgent
-        ACLMessage msg_cmd = new ACLMessage(ACLMessage.INFORM);
-        msg_cmd.addReceiver(proxybot_agent);
-        msg_cmd.setConversationId(ConverId.Commands.ExecuteCommand.getConId());
-        
-        agent.send(msg_cmd);
+            agent.send(msg_cmd);
+          }
+        }catch(UnreadableException ex) {
+          Logger.getLogger(CommanderAgentRespInfUnitM.class.getName()).log(Level.SEVERE, null, ex);
+        }
       }
     } else {
       block();

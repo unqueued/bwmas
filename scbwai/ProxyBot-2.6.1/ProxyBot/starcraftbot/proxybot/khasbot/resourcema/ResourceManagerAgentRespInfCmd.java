@@ -18,10 +18,14 @@ public class ResourceManagerAgentRespInfCmd extends CyclicBehaviour{
     super(a);
     agent=a;
     this.mt=mt;
+    
   }
 
   public void action() {
+    //System.out.println("ResourceManagerAgentRespInfCmd: " + agent.tbf.getThread(this).getId());
+    //System.out.println("DataStore hello: " + getDataStore().get("hello"));
     ACLMessage msg = agent.receive(mt);
+    //System.out.println(agent.getLocalName() + " <<< INFORM: from commander");
     if (msg != null) {
       if(msg.getConversationId().equals(ConverId.Game.InitGameObj.getConId())){
         try {
@@ -36,6 +40,7 @@ public class ResourceManagerAgentRespInfCmd extends CyclicBehaviour{
           Logger.getLogger(ResourceManagerAgentRespInfCmd.class.getName()).log(Level.SEVERE, null, ex);
         }
       }
+      
     } else {
       block();
     }

@@ -23,9 +23,9 @@ public class BuildingManagerAgentRespInfCmd extends CyclicBehaviour{
     this.mt=mt;
   }
 
-  public void action() {
+  public void action(){
     ACLMessage msg = agent.receive(mt);
-    if (msg != null) {
+    if (msg != null){
       if(msg.getConversationId().equals(ConverId.Game.InitGameObj.getConId())){
         try {
           agent.setGameObject((GameObject) msg.getContentObject());

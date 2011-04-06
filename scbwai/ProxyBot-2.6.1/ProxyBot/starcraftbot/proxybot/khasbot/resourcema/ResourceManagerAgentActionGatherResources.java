@@ -17,25 +17,43 @@ import starcraftbot.proxybot.ConverId;
  * up by the garbage collector until the next FIPA-Request is made.
  */
 @SuppressWarnings("serial")
-public class ResourceManagerAgentActionGatherResources extends TickerBehaviour {
+public class ResourceManagerAgentActionGatherResources extends CyclicBehaviour {
 	ResourceManagerAgent agent=null;
-  long timeout=0;
   
-
-  public ResourceManagerAgentActionGatherResources(ResourceManagerAgent a, long tick_time) {
-    super(a,tick_time);
+  public ResourceManagerAgentActionGatherResources(ResourceManagerAgent a) {
+    super(a);
     agent=a;
-    timeout = tick_time;
-    
-    /* make the initial request to gather minerals */
-    agent.gatherMinerals();
-
-
-  }
+ }
 
   @Override
-  protected void onTick() {
-
+  public void action() {
+    //System.out.println("ResourceManagerAgentActionGatherResources: " + agent.tbf.getThread(this).getId());
+    /* request more workers to gather minerals*/
+    //System.out.println("Num of workers: " + agent.numOfWorkers());
+    if((agent.getGameObject() != null)){
+      agent.requestWorker();
+    }
+      //getDataStore().put("hello", "there it is");
+    //if((agent.getGameObject() != null) && (agent.numOfWorkers() <= 4) )
+       //agent.requestWorker();
+//    else
+//    {
+      /*if(agent.getGameObject() == null)
+        System.out.println(agent.getLocalName() + ":: waiting for game object to NOT be null");
+      else
+        System.out.println(agent.getLocalName() + ":: at 5 workers");*/
+//    }
   }
+
+//  @Override
+//  public boolean done() {
+//    if( agent.numOfWorkers() > 0 ){
+//      /* request more workers to gather minerals*/
+//      return false;
+//    }else{
+//      return true;
+//    }
+//  }
+
 
 }

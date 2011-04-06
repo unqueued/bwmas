@@ -83,18 +83,18 @@ public class ProxyBotAgentCreateAgents {
 
     try {
       //request.setContentObject((Object[])agentArgs);
-        /*agent.getContentManager().fillContent(request2, actExpr2);
-        
-        agent.addBehaviour(new AchieveREInitiator(agent, request2) {
-          protected void handleInform(ACLMessage inform) {
-            //DEBUG
-            System.out.println(agent.getAID().getLocalName() + ": " + ca2.getAgentName() + " successfully created");
-          }
-          protected void handleFailure(ACLMessage failure) {
-            System.out.println("Error creating sniffer agent.");
-          }
-        } );	
-    	*/
+//        agent.getContentManager().fillContent(request2, actExpr2);
+//
+//        agent.addBehaviour(new AchieveREInitiator(agent, request2) {
+//          protected void handleInform(ACLMessage inform) {
+//            //DEBUG
+//            System.out.println(agent.getAID().getLocalName() + ": " + ca2.getAgentName() + " successfully created");
+//          }
+//          protected void handleFailure(ACLMessage failure) {
+//            System.out.println("Error creating sniffer agent.");
+//          }
+//        } );
+    	
       agent.getContentManager().fillContent(request, actExpr);
     
       agent.addBehaviour(new AchieveREInitiator(agent, request) {

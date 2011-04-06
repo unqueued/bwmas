@@ -71,7 +71,6 @@ public class CommanderAgentRespInfProxyBA extends CyclicBehaviour{
     for( int i=0; i < game_obj_update_agents.length; i++){
       msg_gameObj.clearAllReceiver();
       msg_gameObj.addReceiver(game_obj_update_agents[i]);
-
       //System.out.println("Commander Sending Game Object Update to: "+ game_obj_update_agents[i].getLocalName());
       agent.send(msg_gameObj);
     }

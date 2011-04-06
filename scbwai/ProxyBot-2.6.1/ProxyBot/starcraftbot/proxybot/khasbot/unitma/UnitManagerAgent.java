@@ -21,8 +21,6 @@
  */
 package starcraftbot.proxybot.khasbot.unitma;
 
-import starcraftbot.proxybot.CommandId;
-import starcraftbot.proxybot.command.GameCommand;
 import jade.content.ContentManager;
 import jade.content.lang.Codec;
 import jade.content.lang.sl.SLCodec;
@@ -32,153 +30,79 @@ import jade.domain.FIPANames;
 import jade.lang.acl.*;
 import java.util.*;
 
+import starcraftbot.proxybot.CommandId;
+import starcraftbot.proxybot.command.GameCommand;
 import starcraftbot.proxybot.game.GameObject;
 import starcraftbot.proxybot.game.GameObjectUpdate;
 import starcraftbot.proxybot.game.PlayerObject;
+import starcraftbot.proxybot.khasbot.KhasBotAgent;
 
 @SuppressWarnings("serial")
-public class UnitManagerAgent extends Agent{
-	private ContentManager manager = (ContentManager) getContentManager();
-	private Codec codec = new SLCodec();
-	
-	private GameObject gameObj;
-  private GameObjectUpdate gameObjUp;
+public class UnitManagerAgent extends KhasBotAgent {
 
   private boolean usingGameObject = true;
 
   UnitManagerAgentInitCmdsToCommander sendCommandsToCommander = null;
 
-  AID commander = null;
-  AID building_manager = null;
-  AID structure_manager = null;
-  AID battle_manager = null;
-  AID resource_manager = null;
-  AID map_manager = null;
-
   //non structure units i get from the game objects that belong
   //to my player
-  HashMap<Integer,ArrayList<UnitObject>> myNonStructUnits  = null;
+  ArrayList<UnitObject> unitsTraining = null; //we may or may not need this
+
+  //this will maintain a list of worker units
+  //index 0 - will be idle workers, not assigned to any task
+  //    this HashMap will use <k,v> as <unit id num,UnitObject>
+  //index 1 - will be workers that are assigned tasks
+  //    this HashMap will use <k,v> as <CommandId.Order, UnitObject>
+  //
+  //the same naming scheme is used for the other two lists
+  //groundUnits and airUnits
+  //index 0 - will be idle ground/air, not assigned to any task
+  //    this HashMap will use <k,v> as <unit id num,UnitObject>
+  //index 1 - will be ground/air that are assigned tasks
+  //    this HashMap will use <k,v> as <CommandId.Order, UnitObject>
+  //
+  List<HashMap<Integer,ArrayList<UnitObject>>> workerUnits = new ArrayList<HashMap<Integer,ArrayList<UnitObject>>>(2);
+  List<HashMap<Integer,ArrayList<UnitObject>>> groundUnits = new ArrayList<HashMap<Integer,ArrayList<UnitObject>>>(2);
+  List<HashMap<Integer,ArrayList<UnitObject>>> airUnits = new ArrayList<HashMap<Integer,ArrayList<UnitObject>>>(2);
 
 	protected void setup(){
-  
-    /*
-     * Message Template: ACLMessage.INFORM
-     */
-    MessageTemplate commander_inform_mt = null;
+    super.setup();
 
-    /*
-     * Message Template: FIPANames.InteractionProtocol.FIPA_REQUEST
-     */
-    MessageTemplate mapm_fipa_req_mt = null;
-    MessageTemplate buildm_fipa_req_mt = null;
-    MessageTemplate structm_fipa_req_mt = null;
-    MessageTemplate resm_fipa_req_mt = null;
-    MessageTemplate battm_fipa_req_mt = null;
-    MessageTemplate cmd_fipa_req_mt = null;
+    UnitManagerAgentRespInfCmd resp_inf_cmd =
+            new UnitManagerAgentRespInfCmd(this,commander_inform_mt);
+    UnitManagerAgentRespFIPAReqBuildM resp_fipa_req_buildm = 
+            new UnitManagerAgentRespFIPAReqBuildM(this,buildm_fipa_req_mt);
+    UnitManagerAgentRespFIPAReqResM resp_fipa_req_resm =
+            new UnitManagerAgentRespFIPAReqResM(this,resm_fipa_req_mt);
+    UnitManagerAgentRespFIPAReqBattM resp_fipa_req_battm =
+            new UnitManagerAgentRespFIPAReqBattM(this,battm_fipa_req_mt);
+    UnitManagerAgentRespFIPAReqStructM resp_fipa_req_structm =
+            new UnitManagerAgentRespFIPAReqStructM(this,structm_fipa_req_mt);
+    UnitManagerAgentRespFIPAReqMapM resp_fipa_req_mapm =
+            new UnitManagerAgentRespFIPAReqMapM(this,mapm_fipa_req_mt);
+    UnitManagerAgentRespFIPAReqCmd resp_fipa_req_cmd =
+            new UnitManagerAgentRespFIPAReqCmd(this,cmd_fipa_req_mt);
 
+    resp_fipa_req_buildm.setDataStore(resp_inf_cmd.getDataStore());
+    resp_fipa_req_resm.setDataStore(resp_inf_cmd.getDataStore());
+    resp_fipa_req_battm.setDataStore(resp_inf_cmd.getDataStore());
+    resp_fipa_req_structm.setDataStore(resp_inf_cmd.getDataStore());
+    resp_fipa_req_mapm.setDataStore(resp_inf_cmd.getDataStore());
+    resp_fipa_req_cmd.setDataStore(resp_inf_cmd.getDataStore());
 
-    //arguments passed into agent
-    Object[] args = getArguments();
-    
-    String temp = null;
+    /* handle ACLMessgae.INFORM responders */
+    addThreadedBehaviour(resp_inf_cmd);
 
-    //
-    //now strip out the khasbot agents that the commander will create from the arguments passed in
-    //
-    for(int i=0; i < args.length; i++){
-      temp = (String) args[i];
-      //add the agents that will get game updates
-      if(temp.matches(".*[Cc]ommander.*"))
-        commander = new AID(temp,AID.ISLOCALNAME);
-      else if(temp.matches(".*[Bb]uilding[Mm]anager.*"))
-        building_manager = new AID(temp,AID.ISLOCALNAME);
-      else if(temp.matches(".*[Ss]tructure[Mm]anager.*"))
-        structure_manager = new AID(temp,AID.ISLOCALNAME);
-      else if(temp.matches(".*[Bb]attle[Mm]anager.*"))
-        battle_manager = new AID(temp,AID.ISLOCALNAME);
-      else if(temp.matches(".*[Rr]esource[Mm]anager.*"))
-        resource_manager = new AID(temp,AID.ISLOCALNAME);
-      else if(temp.matches(".*[Mm]ap[Mm]anager.*"))
-        map_manager = new AID(temp,AID.ISLOCALNAME);
-    }
+    /* handle FIPA request responders */
+    addThreadedBehaviour(resp_fipa_req_buildm);
+    addThreadedBehaviour(resp_fipa_req_resm);
+    addThreadedBehaviour(resp_fipa_req_battm);
+    addThreadedBehaviour(resp_fipa_req_structm);
+    addThreadedBehaviour(resp_fipa_req_mapm);
+    addThreadedBehaviour(resp_fipa_req_cmd);
 
-    commander_inform_mt = MessageTemplate.and(
-                                               MessageTemplate.MatchPerformative(ACLMessage.INFORM),
-                                               MessageTemplate.MatchSender(commander)
-                                             );
-
-    mapm_fipa_req_mt = MessageTemplate.and(
-                                             MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-                                             MessageTemplate.and(
-                                                                  MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                                                                  MessageTemplate.MatchSender(map_manager)
-                                              )
-                                            );
-
-    buildm_fipa_req_mt = MessageTemplate.and(
-                                             MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-                                             MessageTemplate.and(
-                                                                  MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                                                                  MessageTemplate.MatchSender(building_manager)
-                                             )
-                                           );
-
-    structm_fipa_req_mt = MessageTemplate.and(
-                                             MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-                                             MessageTemplate.and(
-                                                                  MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                                                                  MessageTemplate.MatchSender(structure_manager)
-                                              )
-                                            );
-
-    resm_fipa_req_mt = MessageTemplate.and(
-                                             MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-                                             MessageTemplate.and(
-                                                                  MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                                                                  MessageTemplate.MatchSender(resource_manager)
-                                             )
-                                           );
-
-    battm_fipa_req_mt = MessageTemplate.and(
-                                             MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-                                             MessageTemplate.and(
-                                                                  MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                                                                  MessageTemplate.MatchSender(battle_manager)
-                                              )
-                                            );
-
-    cmd_fipa_req_mt = MessageTemplate.and(
-                                             MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-                                             MessageTemplate.and(
-                                                                  MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                                                                  MessageTemplate.MatchSender(commander)
-                                              )
-                                            );
-   
-
-    ParallelBehaviour root_behaviour = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
-
-    //set a behaviour to handle all the inform messages from the commander
-    //right now handles:
-    //  GameObject
-    //  GameObjectUpdate
-    root_behaviour.addSubBehaviour(new UnitManagerAgentRespInfCmd(this,commander_inform_mt));
-
-    //can't think of any service/info Map Manager would need from Unit Manager
-    //root_behaviour.addSubBehaviour(new UnitManagerAgentRespFIPAReqMapM(this,mapm_fipa_req_mt));
-    root_behaviour.addSubBehaviour(new UnitManagerAgentRespFIPAReqBuildM(this,buildm_fipa_req_mt));
-    //can't think of any service/info Structure Manager would need from Unit Manager
-    //root_behaviour.addSubBehaviour(new UnitManagerAgentRespFIPAReqStructM(this,structm_fipa_req_mt));
-    root_behaviour.addSubBehaviour(new UnitManagerAgentRespFIPAReqResM(this,resm_fipa_req_mt));
-    root_behaviour.addSubBehaviour(new UnitManagerAgentRespFIPAReqBattM(this,battm_fipa_req_mt));
-    root_behaviour.addSubBehaviour(new UnitManagerAgentRespFIPAReqCmd(this,cmd_fipa_req_mt));
-    
-    sendCommandsToCommander = new UnitManagerAgentInitCmdsToCommander(this,commander);
-    root_behaviour.addSubBehaviour(sendCommandsToCommander);
-
-
-    addBehaviour(root_behaviour);
-
+//    sendCommandsToCommander = new UnitManagerAgentInitCmdsToCommander(this,commander);
+//    root_behaviour.addSubBehaviour(sendCommandsToCommander);
 	}
 
   public void processCmdsReceived(GameCommand cmd){
@@ -192,31 +116,19 @@ public class UnitManagerAgent extends Agent{
     sendCommandsToCommander.reset();
   }
 
-	//may not need this, but we'll see
-  public GameObject getGameObject()
-	{
-		return gameObj;
-	}
-
-	public void setGameObject(GameObject g)
-	{
-    //System.out.println(this.getLocalName() + "> setting GameObject <");
+  @Override
+	public void setGameObject(GameObject g){
 		gameObj = g;
-    myNonStructUnits = gameObj.getUnitsInGame().getMyPlayersNonStructureUnits();
+    //from the game object get the non-structure units and place them in the appropriate
+    //list
+    //    myNonStructUnits = gameObjUp.getUnitsInGame().getMyPlayersNonStructureUnits();
+    //extractUnits(gameObj.getUnitsInGame().getMyPlayersNonStructureUnits());
 	}
 
-  //may not need this, but we'll see
- 	public GameObjectUpdate getGameObjectUpdate()
-	{
-		return gameObjUp;
-	}
-
-  public void setGameObjectUpdate(GameObjectUpdate g)
-	{
-    //System.out.println(this.getLocalName() + "> setting GameObjectUpdate <");
+  @Override
+  public void setGameObjectUpdate(GameObjectUpdate g){
     usingGameObject = false;
 		gameObjUp = g;
-    myNonStructUnits = gameObjUp.getUnitsInGame().getMyPlayersNonStructureUnits();
 	}
 
   /**
@@ -225,7 +137,18 @@ public class UnitManagerAgent extends Agent{
    */
   public UnitObject WorkerAvailable(){
     UnitObject unit = null;
+    if(!workerUnits.get(0).isEmpty()){
+      //our idle list is not empty, so then there is at least one worker standing around doing nothing
+      ArrayList<UnitObject> temp = null;
 
+      //take the idle unit from the idle list
+      temp = workerUnits.get(0).get(Unit.NonStructure.Protoss.Protoss_Probe.getNumValue());
+      unit = temp.remove(0);
+
+      //place the unit on the working list
+      temp = workerUnits.get(1).get(Unit.NonStructure.Protoss.Protoss_Probe.getNumValue());
+      temp.add(unit);
+    }
     return unit;
   }
 
@@ -245,7 +168,9 @@ public class UnitManagerAgent extends Agent{
 
   }
 
-
+  public void extractUnits(HashMap<Integer,ArrayList<UnitObject>> units){
+    //separate out the units to their designated lists
+  }
 
 	/**
 	 * DefaultActions will, inside UnitManager, get stuff to mine and make new drones.

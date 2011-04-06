@@ -13,10 +13,12 @@ import jade.lang.acl.*;
 import jade.proto.AchieveREInitiator;
 
 import java.lang.reflect.*;
+import starcraftbot.proxybot.game.GameObject;
+import starcraftbot.proxybot.game.GameObjectUpdate;
 
-public class CommanderAgent extends Agent{
-  private Codec codec = new SLCodec();
-  private Ontology ontology = JADEManagementOntology.getInstance();
+import starcraftbot.proxybot.khasbot.KhasBotAgent;
+
+public class CommanderAgent extends KhasBotAgent {
 
   //an array of strings will be used to store the agent names and paths
   //the values will be split via a ;
@@ -27,12 +29,6 @@ public class CommanderAgent extends Agent{
 
   /* khasbot agent names */
   AID proxybotagent = null;
-  AID building_manager = null;
-  AID structure_manager = null;
-  AID battle_manager = null;
-  AID resource_manager = null;
-  AID map_manager = null;
-  AID unit_manager = null;
 
   /*
    * Commander agent specifically
@@ -44,21 +40,23 @@ public class CommanderAgent extends Agent{
 
 
   public void setup() {
-    //DEBUG
-    //System.out.println(getAID().getLocalName() + ": is alive !!!");
-
+    super.setup();
+    
     //
     //Message Templates
     //
   
-    MessageTemplate proxybotagent_inform_mt = null;
-    MessageTemplate unitmanager_inform_mt = null;
-    MessageTemplate fipa_request_mt = null; 
+    MessageTemplate pba_inform_mt = null;
 
-    //register the SL codec with the content manager
-    getContentManager().registerLanguage(codec);
-    getContentManager().registerOntology(ontology);
-   
+    this.codec = new SLCodec();
+    this.getContentManager().registerLanguage(this.codec);
+    this.ontology=JADEManagementOntology.getInstance();
+    this.getContentManager().registerOntology(this.ontology);
+
+
+    CommanderAgentRespInfProxyBA resp_inf_pba = null;
+    CommanderAgentRespInfUnitM resp_inf_unitm = null;
+    
     //arguments passed into agent
     Object[] args = getArguments();
     
@@ -67,80 +65,74 @@ public class CommanderAgent extends Agent{
     proxybotagent = new AID(temp,AID.ISLOCALNAME);
 
     khasbot_agents = new String[args.length-1];
-    khasbot_agent_names = new String[args.length-1];
+    khasbot_agent_names = new String[args.length];
     init_game_agents = new AID[6]; //HARDCODE: predefined agents that will get the initial game obj
     game_update_agents = new AID[4]; //HARDCODE: predefined agents that will get game obj updates
+
+    khasbot_agent_names[0] = this.getAID().getLocalName();
     
     //
     //now strip out the khasbot agents that the commander will create from the arguments passed in
     //
-    //NOTE: skip index 0 since this is the name of the proxy bot agent
-    for(int i=1, j=0, k=0, l=0; i < args.length; i++, j++){
+    //NOTE: for i skip index 0 since this is the name of the proxy bot agent
+    //NOTE: for k skip index 0 since this is the name of the commander agent
+    for(int i=1, j=0, k=1, l=0, m=0; i < args.length; i++, j++, k++){
       khasbot_agents[j] = (String)args[i];
-      khasbot_agent_names[j] = (String)Array.get(khasbot_agents[j].split(";"),0);
+      khasbot_agent_names[k] = (String)Array.get(khasbot_agents[j].split(";"),0);
 
       //add the agents that will get game updates
-      if(khasbot_agent_names[j].matches(".*[Bb]uilding[Mm]anager.*")){
-        building_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
-        init_game_agents[k++] = building_manager;
-      } else if(khasbot_agent_names[j].matches(".*[Uu]nit[Mm]anager.*")){
-        unit_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
-        init_game_agents[k++] = unit_manager;
-        game_update_agents[l++] = unit_manager;
-      } else if(khasbot_agent_names[j].matches(".*[Ss]tructure[Mm]anager.*")) {
-        structure_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
-        init_game_agents[k++] = structure_manager;
-        game_update_agents[l++] = structure_manager;
-      } else if(khasbot_agent_names[j].matches(".*[Bb]attle[Mm]anager.*")) {
-    	  battle_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
-    	  init_game_agents[k++] = battle_manager;
-        game_update_agents[l++] = battle_manager;
-      } else if(khasbot_agent_names[j].matches(".*[Rr]esource[Mm]anager.*")) {
-    	  resource_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
-    	  init_game_agents[k++] = resource_manager;
-        game_update_agents[l++] = resource_manager;
-      } else if(khasbot_agent_names[j].matches(".*[Mm]ap[Mm]anager.*")) {
-    	  map_manager = new AID(khasbot_agent_names[j],AID.ISLOCALNAME);
-    	  init_game_agents[k++] = map_manager;
+      if(khasbot_agent_names[k].matches(".*[Bb]uilding[Mm]anager.*")){
+        building_manager = new AID(khasbot_agent_names[k],AID.ISLOCALNAME);
+        init_game_agents[l++] = building_manager;
+      } else if(khasbot_agent_names[k].matches(".*[Uu]nit[Mm]anager.*")){
+        unit_manager = new AID(khasbot_agent_names[k],AID.ISLOCALNAME);
+        init_game_agents[l++] = unit_manager;
+        game_update_agents[m++] = unit_manager;
+      } else if(khasbot_agent_names[k].matches(".*[Ss]tructure[Mm]anager.*")) {
+        structure_manager = new AID(khasbot_agent_names[k],AID.ISLOCALNAME);
+        init_game_agents[l++] = structure_manager;
+        game_update_agents[m++] = structure_manager;
+      } else if(khasbot_agent_names[k].matches(".*[Bb]attle[Mm]anager.*")) {
+    	  battle_manager = new AID(khasbot_agent_names[k],AID.ISLOCALNAME);
+    	  init_game_agents[l++] = battle_manager;
+        game_update_agents[m++] = battle_manager;
+      } else if(khasbot_agent_names[k].matches(".*[Rr]esource[Mm]anager.*")) {
+    	  resource_manager = new AID(khasbot_agent_names[k],AID.ISLOCALNAME);
+    	  init_game_agents[l++] = resource_manager;
+        game_update_agents[m++] = resource_manager;
+      } else if(khasbot_agent_names[k].matches(".*[Mm]ap[Mm]anager.*")) {
+    	  map_manager = new AID(khasbot_agent_names[k],AID.ISLOCALNAME);
+    	  init_game_agents[l++] = map_manager;
       }
     } 
 
     /*
      * This section consists of the ACLMessage.INFORM templates
      */
-    proxybotagent_inform_mt = MessageTemplate.and(
-                                                  MessageTemplate.MatchPerformative(ACLMessage.INFORM),
-                                                  MessageTemplate.MatchSender(proxybotagent)
-                                                  );
 
-    unitmanager_inform_mt = MessageTemplate.and(
-                                                MessageTemplate.MatchPerformative(ACLMessage.INFORM),
-                                                MessageTemplate.MatchSender(unit_manager)
-                                                );
-    /*
-     * This section consists of the FIPANames.InteractionProtocol.FIPA_REQUEST templates
-     */
-    fipa_request_mt = MessageTemplate.and(
-                                         MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-                                         MessageTemplate.MatchPerformative(ACLMessage.REQUEST)
-                                         );
+    pba_inform_mt = MessageTemplate.and(
+                                        MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+                                        MessageTemplate.MatchSender(proxybotagent)
+                                        );
+
 
     //This call will create all of the other agents that will be needed
     CommanderAgentCreateAgents agents = new CommanderAgentCreateAgents(khasbot_agents);
     agents.createAgents(this,khasbot_agent_names);
 
-    ParallelBehaviour root_behaviour = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
-   
+
+    resp_inf_pba = new CommanderAgentRespInfProxyBA(this,pba_inform_mt,init_game_agents,game_update_agents);
+    resp_inf_unitm = new CommanderAgentRespInfUnitM(this,unitm_inform_mt,proxybotagent);
+
+    resp_inf_unitm.setDataStore(resp_inf_pba.getDataStore());
+
     //this behaviour is used to handle the GameObject and GameObjectUpdate that is sent by ProxyBot
-    root_behaviour.addSubBehaviour(new CommanderAgentRespInfProxyBA(this,proxybotagent_inform_mt,init_game_agents,game_update_agents));
+    addThreadedBehaviour(resp_inf_pba);
 
     //This behaviour is used to handle commands received by the unit manager
-    root_behaviour.addSubBehaviour(new CommanderAgentRespInfUnitM(this,unitmanager_inform_mt,proxybotagent));
+    addThreadedBehaviour(resp_inf_unitm);
 
     
-    //root_behaviour.addSubBehaviour(new CommanderAgentRespFIPARequest(this,fipa_request_mt));
-
-    addBehaviour(root_behaviour);
 
 //    CAHelpers = new AID[1];
 //
@@ -151,6 +143,16 @@ public class CommanderAgent extends Agent{
 //    createMyHelperAgents("CAH_build_order");
 
   }//end setup
+
+  @Override
+  protected void setGameObject(GameObject g) {
+    //does not store gameObj
+  }
+
+  @Override
+  protected void setGameObjectUpdate(GameObjectUpdate g) {
+    //does not store gameObjUp
+  }
 
   /**
    * This method is used to create a whole new set of helper agents that the commander will
