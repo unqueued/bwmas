@@ -1,0 +1,72 @@
+%File: formatting-instruction.tex
+\documentclass[letterpaper]{article}
+\usepackage{aaai}
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
+\frenchspacing
+\pdfinfo{
+/Title (Multi-Agent System Framework for Real-Time Strategy AI)
+/Subject (AAAI Publications)
+/Author (AAAI Press)}
+\setcounter{secnumdepth}{0}  
+ \begin{document}
+% The file aaai.sty is the style file for AAAI Press 
+% proceedings, working notes, and technical reports.
+%
+\title{Agent-Orient Programming Framework Design for Real-Time Strategy AI}
+
+%\author{Antonio Arredondo\and Daniel Jaramillo\and Frank Navidad\and Ben Wright\\
+%New Mexico State University \\ Department of Computer Science \\ Box 30001 MSC CS \\ Las Cruces, NM 88003-8001
+%}
+
+%%Blank authers for Double Blind Review
+\author{XXXXXX \and XXXXXXX \and XXXXXXX \and XXXXXXX \\
+123 Alphabet Lane \\  Somewheresville, NotYourState 11111-2222
+}
+
+\maketitle
+\begin{abstract}
+\begin{quote}
+We present a Multi-Agent System Framework, KhasBot, to handle the Artificial Intelligence in a Real-Time Strategy Game StarCraft: BroodWar.  This Framework will be tested in the SC AI 2011 competition as well.
+\end{quote}
+\end{abstract}
+
+\section{Introduction}
+Real-Time Strategy Games are of interest for making Artificial Intelligence systems around for many reasons.  They must adapt quickly to changing environments, must make decisions on non-complete information, and involve multiple complex AI issues in general.
+
+\section{Background}
+What we do in this project is combine two different areas together, BWAPI (BroodWar API) and JADE (Java Agent Development Environment).
+
+\subsection{BWAPI}
+BWAPI is an open-source api that allows injection of the game Starcraft: Broodwar.  It was developed in C++, but many extensions have allowed access to other languages such as Python, C\#, and Java.  We used Java.
+
+
+\subsection{JADE}
+JADE is a java framework middleware for designing multi-agent systems.
+
+\section{Design}
+To start with, we took our base ideas from another RTS AI framework, BWSAL.  However, this is developed in C++ and is not Agent-Based. The idea behind using an Agent-Oriented design was to offload reasoning for the RTS game to individual Agents that only cared about one facet of the overall problem.  We split the problem into 7 different agents as follows:
+\begin{itemize}
+\item \emph{Commander Agent} : concerned with keeping the information up to date and controlling current reactive build orders.
+\item \emph{Building Manager Agent} :  concerned with placement of future buildings and builds structures on demand
+\item \emph{Structure Manager Agent} : concerned with training and upgrading used by any building in control of the AI
+\item \emph{Battle Manager Agent} : concerned with all combat matters including scouting
+\item \emph{Resource Manager Agent} : concerned with all resource gathering, including "rate of" gathering
+\item \emph{Map ManagerAgent} : concerned with maintaining an up to date map and efficient path finding for any units in AI control
+\item \emph{Unit Manager Agent} : concerned with mainting unity between all the pieces used by the other Manager Agents and merging together unit commands for Commander
+\end{itemize}
+
+In addition to the above agents, we also developed one, \emph{Proxy Bot Agent}, that was in charge of interfacing with the BWAPI and socket information from the StarCraft game and converting that information into messages the Agent System could understand.  It also converted messages from the Agent System to something the BWAPI and socket information understand.
+
+
+\section{Implementation}
+
+\section{Results}
+
+
+
+\section{Conclusion and Future Work}
+
+
+\end{document}
