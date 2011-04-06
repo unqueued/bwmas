@@ -584,7 +584,7 @@ return;
 	    // virtual bool attackMove(Position position) = 0;
 		case 1:
 			if (logCommands) Broodwar->sendText("Unit:%d attackMove(%d, %d)",unitID, arg0, arg1);
-			unit->attackMove(getPosition(arg0, arg1));
+			unit->attack(getPosition(arg0, arg1));
 			break;
 		// virtual bool attackUnit(Unit* target) = 0;
 		case 2:
@@ -593,7 +593,7 @@ return;
 			}
 			else {
 				if (logCommands) Broodwar->sendText("Unit:%d attackUnit(%d)", unitID, arg0);
-				unit->attackUnit(getUnit(arg0));
+				unit->attack(getUnit(arg0));
 			}
 			break;
 		// virtual bool rightClick(Position position) = 0;
@@ -1113,9 +1113,9 @@ void exportStaticData() {
 	  std::string name = i->getName();
 	  int whatUpgradesID = i->whatUpgrades().getID(); // unit type id of what researches it
 	  int repeats = i->maxRepeats();
-	  int minBase = i->mineralPriceBase();
+	  int minBase = i->mineralPrice();
 	  int minFactor = i->mineralPriceFactor();
-	  int gasBase = i->gasPriceBase();
+	  int gasBase = i->gasPrice();
 	  int gasFactor = i->gasPriceFactor();
 	  
 	  std::string upgradeType(" UpgradeType"); 
