@@ -35,6 +35,7 @@ import starcraftbot.proxybot.command.GameCommand;
 import starcraftbot.proxybot.game.GameObject;
 import starcraftbot.proxybot.game.GameObjectUpdate;
 import starcraftbot.proxybot.game.PlayerObject;
+import starcraftbot.proxybot.game.Race;
 import starcraftbot.proxybot.khasbot.KhasBotAgent;
 
 @SuppressWarnings("serial")
@@ -44,23 +45,26 @@ public class UnitManagerAgent extends KhasBotAgent {
 
   UnitManagerAgentInitCmdsToCommander sendCommandsToCommander = null;
 
+  PlayerObject myPlayer = null;
   //non structure units i get from the game objects that belong
   //to my player
   ArrayList<UnitObject> unitsTraining = null; //we may or may not need this
 
-  //this will maintain a list of worker units
-  //index 0 - will be idle workers, not assigned to any task
-  //    this HashMap will use <k,v> as <unit id num,UnitObject>
-  //index 1 - will be workers that are assigned tasks
-  //    this HashMap will use <k,v> as <CommandId.Order, UnitObject>
-  //
-  //the same naming scheme is used for the other two lists
-  //groundUnits and airUnits
-  //index 0 - will be idle ground/air, not assigned to any task
-  //    this HashMap will use <k,v> as <unit id num,UnitObject>
-  //index 1 - will be ground/air that are assigned tasks
-  //    this HashMap will use <k,v> as <CommandId.Order, UnitObject>
-  //
+  /**
+   *this will maintain a list of worker units
+   *index 0 - will be idle workers, not assigned to any task
+   *   this HashMap will use <k,v> as <unit id num,UnitObject>
+   *index 1 - will be workers that are assigned tasks
+   *   this HashMap will use <k,v> as <CommandId.Order, UnitObject>
+   *
+   *the same naming scheme is used for the other two lists
+   *groundUnits and airUnits
+   *index 0 - will be idle ground/air, not assigned to any task
+   *   this HashMap will use <k,v> as <unit id num,UnitObject>
+   *index 1 - will be ground/air that are assigned tasks
+   *   this HashMap will use <k,v> as <CommandId.Order, UnitObject>
+   *
+   */
   List<HashMap<Integer,ArrayList<UnitObject>>> workerUnits = new ArrayList<HashMap<Integer,ArrayList<UnitObject>>>(2);
   List<HashMap<Integer,ArrayList<UnitObject>>> groundUnits = new ArrayList<HashMap<Integer,ArrayList<UnitObject>>>(2);
   List<HashMap<Integer,ArrayList<UnitObject>>> airUnits = new ArrayList<HashMap<Integer,ArrayList<UnitObject>>>(2);
@@ -122,34 +126,37 @@ public class UnitManagerAgent extends KhasBotAgent {
     //from the game object get the non-structure units and place them in the appropriate
     //list
     //    myNonStructUnits = gameObjUp.getUnitsInGame().getMyPlayersNonStructureUnits();
-    //extractUnits(gameObj.getUnitsInGame().getMyPlayersNonStructureUnits());
+    myPlayer = gameObj.getMyPlayer();
+    extractUnits(gameObj.getUnitsInGame().getMyPlayersNonStructureUnits());
 	}
 
   @Override
   public void setGameObjectUpdate(GameObjectUpdate g){
     usingGameObject = false;
 		gameObjUp = g;
+    myPlayer = gameObjUp.getMyPlayer();
+    extractUnits(gameObjUp.getUnitsInGame().getMyPlayersNonStructureUnits());
 	}
 
   /**
    * This method return a worker class unit for the player if one is available
    * @return
    */
-  public UnitObject WorkerAvailable(){
-    UnitObject unit = null;
-    if(!workerUnits.get(0).isEmpty()){
-      //our idle list is not empty, so then there is at least one worker standing around doing nothing
-      ArrayList<UnitObject> temp = null;
-
-      //take the idle unit from the idle list
-      temp = workerUnits.get(0).get(Unit.NonStructure.Protoss.Protoss_Probe.getNumValue());
-      unit = temp.remove(0);
-
-      //place the unit on the working list
-      temp = workerUnits.get(1).get(Unit.NonStructure.Protoss.Protoss_Probe.getNumValue());
-      temp.add(unit);
-    }
-    return unit;
+  public int WorkerAvailable(){
+    int unit_id = -1;
+//    if(!workerUnits.get(0).isEmpty()){
+//      //our idle list is not empty, so then there is at least one worker standing around doing nothing
+//      ArrayList<UnitObject> temp = null;
+//
+//      //take the idle unit from the idle list
+//      temp = workerUnits.get(0).get(Unit.NonStructure.Protoss.Protoss_Probe.getNumValue());
+//      unit_id = temp.remove(0);
+//
+//      //place the unit on the working list
+//      temp = workerUnits.get(1).get(Unit.NonStructure.Protoss.Protoss_Probe.getNumValue());
+//      temp.add(unit_id);
+//    }
+    return unit_id;
   }
 
   public void SmallUnitGroup(){
@@ -170,6 +177,10 @@ public class UnitManagerAgent extends KhasBotAgent {
 
   public void extractUnits(HashMap<Integer,ArrayList<UnitObject>> units){
     //separate out the units to their designated lists
+    if( myPlayer.getPlayerRace() == Race.Protoss ){
+      //add probes
+      
+    }
   }
 
 	/**

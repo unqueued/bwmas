@@ -316,87 +316,88 @@ public class Units implements Serializable {
 
     //get only the keys in the hashmap
     for(Iterator itr = myPlayersUnits.keySet().iterator(); itr.hasNext(); ){
-      Enum key = (Enum)itr.next();
+      int key = Integer.parseInt(itr.next().toString());
 
-      if( key == Unit.NonStructure.Terran.Terran_Marine || 
-          key == Unit.NonStructure.Terran.Terran_Ghost || 
-          key == Unit.NonStructure.Terran.Terran_Vulture || 
-          key == Unit.NonStructure.Terran.Terran_Goliath || 
-          key == Unit.NonStructure.Terran.Terran_Siege_Tank_Tank_Mode || 
-          key == Unit.NonStructure.Terran.Terran_SCV || 
-          key == Unit.NonStructure.Terran.Terran_Wraith || 
-          key == Unit.NonStructure.Terran.Terran_Science_Vessel || 
-          key == Unit.NonStructure.Terran.Terran_Dropship || 
-          key == Unit.NonStructure.Terran.Terran_Battlecruiser || 
-          key == Unit.NonStructure.Terran.Terran_Vulture_Spider_Mine || 
-          key == Unit.NonStructure.Terran.Terran_Nuclear_Missile || 
-          key == Unit.NonStructure.Terran.Terran_Siege_Tank_Siege_Mode || 
-          key == Unit.NonStructure.Terran.Terran_Firebat || 
-          key == Unit.NonStructure.Terran.Spell_Scanner_Sweep || 
-          key == Unit.NonStructure.Terran.Terran_Medic || 
-          key == Unit.NonStructure.Terran.Terran_Valkyrie || 
-        
-          key == Unit.NonStructure.Zerg.Zerg_Larva || 
-          key == Unit.NonStructure.Zerg.Zerg_Egg || 
-          key == Unit.NonStructure.Zerg.Zerg_Zergling || 
-          key == Unit.NonStructure.Zerg.Zerg_Hydralisk || 
-          key == Unit.NonStructure.Zerg.Zerg_Ultralisk || 
-          key == Unit.NonStructure.Zerg.Zerg_Broodling || 
-          key == Unit.NonStructure.Zerg.Zerg_Drone || 
-          key == Unit.NonStructure.Zerg.Zerg_Overlord || 
-          key == Unit.NonStructure.Zerg.Zerg_Mutalisk || 
-          key == Unit.NonStructure.Zerg.Zerg_Guardian || 
-          key == Unit.NonStructure.Zerg.Zerg_Queen || 
-          key == Unit.NonStructure.Zerg.Zerg_Defiler || 
-          key == Unit.NonStructure.Zerg.Zerg_Scourge || 
-          key == Unit.NonStructure.Zerg.Zerg_Infested_Terran || 
-          key == Unit.NonStructure.Zerg.Zerg_Cocoon || 
-          key == Unit.NonStructure.Zerg.Zerg_Devourer || 
-         
-          key == Unit.NonStructure.Protoss.Protoss_Corsair || 
-          key == Unit.NonStructure.Protoss.Protoss_Dark_Templar || 
-          key == Unit.NonStructure.Protoss.Protoss_Dark_Archon || 
-          key == Unit.NonStructure.Protoss.Protoss_Probe || 
-          key == Unit.NonStructure.Protoss.Protoss_Zealot || 
-          key == Unit.NonStructure.Protoss.Protoss_Dragoon || 
-          key == Unit.NonStructure.Protoss.Protoss_High_Templar || 
-          key == Unit.NonStructure.Protoss.Protoss_Archon || 
-          key == Unit.NonStructure.Protoss.Protoss_Shuttle || 
-          key == Unit.NonStructure.Protoss.Protoss_Scout || 
-          key == Unit.NonStructure.Protoss.Protoss_Arbiter || 
-          key == Unit.NonStructure.Protoss.Protoss_Carrier || 
-          key == Unit.NonStructure.Protoss.Protoss_Interceptor || 
-          key == Unit.NonStructure.Protoss.Protoss_Reaver || 
-          key == Unit.NonStructure.Protoss.Protoss_Observer || 
-          key == Unit.NonStructure.Protoss.Protoss_Scarab || 
-       
-          key == Unit.NonStructure.Neutral.Critter_Rhynadon || 
-          key == Unit.NonStructure.Neutral.Critter_Bengalaas || 
-          key == Unit.NonStructure.Neutral.Critter_Scantid || 
-          key == Unit.NonStructure.Neutral.Critter_Kakaru || 
-          key == Unit.NonStructure.Neutral.Critter_Ragnasaur || 
-          key == Unit.NonStructure.Neutral.Critter_Ursadon || 
-          key == Unit.NonStructure.Neutral.Special_Crashed_Norad_II || 
-          key == Unit.NonStructure.Neutral.Special_Ion_Cannon || 
-          key == Unit.NonStructure.Neutral.Special_Overmind_With_Shell || 
-          key == Unit.NonStructure.Neutral.Special_Overmind || 
-          key == Unit.NonStructure.Neutral.Special_Mature_Chrysalis || 
-          key == Unit.NonStructure.Neutral.Special_Cerebrate || 
-          key == Unit.NonStructure.Neutral.Special_Cerebrate_Daggoth || 
-          key == Unit.NonStructure.Neutral.Special_Stasis_Cell_Prison || 
-          key == Unit.NonStructure.Neutral.Special_Khaydarin_Crystal_Form || 
-          key == Unit.NonStructure.Neutral.Special_Protoss_Temple || 
-          key == Unit.NonStructure.Neutral.Special_XelNaga_Temple || 
-          key == Unit.NonStructure.Neutral.Resource_Mineral_Field || 
-          key == Unit.NonStructure.Neutral.Resource_Vespene_Geyser || 
-          key == Unit.NonStructure.Neutral.Special_Warp_Gate || 
-          key == Unit.NonStructure.Neutral.Special_Psi_Disrupter || 
-          key == Unit.NonStructure.Neutral.Special_Power_Generator || 
-          key == Unit.NonStructure.Neutral.Special_Overmind_Cocoon || 
-          key == Unit.NonStructure.Neutral.Spell_Dark_Swarm || 
-          key == Unit.NonStructure.Neutral.None || 
-          key == Unit.NonStructure.Neutral.Unknown )
-        nonstructures.put(Integer.parseInt(key.toString()), myPlayersUnits.get(Integer.parseInt(key.toString())));
+      if( key == Unit.NonStructure.Terran.Terran_Marine.getNumValue() ||
+          key == Unit.NonStructure.Terran.Terran_Ghost.getNumValue() ||
+          key == Unit.NonStructure.Terran.Terran_Vulture.getNumValue() ||
+          key == Unit.NonStructure.Terran.Terran_Goliath.getNumValue() ||
+          key == Unit.NonStructure.Terran.Terran_Siege_Tank_Tank_Mode.getNumValue() ||
+          key == Unit.NonStructure.Terran.Terran_SCV.getNumValue() ||
+          key == Unit.NonStructure.Terran.Terran_Wraith.getNumValue() ||
+          key == Unit.NonStructure.Terran.Terran_Science_Vessel.getNumValue() ||
+          key == Unit.NonStructure.Terran.Terran_Dropship.getNumValue() ||
+          key == Unit.NonStructure.Terran.Terran_Battlecruiser.getNumValue() ||
+          key == Unit.NonStructure.Terran.Terran_Vulture_Spider_Mine.getNumValue() ||
+          key == Unit.NonStructure.Terran.Terran_Nuclear_Missile.getNumValue() ||
+          key == Unit.NonStructure.Terran.Terran_Siege_Tank_Siege_Mode.getNumValue() ||
+          key == Unit.NonStructure.Terran.Terran_Firebat.getNumValue() ||
+          key == Unit.NonStructure.Terran.Spell_Scanner_Sweep.getNumValue() ||
+          key == Unit.NonStructure.Terran.Terran_Medic.getNumValue() ||
+          key == Unit.NonStructure.Terran.Terran_Valkyrie.getNumValue() ||
+
+          key == Unit.NonStructure.Zerg.Zerg_Larva.getNumValue() ||
+          key == Unit.NonStructure.Zerg.Zerg_Egg.getNumValue() ||
+          key == Unit.NonStructure.Zerg.Zerg_Zergling.getNumValue() ||
+          key == Unit.NonStructure.Zerg.Zerg_Hydralisk.getNumValue() ||
+          key == Unit.NonStructure.Zerg.Zerg_Ultralisk.getNumValue() ||
+          key == Unit.NonStructure.Zerg.Zerg_Broodling.getNumValue() ||
+          key == Unit.NonStructure.Zerg.Zerg_Drone.getNumValue() ||
+          key == Unit.NonStructure.Zerg.Zerg_Overlord.getNumValue() ||
+          key == Unit.NonStructure.Zerg.Zerg_Mutalisk.getNumValue() ||
+          key == Unit.NonStructure.Zerg.Zerg_Guardian.getNumValue() ||
+          key == Unit.NonStructure.Zerg.Zerg_Queen.getNumValue() ||
+          key == Unit.NonStructure.Zerg.Zerg_Defiler.getNumValue() ||
+          key == Unit.NonStructure.Zerg.Zerg_Scourge.getNumValue() ||
+          key == Unit.NonStructure.Zerg.Zerg_Infested_Terran.getNumValue() ||
+          key == Unit.NonStructure.Zerg.Zerg_Cocoon.getNumValue() ||
+          key == Unit.NonStructure.Zerg.Zerg_Devourer.getNumValue() ||
+
+          key == Unit.NonStructure.Protoss.Protoss_Corsair.getNumValue() ||
+          key == Unit.NonStructure.Protoss.Protoss_Dark_Templar.getNumValue() ||
+          key == Unit.NonStructure.Protoss.Protoss_Dark_Archon.getNumValue() ||
+          key == Unit.NonStructure.Protoss.Protoss_Probe.getNumValue() ||
+          key == Unit.NonStructure.Protoss.Protoss_Zealot.getNumValue() ||
+          key == Unit.NonStructure.Protoss.Protoss_Dragoon.getNumValue() ||
+          key == Unit.NonStructure.Protoss.Protoss_High_Templar.getNumValue() ||
+          key == Unit.NonStructure.Protoss.Protoss_Archon.getNumValue() ||
+          key == Unit.NonStructure.Protoss.Protoss_Shuttle.getNumValue() ||
+          key == Unit.NonStructure.Protoss.Protoss_Scout.getNumValue() ||
+          key == Unit.NonStructure.Protoss.Protoss_Arbiter.getNumValue() ||
+          key == Unit.NonStructure.Protoss.Protoss_Carrier.getNumValue() ||
+          key == Unit.NonStructure.Protoss.Protoss_Interceptor.getNumValue() ||
+          key == Unit.NonStructure.Protoss.Protoss_Reaver.getNumValue() ||
+          key == Unit.NonStructure.Protoss.Protoss_Observer.getNumValue() ||
+          key == Unit.NonStructure.Protoss.Protoss_Scarab.getNumValue() ||
+
+          key == Unit.NonStructure.Neutral.Critter_Rhynadon.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Critter_Bengalaas.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Critter_Scantid.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Critter_Kakaru.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Critter_Ragnasaur.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Critter_Ursadon.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Special_Crashed_Norad_II.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Special_Ion_Cannon.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Special_Overmind_With_Shell.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Special_Overmind.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Special_Mature_Chrysalis.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Special_Cerebrate.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Special_Cerebrate_Daggoth.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Special_Stasis_Cell_Prison.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Special_Khaydarin_Crystal_Form.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Special_Protoss_Temple.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Special_XelNaga_Temple.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Resource_Mineral_Field.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Resource_Vespene_Geyser.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Special_Warp_Gate.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Special_Psi_Disrupter.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Special_Power_Generator.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Special_Overmind_Cocoon.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Spell_Dark_Swarm.getNumValue() ||
+          key == Unit.NonStructure.Neutral.None.getNumValue() ||
+          key == Unit.NonStructure.Neutral.Unknown.getNumValue() )
+        System.out.println("nonstruct trigger: " + key );
+        nonstructures.put(key, myPlayersUnits.get(key));
      }
     
     return nonstructures;

@@ -29,11 +29,11 @@ public class UnitManagerAgentRespFIPAReqBuildM extends AchieveREResponder {
     ACLMessage reply = request.createReply();
     //check the conversation id
     if( request.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId()) ){
-      UnitObject unit = agent.WorkerAvailable();
-      if( unit != null ) {
+      int unit_id = agent.WorkerAvailable();
+      if( unit_id > 0 ) {
         reply.setPerformative(ACLMessage.INFORM);
         try {
-          reply.setContentObject(unit);
+          reply.setContentObject(unit_id);
         } catch (IOException ex) {
           Logger.getLogger(UnitManagerAgentRespFIPAReqResM.class.getName()).log(Level.SEVERE, null, ex);
         }

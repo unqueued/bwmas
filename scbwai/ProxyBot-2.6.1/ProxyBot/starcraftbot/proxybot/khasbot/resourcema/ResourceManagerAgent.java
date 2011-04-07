@@ -43,8 +43,9 @@ public class ResourceManagerAgent extends KhasBotAgent {
 //    ResourceManagerAgentRespFIPAReqMapM resp_fipa_req_mapm =
 //            new ResourceManagerAgentRespFIPAReqMapM(this,mapm_fipa_req_mt);
 
-    gather_res.setDataStore(resp_inf_cmd.getDataStore());
-    resp_fipa_req_unitm.setDataStore(resp_inf_cmd.getDataStore());
+    this.myDS = resp_inf_cmd.getDataStore();
+    gather_res.setDataStore(this.myDS);
+    resp_fipa_req_unitm.setDataStore(this.myDS);
     
     /* handle ACLMessgae.INFORM responders */
     addThreadedBehaviour(resp_inf_cmd);
@@ -89,31 +90,24 @@ public class ResourceManagerAgent extends KhasBotAgent {
   /* message processing methods */
   public void sendRequestFor(ResMRequests request, AID receiver){
 
-//    ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-//    msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-//   // msg.setReplyByDate(new Date(System.currentTimeMillis() + 1000));
-//
-//    if(request == ResMRequests.RequestWorker){
-//      //set a conversatinon id for this FIPA-Request
-//      msg.setConversationId(ConverId.UnitM.NeedWorker.getConId());
-//      //System.out.println(this.getLocalName() + " >>> REQUEST: for a worker");
-//    }
-//
-//    msg.addReceiver(receiver);
-//    this.send(msg);
-//    root_behaviour.addSubBehaviour(new ResourceManagerAgentInitFIPAReqUnitM(this,msg));
+    ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+    msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
-    ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-    //if(request == ResMRequests.RequestWorker){
+    if(request == ResMRequests.RequestWorker){
       //set a conversatinon id for this FIPA-Request
       msg.setConversationId(ConverId.UnitM.NeedWorker.getConId());
       msg.setContent(ConverId.UnitM.NeedWorker.getConId());
-      //System.out.println(this.getLocalName() + " >>> REQUEST: for a worker");
-    //}
-   
+    }
+
     msg.addReceiver(receiver);
     this.send(msg);
 
+    ResourceManagerAgentInitFIPAReqUnitM init_fipa_req_unitm = 
+            new ResourceManagerAgentInitFIPAReqUnitM(this,msg);
+
+    init_fipa_req_unitm.setDataStore(this.myDS);
+
+    addThreadedBehaviour(init_fipa_req_unitm);
   }//end sendRequestFor
 
 }//end ResourceManagerAgent

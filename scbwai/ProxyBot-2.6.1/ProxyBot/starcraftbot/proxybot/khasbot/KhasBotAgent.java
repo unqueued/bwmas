@@ -19,6 +19,8 @@ abstract public class KhasBotAgent extends Agent {
 
   protected GameObject gameObj;
   protected GameObjectUpdate gameObjUp;
+  
+  protected DataStore myDS = null;
 
   protected AID commander = null;
   protected AID building_manager = null;
@@ -53,6 +55,7 @@ abstract public class KhasBotAgent extends Agent {
     tbf = new ThreadedBehaviourFactory();
     extractAgentNames(getArguments());
 
+    myDS = new DataStore();
 
     commander_inform_mt = MessageTemplate.and(
                                                MessageTemplate.MatchPerformative(ACLMessage.INFORM),

@@ -289,4 +289,27 @@ public class UnitObject implements Serializable{
 		return realY;
 	}
 
+  public boolean isIdle(){
+
+    return false;
+  }
+//  public boolean isAirUnit(){
+//
+//  }
+//  public boolean isGroundUnit(){
+//
+//  }
+  public boolean isBeingBuilt(){
+    return (buildTimer > 0);
+  }
+  public boolean isBeingTrained(){
+    return (trainTimer > 0);
+  }
+  public boolean isBuilt(){
+    return buildTimer == 0;
+  }
+  public boolean isTrained(){
+    return trainTimer == 0;
+  }
+
 }
