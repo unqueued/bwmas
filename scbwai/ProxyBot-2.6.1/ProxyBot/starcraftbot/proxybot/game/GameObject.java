@@ -22,12 +22,12 @@ import starcraftbot.proxybot.khasbot.unitma.Units;
 public class GameObject implements Serializable {
 
   private PlayerObject myPlayer = null;
-  private int myPlayerId;
+  private int myPlayerId = -10;
 
   /** all players */
-  private ArrayList<PlayerObject> playersInGame;
+  private ArrayList<PlayerObject> playersInGame = null;
   
-  private Units unitsInGame;
+  private Units unitsInGame = null;
 
   /** map information */
   private MapObject map = null;
@@ -57,14 +57,15 @@ public class GameObject implements Serializable {
                     String baseLocationsData, 
                     String regionsData){
     
-    playersInGame = PlayerObject.parsePlayersData(playersData);
+    
+	playersInGame = PlayerObject.parsePlayersData(playersData);
     
     String[] playerDatas = playersData.split(":");
-    int my_player_id = Integer.parseInt(playerDatas[0].split(";")[1]);
+    myPlayerId = Integer.parseInt(playerDatas[0].split(";")[1]);
 
     //set myPlayer from the players on our list
     for(PlayerObject tmp : playersInGame) {
-      if(tmp.getPlayerID() == my_player_id) {
+      if(tmp.getPlayerID() == myPlayerId) {
         myPlayer = tmp;
         break;
       } 
@@ -115,6 +116,13 @@ public class GameObject implements Serializable {
 
   public ArrayList<PlayerObject> getPlayersInGame(){
     return playersInGame;
+  }
+  
+  public String toString()
+  {
+	  String s = "GameObject: my Player->#"+myPlayerId+":"+myPlayer.getPlayerName()+":"+myPlayer.getPlayerRace()+"| map: "+ map.toString();
+	  
+	  return s;
   }
 
 }//end GameObject

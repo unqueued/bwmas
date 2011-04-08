@@ -12,6 +12,7 @@ import jade.domain.JADEAgentManagement.*;
 import jade.lang.acl.*;
 
 import java.lang.reflect.*;
+import java.util.ArrayList;
 import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +20,7 @@ import java.util.logging.Logger;
 import starcraftbot.proxybot.game.GameObject;
 import starcraftbot.proxybot.game.GameObjectUpdate;
 import starcraftbot.proxybot.command.GameCommand;
+import starcraftbot.proxybot.command.GameCommandQueue;
 
 
 /**
@@ -33,7 +35,7 @@ public class ProxyBotAgent extends Agent{
   private Ontology ontology = JADEManagementOntology.getInstance();
 
   // A queue for passing back a reply to the ProxyBot.java 
-  ArrayBlockingQueue<GameCommand> jadeReplyQueue = null;
+  ArrayBlockingQueue<GameCommandQueue> jadeReplyQueue = null;
   
   //an array of strings will be used to store the agent names and paths
   //the values will be split via a ;
@@ -81,7 +83,7 @@ public class ProxyBotAgent extends Agent{
 
     //Now read in the arguments and make sure to set the 
     //jadeReplyQueue to communicate back to the AgentClient app
-    jadeReplyQueue = (ArrayBlockingQueue<GameCommand>) args[0];
+    jadeReplyQueue = (ArrayBlockingQueue<GameCommandQueue>) args[0];
 
     ReadyToGo flip_switch = (ReadyToGo) args[1];
     
@@ -230,13 +232,13 @@ public class ProxyBotAgent extends Agent{
       if (msg != null) {
         if (msg.getConversationId().equals(ConverId.Commands.ExecuteCommand.getConId())) {
           try {
-            GameCommand cmd = (GameCommand)msg.getContentObject();
-              if( cmd != null ){
+            GameCommandQueue cmds = (GameCommandQueue)msg.getContentObject();
+              if( cmds != null ){
               //
               // Process the game update that was received. Pass on the information to ProxyBot client
               // application by placing command data onto the reply queue
               //
-              jadeReplyQueue.put(cmd);
+              jadeReplyQueue.put(cmds);
             }
             } catch (UnreadableException ex) {
               Logger.getLogger(ProxyBotAgent.class.getName()).log(Level.SEVERE, null, ex);

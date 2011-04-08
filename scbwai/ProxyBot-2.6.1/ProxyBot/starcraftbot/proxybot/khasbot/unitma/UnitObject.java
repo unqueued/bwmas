@@ -3,6 +3,8 @@ package starcraftbot.proxybot.khasbot.unitma;
 
 import java.io.Serializable;
 
+import starcraftbot.proxybot.CommandId.Order;
+
 
 /**
  * 
@@ -14,6 +16,7 @@ import java.io.Serializable;
  * @author Antonio Arredondo
  *
  */
+@SuppressWarnings("serial")
 public class UnitObject implements Serializable{
 	
 	/**
@@ -291,8 +294,23 @@ public class UnitObject implements Serializable{
 
   public boolean isIdle(){
 
-    return false;
+    return ( (this.getOrder() == Order.Neutral.ordinal()) ||
+    		 (this.getOrder() == Order.None.ordinal()) ||
+    		 (this.getOrder() == Order.Nothing1.ordinal()) ||
+    		 (this.getOrder() == Order.Nothing2.ordinal()) ||
+    		 (this.getOrder() == Order.Nothing3.ordinal()) ||
+    		 (this.getOrder() == Order.Unknown.ordinal())
+    	   );
   }
+  
+  public boolean isGaurding(){
+	  return (
+			  (this.getOrder() == Order.PlayerGuard.ordinal()) ||
+			  (this.getOrder() == Order.Guard.ordinal()) ||
+			  (this.getOrder() == Order.GuardPost.ordinal())
+			  );
+  }
+  
 //  public boolean isAirUnit(){
 //
 //  }
@@ -311,5 +329,17 @@ public class UnitObject implements Serializable{
   public boolean isTrained(){
     return trainTimer == 0;
   }
+
+
+public boolean isMining() {
+	return ((this.getOrder() == Order.MiningMinerals.ordinal()) ||
+	(this.getOrder() == Order.MoveToMinerals.ordinal()) ||
+	(this.getOrder() == Order.ReturnMinerals.ordinal()) ||
+	(this.getOrder() == Order.WaitForMinerals.ordinal()));
+}
+
+public String toString(){
+	return "Unit[ "+ this.getID() + "] at (" + this.getRealX() + "," + this.getRealY() +") is doing: " + Order.values()[this.getOrder()];
+}
 
 }

@@ -113,11 +113,13 @@ public class Units implements Serializable {
           unit_list = (ArrayList<UnitObject>)myPlayersUnits.remove(unit_type);
           //this insert must be done to avoid adding duplicate unit ids for the same unit
           unit_list = unitInsertIntoUnits(unit_list,unit);
+          unit_list.trimToSize();
           myPlayersUnits.put(unit_type, unit_list);
         }else{
           //key doesn't exits so we create the ArrayList and add the new UnitObject
           unit_list = new ArrayList<UnitObject>();
           unit_list.add(unit);
+          unit_list.trimToSize();
           myPlayersUnits.put(unit_type,unit_list);
         }
       }else if(pID == -1){
@@ -126,11 +128,13 @@ public class Units implements Serializable {
           unit_list = (ArrayList<UnitObject>)neutralPlayersUnits.remove(unit_type);
           //this insert must be done to avoid adding duplicate unit ids for the same unit
           unit_list = unitInsertIntoUnits(unit_list,unit);
+          unit_list.trimToSize();
           neutralPlayersUnits.put(unit_type, unit_list);
         }else{
           //key doesn't exits so we create the ArrayList and add the new UnitObject
           unit_list = new ArrayList<UnitObject>();
           unit_list.add(unit);
+          unit_list.trimToSize();
           neutralPlayersUnits.put(unit_type,unit_list);
         }
       }else{
@@ -139,15 +143,21 @@ public class Units implements Serializable {
           unit_list = (ArrayList<UnitObject>)enemyPlayersUnits.remove(unit_type);
           //this insert must be done to avoid adding duplicate unit ids for the same unit
           unit_list = unitInsertIntoUnits(unit_list,unit);
+          unit_list.trimToSize();
           enemyPlayersUnits.put(unit_type, unit_list);
         }else{
           //key doesn't exits so we create the ArrayList and add the new UnitObject
           unit_list = new ArrayList<UnitObject>();
           unit_list.add(unit);
+          unit_list.trimToSize();
           enemyPlayersUnits.put(unit_type,unit_list);
         }
       }//end player id checks
 		}//end for 
+		
+		
+	
+		
 	}//end parseUpdateUnits
 
 
@@ -183,7 +193,7 @@ public class Units implements Serializable {
         /* moved these above the add, old location was after the add */
         u.setX(unit.getRealX() / 32);
         u.setY(unit.getRealY() / 32);
-       
+        break;
       }
     }//end for
     if(!found) 
@@ -306,7 +316,14 @@ public class Units implements Serializable {
     return structures;
   }
 
-  /* get only non-structures from the unit list */
+  /**
+   *  get only non-structures from the unit list
+   *  
+   *  return structure is like:
+   *  		Integer: enum of Unit | ArrayList<UnitObject> of # of Units of that type
+   *  
+   *  @return HashMap<Integer, ArrayList<UnitObject>> 
+   */
   public HashMap<Integer,ArrayList<UnitObject>> getMyPlayersNonStructureUnits(){
 
     /**
@@ -396,7 +413,7 @@ public class Units implements Serializable {
           key == Unit.NonStructure.Neutral.Spell_Dark_Swarm.getNumValue() ||
           key == Unit.NonStructure.Neutral.None.getNumValue() ||
           key == Unit.NonStructure.Neutral.Unknown.getNumValue() )
-        
+        //System.out.println("nonstruct trigger: " + key );
         nonstructures.put(key, myPlayersUnits.get(key));
      }
     

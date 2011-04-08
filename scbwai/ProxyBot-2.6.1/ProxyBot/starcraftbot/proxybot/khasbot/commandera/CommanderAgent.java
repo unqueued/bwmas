@@ -147,11 +147,13 @@ public class CommanderAgent extends KhasBotAgent {
   @Override
   protected void setGameObject(GameObject g) {
     //does not store gameObj
+	  myDS.put("game", g);  
   }
 
   @Override
   protected void setGameObjectUpdate(GameObjectUpdate g) {
     //does not store gameObjUp
+	  myDS.put("gameUpate", g);  
   }
 
   /**

@@ -10,14 +10,21 @@ import jade.domain.FIPANames;
 import jade.domain.FIPAAgentManagement.*;
 import jade.lang.acl.*;
 import jade.proto.*;
+
+import java.io.IOException;
 import java.util.*;
+
 import starcraftbot.proxybot.ConverId;
 import starcraftbot.proxybot.ConverId.UnitM;
 
 import starcraftbot.proxybot.khasbot.KhasBotAgent;
+import starcraftbot.proxybot.command.GameCommand;
+import starcraftbot.proxybot.command.GameCommandQueue;
 import starcraftbot.proxybot.game.GameObject;
 import starcraftbot.proxybot.game.GameObjectUpdate;
+import starcraftbot.proxybot.khasbot.unitma.Unit;
 import starcraftbot.proxybot.khasbot.unitma.UnitObject;
+import starcraftbot.proxybot.khasbot.unitma.Units;
 
 @SuppressWarnings("serial")
 public class ResourceManagerAgent extends KhasBotAgent {
@@ -26,6 +33,10 @@ public class ResourceManagerAgent extends KhasBotAgent {
   //    this HashMap will use <k,v> as <unit id num,UnitObject>
   HashMap<Integer,UnitObject> my_units = null;
 
+  ArrayList<UnitObject> minerals = null;
+  
+  GameCommandQueue commandsToDo = null;
+  
   ResourceManagerAgentInitFIPAReqUnitM unitm_Init = null;
 
   @Override
@@ -33,6 +44,12 @@ public class ResourceManagerAgent extends KhasBotAgent {
     super.setup();
 
     my_units = new HashMap<Integer,UnitObject>();
+    
+    minerals = new ArrayList<UnitObject>();
+  
+    commandsToDo = new GameCommandQueue();
+    
+    this.myDS.put(getLocalName()+"agent", this);
     
     ResourceManagerAgentRespInfCmd resp_inf_cmd =
             new ResourceManagerAgentRespInfCmd(this,this.commander_inform_mt);
@@ -43,7 +60,7 @@ public class ResourceManagerAgent extends KhasBotAgent {
 //    ResourceManagerAgentRespFIPAReqMapM resp_fipa_req_mapm =
 //            new ResourceManagerAgentRespFIPAReqMapM(this,mapm_fipa_req_mt);
 
-    this.myDS = resp_inf_cmd.getDataStore();
+    resp_inf_cmd.setDataStore(this.myDS);
     gather_res.setDataStore(this.myDS);
     resp_fipa_req_unitm.setDataStore(this.myDS);
     
@@ -61,21 +78,57 @@ public class ResourceManagerAgent extends KhasBotAgent {
   @Override
 	public void setGameObject(GameObject g)
 	{
-		gameObj = g;
+	  	System.out.println(getLocalName()+"Setting GameObject?");
+		this.gameObj = this.getGameObject();
+		this.gameObj = g;
+		//myDS.put("game", gameObj);
+		
+		if(!(this.gameObj == null))
+		{
+			System.out.println(getLocalName() +":: gameObj is->"+this.gameObj +" g is ->"+g);
+			//this.myDS.put(getLocalName()+"game", this.gameObj);
+			Units us = this.gameObj.getUnitsInGame();
+			if(us != null)
+			{	//System.out.println("Units in game is NULL wtf?!");
+				ArrayList<UnitObject> min = us.getNeutralPlayersUnit(Unit.NonStructure.Neutral.Resource_Mineral_Field);
+				if(min != null)
+				{	
+					for(UnitObject u : min)//gameObj.getUnitsInGame().getNeutralPlayersUnit(Unit.NonStructure.Neutral.Resource_Mineral_Field))
+					{
+						if(!this.minerals.contains(u))
+							this.minerals.add(u);
+					}
+				}	
+			}
+			this.myDS.put(getLocalName()+"agent", this);
+		}
+		else
+			System.out.println(getLocalName() + "::just set game object, and yet... its null.");
+		
 	}
 
   @Override
   public void setGameObjectUpdate(GameObjectUpdate g)
 	{
-		gameObjUp = g;
+		this.gameObjUp = g;
+		if(this.gameObjUp != null)
+		{
+			myDS.put(getLocalName()+"gameUpdate", this.gameObjUp);
+			for(UnitObject u : this.gameObjUp.getUnitsInGame().getNeutralPlayersUnit(Unit.NonStructure.Neutral.Resource_Mineral_Field))
+			{
+				if(!this.minerals.contains(u))
+					this.minerals.add(u);
+			}
+			this.myDS.put(getLocalName()+"agent", this);
+		}
 	}
 
   public void addWorker(UnitObject worker){
-    my_units.put(worker.getID(),worker);
+    this.my_units.put(worker.getID(),worker);
   }
 
   public int numOfWorkers(){
-    return my_units.size();
+    return this.my_units.size();
   }
 
   /* message request methods */
@@ -84,7 +137,11 @@ public class ResourceManagerAgent extends KhasBotAgent {
   }
   
   public void requestWorker(){
-    sendRequestFor(ResMRequests.RequestWorker,unit_manager);
+    this.sendRequestFor(ResMRequests.RequestWorker,unit_manager);
+  }
+  
+  public void requestCommandsExe(){
+	  this.sendRequestFor(ResMRequests.doCommands, unit_manager);
   }
 
   /* message processing methods */
@@ -98,6 +155,16 @@ public class ResourceManagerAgent extends KhasBotAgent {
       msg.setConversationId(ConverId.UnitM.NeedWorker.getConId());
       msg.setContent(ConverId.UnitM.NeedWorker.getConId());
     }
+    else if(request == ResMRequests.doCommands)
+    {
+    	msg.setConversationId(ConverId.UnitM.NewCommands.getConId());
+    	try {
+			msg.setContentObject(this.commandsToDo);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 
     msg.addReceiver(receiver);
     this.send(msg);
@@ -107,7 +174,7 @@ public class ResourceManagerAgent extends KhasBotAgent {
 
     init_fipa_req_unitm.setDataStore(this.myDS);
 
-    addThreadedBehaviour(init_fipa_req_unitm);
+    this.addThreadedBehaviour(init_fipa_req_unitm);
   }//end sendRequestFor
 
 }//end ResourceManagerAgent

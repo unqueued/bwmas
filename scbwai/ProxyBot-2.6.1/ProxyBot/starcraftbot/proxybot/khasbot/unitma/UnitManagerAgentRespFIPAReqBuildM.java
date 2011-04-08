@@ -29,8 +29,8 @@ public class UnitManagerAgentRespFIPAReqBuildM extends AchieveREResponder {
     ACLMessage reply = request.createReply();
     //check the conversation id
     if( request.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId()) ){
-      int unit_id = agent.WorkerAvailable();
-      if( unit_id > 0 ) {
+      UnitObject unit_id = agent.WorkerAvailable();
+      if( unit_id != null ) {
         reply.setPerformative(ACLMessage.INFORM);
         try {
           reply.setContentObject(unit_id);

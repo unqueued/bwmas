@@ -32,6 +32,7 @@ import java.util.*;
 
 import starcraftbot.proxybot.CommandId;
 import starcraftbot.proxybot.command.GameCommand;
+import starcraftbot.proxybot.command.GameCommandQueue;
 import starcraftbot.proxybot.game.GameObject;
 import starcraftbot.proxybot.game.GameObjectUpdate;
 import starcraftbot.proxybot.game.PlayerObject;
@@ -43,6 +44,8 @@ public class UnitManagerAgent extends KhasBotAgent {
 
   private boolean usingGameObject = true;
 
+  private GameCommandQueue commandsToDo = null;
+  
   UnitManagerAgentInitCmdsToCommander sendCommandsToCommander = null;
 
   PlayerObject myPlayer = null;
@@ -56,22 +59,35 @@ public class UnitManagerAgent extends KhasBotAgent {
    *   this HashMap will use <k,v> as <unit id num,UnitObject>
    *index 1 - will be workers that are assigned tasks
    *   this HashMap will use <k,v> as <CommandId.Order, UnitObject>
-   *
-   *the same naming scheme is used for the other two lists
-   *groundUnits and airUnits
-   *index 0 - will be idle ground/air, not assigned to any task
-   *   this HashMap will use <k,v> as <unit id num,UnitObject>
-   *index 1 - will be ground/air that are assigned tasks
-   *   this HashMap will use <k,v> as <CommandId.Order, UnitObject>
-   *
    */
-  List<HashMap<Integer,ArrayList<UnitObject>>> workerUnits = new ArrayList<HashMap<Integer,ArrayList<UnitObject>>>(2);
+  List<ArrayList<UnitObject>> workerUnits = new ArrayList<ArrayList<UnitObject>>(2);
+  /**
+   *groundUnits
+   *index 0 - will be idle ground, not assigned to any task
+   *   this HashMap will use <k,v> as <unit id num,UnitObject>
+   *index 1 - will be ground that are assigned tasks
+   *   this HashMap will use <k,v> as <CommandId.Order, UnitObject>
+   */
   List<HashMap<Integer,ArrayList<UnitObject>>> groundUnits = new ArrayList<HashMap<Integer,ArrayList<UnitObject>>>(2);
+  /**
+  *airUnits
+  *index 0 - will be idle air, not assigned to any task
+  *   this HashMap will use <k,v> as <unit id num,UnitObject>
+  *index 1 - will be air that are assigned tasks
+  *   this HashMap will use <k,v> as <CommandId.Order, UnitObject>
+  *
+  */
   List<HashMap<Integer,ArrayList<UnitObject>>> airUnits = new ArrayList<HashMap<Integer,ArrayList<UnitObject>>>(2);
 
 	protected void setup(){
     super.setup();
 
+    this.commandsToDo = new GameCommandQueue();
+    this.workerUnits.add(0, new ArrayList<UnitObject>());
+    this.workerUnits.add(1, new ArrayList<UnitObject>());
+    
+    this.myDS.put(getLocalName()+"agent", this);
+    
     UnitManagerAgentRespInfCmd resp_inf_cmd =
             new UnitManagerAgentRespInfCmd(this,commander_inform_mt);
     UnitManagerAgentRespFIPAReqBuildM resp_fipa_req_buildm = 
@@ -87,12 +103,13 @@ public class UnitManagerAgent extends KhasBotAgent {
     UnitManagerAgentRespFIPAReqCmd resp_fipa_req_cmd =
             new UnitManagerAgentRespFIPAReqCmd(this,cmd_fipa_req_mt);
 
-    resp_fipa_req_buildm.setDataStore(resp_inf_cmd.getDataStore());
-    resp_fipa_req_resm.setDataStore(resp_inf_cmd.getDataStore());
-    resp_fipa_req_battm.setDataStore(resp_inf_cmd.getDataStore());
-    resp_fipa_req_structm.setDataStore(resp_inf_cmd.getDataStore());
-    resp_fipa_req_mapm.setDataStore(resp_inf_cmd.getDataStore());
-    resp_fipa_req_cmd.setDataStore(resp_inf_cmd.getDataStore());
+    resp_inf_cmd.setDataStore(this.myDS);
+    resp_fipa_req_buildm.setDataStore(this.myDS);
+    resp_fipa_req_resm.setDataStore(this.myDS);
+    resp_fipa_req_battm.setDataStore(this.myDS);
+    resp_fipa_req_structm.setDataStore(this.myDS);
+    resp_fipa_req_mapm.setDataStore(this.myDS);
+    resp_fipa_req_cmd.setDataStore(this.myDS);
 
     /* handle ACLMessgae.INFORM responders */
     addThreadedBehaviour(resp_inf_cmd);
@@ -109,54 +126,86 @@ public class UnitManagerAgent extends KhasBotAgent {
 //    root_behaviour.addSubBehaviour(sendCommandsToCommander);
 	}
 
-  public void processCmdsReceived(GameCommand cmd){
-    sendCommandsToCommander.cmdToSend(cmd);
+  public void processCmdsReceived()
+  {
+	  processCmdsReceived(this.commandsToDo);
+  }
+	
+  public void processCmdsReceived(GameCommandQueue cmds){
+   
+	  sendCommandsToCommander = new UnitManagerAgentInitCmdsToCommander(this, commander);
+	  sendCommandsToCommander.cmdToSend(cmds);
 
+    
+    addThreadedBehaviour(sendCommandsToCommander);
+    
     /*
      * Done last.
      * once the command has been processed reset
      * the behaviour so that it can be scheduled again
      */
-    sendCommandsToCommander.reset();
+    //sendCommandsToCommander.reset();
   }
 
   @Override
 	public void setGameObject(GameObject g){
-		gameObj = g;
+	   this.gameObj = this.getGameObject();
+		this.gameObj = g;
     //from the game object get the non-structure units and place them in the appropriate
     //list
     //    myNonStructUnits = gameObjUp.getUnitsInGame().getMyPlayersNonStructureUnits();
-    myPlayer = gameObj.getMyPlayer();
-    extractUnits(gameObj.getUnitsInGame().getMyPlayersNonStructureUnits());
+	  if(this.gameObj != null)
+	  {
+	    //this.myDS.put(getLocalName()+"gameObject", this.gameObj);
+	    this.myPlayer = this.gameObj.getMyPlayer();
+	    Units toExtract = this.gameObj.getUnitsInGame();
+	    if(toExtract != null)
+	    	this.extractUnits(toExtract.getMyPlayersNonStructureUnits());
+		this.myDS.put(this.getLocalName()+"agent", this);
+	  }  
 	}
 
   @Override
   public void setGameObjectUpdate(GameObjectUpdate g){
-    usingGameObject = false;
-		gameObjUp = g;
-    myPlayer = gameObjUp.getMyPlayer();
-    extractUnits(gameObjUp.getUnitsInGame().getMyPlayersNonStructureUnits());
+    this.usingGameObject = false;
+    this.gameObjUp = this.getGameObjectUpdate();
+	this.gameObjUp = g;
+	if(this.gameObjUp != null)
+	{	
+		//myDS.put(getLocalName()+"gameUpate", g);
+		this.myPlayer = this.gameObjUp.getMyPlayer();
+		extractUnits(this.gameObjUp.getUnitsInGame().getMyPlayersNonStructureUnits());
+		this.myDS.put(this.getLocalName()+"agent", this);
 	}
-
+  }	
   /**
    * This method return a worker class unit for the player if one is available
    * @return
    */
-  public int WorkerAvailable(){
-    int unit_id = -1;
-//    if(!workerUnits.get(0).isEmpty()){
-//      //our idle list is not empty, so then there is at least one worker standing around doing nothing
-//      ArrayList<UnitObject> temp = null;
-//
-//      //take the idle unit from the idle list
-//      temp = workerUnits.get(0).get(Unit.NonStructure.Protoss.Protoss_Probe.getNumValue());
-//      unit_id = temp.remove(0);
-//
-//      //place the unit on the working list
-//      temp = workerUnits.get(1).get(Unit.NonStructure.Protoss.Protoss_Probe.getNumValue());
-//      temp.add(unit_id);
-//    }
-    return unit_id;
+  public UnitObject WorkerAvailable(){
+	
+	 this.workerUnits = (List<ArrayList<UnitObject>>) this.myDS.get(getLocalName()+"workerUnits");  
+	  
+    //int unit_id = -1;
+    //System.out.println(getLocalName()+":: Checking for an Available Worker...");
+	if(this.workerUnits != null)
+	{
+		if(!this.workerUnits.get(0).isEmpty()){
+	      //our idle list is not empty, so then there is at least one worker standing around doing nothing
+	      //ArrayList<UnitObject> temp = null;
+	
+	      //take the idle unit from the idle list
+	      //temp = workerUnits.get(0).get(Unit.NonStructure.Protoss.Protoss_Probe.getNumValue());
+	      
+	      UnitObject u = this.workerUnits.get(0).remove(0);
+	      
+	      this.workerUnits.get(1).add(u);
+	      
+	      return u;
+	  
+	    }
+	}
+    return null;
   }
 
   public void SmallUnitGroup(){
@@ -175,19 +224,102 @@ public class UnitManagerAgent extends KhasBotAgent {
 
   }
 
+  /**
+   * Extract Units into workers, ground, and air units.
+   * 
+   * @param units
+   */
   public void extractUnits(HashMap<Integer,ArrayList<UnitObject>> units){
     //separate out the units to their designated lists
-    if( myPlayer.getPlayerRace() == Race.Protoss ){
-      //add probes
-      
-    }
+	
+	/*
+	 *  units set up like:
+	 *  	Integer: enum of Unit | ArrayList<UnitObject> of # of Units of that type
+	 */
+	  
+	//check all worker types
+	  //;
+	  
+	  System.out.println(getLocalName()+":: extracting Units...");
+	  
+	  int WorkerType;
+	  if(gameObj.getMyPlayer().getPlayerRace() == Race.Protoss)
+	  { 
+		  WorkerType = Unit.NonStructure.Protoss.Protoss_Probe.getNumValue();
+	  }
+	  else if(getGameObject().getMyPlayer().getPlayerRace() == Race.Zerg)
+	  {
+		  WorkerType = Unit.NonStructure.Zerg.Zerg_Drone.getNumValue();		  
+	  }
+	  else
+	  {
+		  WorkerType = Unit.NonStructure.Terran.Terran_SCV.getNumValue();		  
+	  }
+	  
+	  
+	  ArrayList<UnitObject> UnitsToCheck = units.get(WorkerType);
+	  
+	  ArrayList<UnitObject> idle = new ArrayList<UnitObject>();
+	  ArrayList<UnitObject> working = new ArrayList<UnitObject>();
+	  
+	  for(UnitObject u : UnitsToCheck)
+	  {
+		  if(u.isIdle() || u.isGaurding())
+		  {
+		    idle.add(u);
+		    System.out.println(this.getLocalName() + ": in extractMethod() adding unit to IDLE array; unit is:" + u.toString());
+		  }
+		  else
+		  {
+			working.add(u);
+			System.out.println(this.getLocalName() + ": in extractMethod() adding unit to WORKING array; unit is:" + u.toString());
+		  }
+	  }
+	  idle.trimToSize();
+	  working.trimToSize();
+	  this.workerUnits.add(0, idle);
+	  this.workerUnits.add(1, working);
+	  
+	  idle.clear();
+	  working.clear();
+	  idle.trimToSize();
+	  working.trimToSize();
+	  
+	  this.myDS.put(getLocalName()+"workerUnits", this.workerUnits);
+	  
+	  /*System.out.println(this.getLocalName() + ": finished extractMethod() got idle/non-idle workers->");
+	  System.out.print("		IDLE Workers:[");
+	  for(UnitObject u : workerUnits.get(0))
+		  System.out.print(u.toString() + ",");
+	  System.out.print("] \n		WORKING Workers:[");
+	  for(UnitObject u : workerUnits.get(1))
+		  System.out.print(u.toString() + ",");
+	  System.out.println("]");
+	  */
+	  //extract ground units...
+	  
+	  //extract air units...
+	  
   }
+	/**
+	 * adds the new Commands to its existing queue.
+	 * @param newCommands
+	 */
+	public void addCommands(GameCommandQueue newCommands) {
+		while(!newCommands.empty())
+		{
+			commandsToDo.push(newCommands.pop());
+		}
+		
+	}
+		
+
 
 	/**
 	 * DefaultActions will, inside UnitManager, get stuff to mine and make new drones.
 	 */
 	public void DefaultActions() {
-		// TODO Auto-generated method stub
+		
 		
 		//System.out.println("UnitManager is ATTEMPTING ACTIONS...");
 		
@@ -215,8 +347,8 @@ public class UnitManagerAgent extends KhasBotAgent {
         //System.out.flush();
       
     }
-		
-        
+
+      
 //		for(int i = 0; i < game.getUnitArray().size(); i++)
 //		{
 //			UnitsObject u = game.getUnitAt(i);

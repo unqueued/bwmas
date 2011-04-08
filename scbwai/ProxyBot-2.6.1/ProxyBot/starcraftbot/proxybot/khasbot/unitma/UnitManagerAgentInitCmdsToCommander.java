@@ -5,10 +5,13 @@ import java.io.IOException;
 
 import jade.core.behaviours.*;
 import jade.lang.acl.*;
+
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import starcraftbot.proxybot.command.GameCommand;
+import starcraftbot.proxybot.command.GameCommandQueue;
 import starcraftbot.proxybot.ConverId;
 
 /**
@@ -18,18 +21,20 @@ import starcraftbot.proxybot.ConverId;
  */
 @SuppressWarnings("serial")
 public class UnitManagerAgentInitCmdsToCommander extends SimpleBehaviour{
-	UnitManagerAgent agent=null;	
+	UnitManagerAgent agent=null;
+	DataStore ds = null;
   AID commander = null;
-  GameCommand msg_cmd = null;
+  GameCommandQueue msg_cmds = null;
 
   public UnitManagerAgentInitCmdsToCommander(UnitManagerAgent a, AID commander) {
     super(a);
-    agent=a;
+    this.agent=a;
+    this.ds = this.agent.getDS();
     this.commander = commander;
   }
 
-  public void cmdToSend(GameCommand cmd){
-    msg_cmd = cmd;
+  public void cmdToSend(GameCommandQueue cmds){
+    this.msg_cmds = cmds;
   }
 
   /*
@@ -42,12 +47,12 @@ public class UnitManagerAgentInitCmdsToCommander extends SimpleBehaviour{
     msg.setConversationId(ConverId.Commands.ExecuteCommand.getConId());
 
     try {
-      msg.setContentObject((GameCommand) msg_cmd);
+      msg.setContentObject(this.msg_cmds);
     } catch (IOException ex) {
       Logger.getLogger(UnitManagerAgentInitCmdsToCommander.class.getName()).log(Level.SEVERE, null, ex);
     }
    
-    agent.send(msg);
+    this.agent.send(msg);
 
 	}//end action
 

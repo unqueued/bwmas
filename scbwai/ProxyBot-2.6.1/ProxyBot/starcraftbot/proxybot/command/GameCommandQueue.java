@@ -1,5 +1,6 @@
 package starcraftbot.proxybot.command;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -7,7 +8,8 @@ import java.util.ArrayList;
  * Class for queueing up commands to be sent to StarCraft. This class handles
  * the asynchronuous communication between the agent and StarCraft.
  */
-public class GameCommandQueue {
+@SuppressWarnings("serial")
+public class GameCommandQueue implements Serializable{
 
 	/** queued up commands (orders) to send to StarCraft */
 	private ArrayList<GameCommand> cmdQueue = null; 
@@ -36,7 +38,7 @@ public class GameCommandQueue {
 	private StringBuilder getCommands() {
 		StringBuilder commandData = new StringBuilder("commands");
 
-		synchronized (cmdQueue) {
+		//synchronized (cmdQueue) {
 			int commandsAdded = 0;
 
       //send as many commands as we can fit in the buffer
@@ -44,7 +46,7 @@ public class GameCommandQueue {
 				commandsAdded++;
 				commandData.append(cmdQueue.remove(cmdQueue.size() - 1).formatCmd());
 			}
-		}
+		//}
 
 		return commandData;
 	}
@@ -75,5 +77,19 @@ public class GameCommandQueue {
   public byte[] cmdsToExe() {
     return getCommands().toString().getBytes();
   }
+
+public GameCommand pop() {
+	//GameCommand t = cmdQueue.remove(cmdQueue.size()-1);
+	return cmdQueue.remove(cmdQueue.size()-1);
+}
+
+public boolean empty() {
+	return (cmdQueue.size() == 0);
+}
+
+public void push(GameCommand pop) {
+	cmdQueue.add(pop);
+	
+}
   	
 }

@@ -4,6 +4,7 @@
 package starcraftbot.proxybot.khasbot.resourcema;
 
 import jade.core.*;
+import jade.core.behaviours.DataStore;
 import jade.domain.FIPANames;
 import jade.lang.acl.*;
 import jade.proto.*;
@@ -23,13 +24,15 @@ import starcraftbot.proxybot.khasbot.unitma.UnitObject;
 @SuppressWarnings("serial")
 public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
 	ResourceManagerAgent agent=null;
-    ACLMessage msg = null;
+    DataStore ds = null;
+	ACLMessage msg = null;
 
   public ResourceManagerAgentInitFIPAReqUnitM(ResourceManagerAgent a, ACLMessage msg) {
     super(a,msg);
     this.msg=msg;
-
-    agent=a;
+    this.agent=a;
+    ds = this.agent.getDS();
+    
   }
 
   protected void handleAgree(ACLMessage agree) {
@@ -41,16 +44,18 @@ public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
   /* This is the inform INFORM letting us know that the request was completed */
   protected void handleInform(ACLMessage inform) {
     //System.out.println("ResourceManagerInit "+inform.getSender().getName()+" successfully performed the requested action");
-    if(inform.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())) {
-      System.out.println(agent.getLocalName() + " <<< INFORM: request for a worker was APPROVED");
+	this.agent = (ResourceManagerAgent)this.agent.getDS().get(this.agent.getLocalName()+"agent");
+	if(inform.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())) {
+      System.out.println(this.agent.getLocalName() + " <<< INFORM: request for a worker was APPROVED");
       try {
         UnitObject worker = (UnitObject)inform.getContentObject();
-        agent.addWorker(worker);
+        this.agent.addWorker(worker);
       } catch (UnreadableException ex) {
         Logger.getLogger(ResourceManagerAgentInitFIPAReqUnitM.class.getName()).log(Level.SEVERE, null, ex);
       }
+      this.agent.getDS().put(this.agent.getLocalName()+"agent", this.agent);
     }else
-      System.out.println(agent.getLocalName() + " <<< INFORM: unknown conversation");
+      System.out.println(this.agent.getLocalName() + " <<< INFORM: unknown conversation");
   }
 
   protected void handleRefuse(ACLMessage refuse) {
@@ -58,7 +63,8 @@ public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
     if(refuse.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())) {
       System.out.println(agent.getLocalName() + " <<< REFUSE: request for a worker was DENIED");
     }
-    System.out.println(agent.getLocalName() + " <<< REFUSE: unknown conversation from " + refuse.getSender());
+    else
+    	System.out.println(agent.getLocalName() + " <<< REFUSE: unknown conversation from " + refuse.getSender());
   }
 
 

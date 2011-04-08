@@ -41,16 +41,23 @@ public class CommanderAgentRespInfUnitM extends CyclicBehaviour{
         //I might want to override it or change it, depending on my overall view of how
         //the game is going.
         try{
-          if( (GameCommand)msg.getContentObject() != null){
+          if( msg.getContentObject() != null){
             //Send the command to ProxyBotAgent
             ACLMessage msg_cmd = new ACLMessage(ACLMessage.INFORM);
             msg_cmd.addReceiver(proxybot_agent);
             msg_cmd.setConversationId(ConverId.Commands.ExecuteCommand.getConId());
-
+            msg_cmd.setContentObject(msg.getContentObject());
             agent.send(msg_cmd);
+            msg_cmd.reset();
           }
         }catch(UnreadableException ex) {
           Logger.getLogger(CommanderAgentRespInfUnitM.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        finally{
+        	msg.reset();
         }
       }
     } else {

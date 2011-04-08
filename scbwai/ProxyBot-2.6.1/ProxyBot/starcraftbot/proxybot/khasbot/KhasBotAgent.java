@@ -12,6 +12,7 @@ import jade.lang.acl.*;
 import starcraftbot.proxybot.game.GameObject;
 import starcraftbot.proxybot.game.GameObjectUpdate;
 
+@SuppressWarnings("serial")
 abstract public class KhasBotAgent extends Agent {
   protected ContentManager manager = null;
 	protected Codec codec = null;
@@ -124,14 +125,24 @@ abstract public class KhasBotAgent extends Agent {
                                             );
   }
 
-	abstract protected void setGameObject(GameObject g);
+  abstract protected void setGameObject(GameObject g);
   abstract protected void setGameObjectUpdate(GameObjectUpdate g);
 
+  public DataStore getDS(){
+	  return this.myDS;
+  }
+  public void setDS(DataStore d){
+	  this.myDS = d;
+  }
+  
   public GameObject getGameObject(){
+	    this.gameObj = ((KhasBotAgent)this.myDS.get(this.getLocalName()+"agent")).gameObj;//, gameObjUp);
+	  
 		return this.gameObj;
 	}
 
   public GameObjectUpdate getGameObjectUpdate(){
+	  this.gameObjUp = ((KhasBotAgent)this.myDS.get(this.getLocalName()+"agent")).gameObjUp;
 		return this.gameObjUp;
 	}
 

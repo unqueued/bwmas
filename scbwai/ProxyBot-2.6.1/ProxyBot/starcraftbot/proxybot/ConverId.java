@@ -155,7 +155,8 @@ public class ConverId{
     MediumUnitGroup("Medium-Unit-Group"), //we will have to define this size
     LargeUnitGroup("Large-Unit-Group"),   //we will have to define this size
     UnitsLost("Units-Lost"),
-    NewUnit("New-Unit");  //a request for a new unit to be built, say from battle manager
+    NewUnit("New-Unit"), //a request for a new unit to be built, say from battle manager
+    NewCommands("New-Commands"); //new commands to be added to gamecommand queue  
     
 
     

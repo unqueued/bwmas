@@ -140,7 +140,7 @@ public class ProxyBot {
       }
       
       //currently the old game object
-      final Game game = new Game(playerData, locationData, mapData, chokesData, basesData, regionsData);
+      //final Game game = new Game(playerData, locationData, mapData, chokesData, basesData, regionsData);
 
       //this is the new game object
       gameObj = new GameObject(playerData, locationData, mapData, chokesData, basesData, regionsData);
@@ -148,7 +148,7 @@ public class ProxyBot {
       //this is the game update object
       gameObjUp = new GameObjectUpdate(gameObj);
       
-      gameRef = game;
+      //gameRef = game;
       //NOTE: enable this to test the example bot
       //boolean firstFrame = true;
 
@@ -227,7 +227,7 @@ public class ProxyBot {
 
     //This will be used to communicate back and forth
     //\todo the return type, currently String must be finalized
-    ArrayBlockingQueue<GameCommand> jadeReplyQueue = null;
+    ArrayBlockingQueue<GameCommandQueue> jadeReplyQueue = null;
 
     /**
      * Empty Constructor.
@@ -259,7 +259,7 @@ public class ProxyBot {
       Object[] agentArgs = new Object[2];
 
       //array queue of 20 for ProxyBot to Tx & RX with ProxyBotAgent
-      jadeReplyQueue = new ArrayBlockingQueue<GameCommand>(20);
+      jadeReplyQueue = new ArrayBlockingQueue<GameCommandQueue>(1);
     
       //pass a wait switch so that we can communicate with the agent once it has
       //been created
@@ -321,7 +321,7 @@ public class ProxyBot {
      */
     public ArrayList<GameCommand> getUpdate(){
       ArrayList<GameCommand> reply = null;
-      GameCommand temp = null;
+      /*GameCommand temp = null;
       
       if(! jadeReplyQueue.isEmpty() ) {
         for(GameCommand cmd : jadeReplyQueue){
@@ -335,18 +335,34 @@ public class ProxyBot {
         return reply;
       }else{
         return null;
-      }
+      }*/
+      
+      /*try {
+		reply = (ArrayList<GameCommand>) jadeReplyQueue.take();
+	} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}*/
+	return reply;
+      
     }//end getGameUpdateFromJADE
 
     public void getGameUpdateFromJADE(){
-      ArrayList<GameCommand> commands = getUpdate();
-      GameCommand temp = null;
+      //ArrayList<GameCommand> commands = getUpdate();
+      //GameCommand temp = null;
 
-      if(commands != null){
+      try {
+		starcraft_cmds = (GameCommandQueue)jadeReplyQueue.take();
+	} catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}	
+    	
+      /*if(commands != null){
         for(GameCommand cmd : commands){
             starcraft_cmds.addCommand(cmd);
         }
-      }
+      }*/
     }//end getGameUpdateFromJADE
 
   }//end ProxyBotAgentClient
