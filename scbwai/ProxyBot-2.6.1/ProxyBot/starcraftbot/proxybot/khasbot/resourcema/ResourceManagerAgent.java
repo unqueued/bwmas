@@ -37,17 +37,21 @@ public class ResourceManagerAgent extends KhasBotAgent {
   
   GameCommandQueue commandsToDo = null;
   
+  boolean RequestingWorker = false;
+  
   ResourceManagerAgentInitFIPAReqUnitM unitm_Init = null;
 
   @Override
 	protected void setup(){
     super.setup();
 
-    my_units = new HashMap<Integer,UnitObject>();
+    this.my_units = new HashMap<Integer,UnitObject>();
     
-    minerals = new ArrayList<UnitObject>();
+    this.minerals = new ArrayList<UnitObject>();
   
-    commandsToDo = new GameCommandQueue();
+    this.commandsToDo = new GameCommandQueue();
+    
+    //this.RequestingWorker = false;
     
     this.myDS.put(getLocalName()+"agent", this);
     
@@ -113,7 +117,7 @@ public class ResourceManagerAgent extends KhasBotAgent {
 		this.gameObjUp = g;
 		if(this.gameObjUp != null)
 		{
-			myDS.put(getLocalName()+"gameUpdate", this.gameObjUp);
+			this.myDS.put(getLocalName()+"gameUpdate", this.gameObjUp);
 			for(UnitObject u : this.gameObjUp.getUnitsInGame().getNeutralPlayersUnit(Unit.NonStructure.Neutral.Resource_Mineral_Field))
 			{
 				if(!this.minerals.contains(u))
@@ -124,9 +128,16 @@ public class ResourceManagerAgent extends KhasBotAgent {
 	}
 
   public void addWorker(UnitObject worker){
+	this.my_units = ((ResourceManagerAgent)this.myDS.get(getLocalName()+"agent")).getMyUnits();  
     this.my_units.put(worker.getID(),worker);
+    this.RequestingWorker = false;
+    this.myDS.put(getLocalName()+"agent", this);
   }
 
+  public HashMap<Integer, UnitObject> getMyUnits(){
+	  return this.my_units;
+  }
+  
   public int numOfWorkers(){
     return this.my_units.size();
   }
@@ -147,11 +158,15 @@ public class ResourceManagerAgent extends KhasBotAgent {
   /* message processing methods */
   public void sendRequestFor(ResMRequests request, AID receiver){
 
+	  
+	  
     ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
     msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
     if(request == ResMRequests.RequestWorker){
       //set a conversatinon id for this FIPA-Request
+      //this.getDS().put(this.getLocalName()+"reqWorker", true);
+      this.RequestingWorker = ((ResourceManagerAgent)this.myDS.get(getLocalName()+"agent")).RequestingWorker;
       msg.setConversationId(ConverId.UnitM.NeedWorker.getConId());
       msg.setContent(ConverId.UnitM.NeedWorker.getConId());
     }
@@ -169,13 +184,21 @@ public class ResourceManagerAgent extends KhasBotAgent {
     msg.addReceiver(receiver);
     this.send(msg);
 
-    ResourceManagerAgentInitFIPAReqUnitM init_fipa_req_unitm = 
-            new ResourceManagerAgentInitFIPAReqUnitM(this,msg);
-
-    init_fipa_req_unitm.setDataStore(this.myDS);
-
-    this.addThreadedBehaviour(init_fipa_req_unitm);
-  }//end sendRequestFor
+    
+    if(!this.RequestingWorker || request== ResMRequests.doCommands)
+    {
+    	if(!this.RequestingWorker && request == ResMRequests.RequestWorker)
+    		this.RequestingWorker = true;
+	    ResourceManagerAgentInitFIPAReqUnitM init_fipa_req_unitm = 
+	            new ResourceManagerAgentInitFIPAReqUnitM(this,msg);
+	
+	    init_fipa_req_unitm.setDataStore(this.getDS());//myDS);
+	
+	    this.addThreadedBehaviour(init_fipa_req_unitm);
+	    
+	    this.myDS.put(getLocalName()+"agent", this);
+    }
+ }//end sendRequestFor
 
 }//end ResourceManagerAgent
 
