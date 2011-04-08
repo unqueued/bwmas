@@ -244,63 +244,63 @@ public class Units implements Serializable {
 
     //get only the keys in the hashmap
     for(Iterator itr = myPlayersUnits.keySet().iterator(); itr.hasNext(); ){
-      Enum key = (Enum) itr.next();
+      int key = Integer.parseInt(itr.next().toString());
 
-      if( key == Unit.Structure.Terran.Terran_Command_Center ||
-          key == Unit.Structure.Terran.Terran_Comsat_Station ||
-          key == Unit.Structure.Terran.Terran_Nuclear_Silo ||
-          key == Unit.Structure.Terran.Terran_Supply_Depot ||
-          key == Unit.Structure.Terran.Terran_Refinery ||
-          key == Unit.Structure.Terran.Terran_Barracks ||
-          key == Unit.Structure.Terran.Terran_Academy ||
-          key == Unit.Structure.Terran.Terran_Factory ||
-          key == Unit.Structure.Terran.Terran_Starport ||
-          key == Unit.Structure.Terran.Terran_Control_Tower ||
-          key == Unit.Structure.Terran.Terran_Science_Facility ||
-          key == Unit.Structure.Terran.Terran_Covert_Ops ||
-          key == Unit.Structure.Terran.Terran_Physics_Lab ||
-          key == Unit.Structure.Terran.Terran_Machine_Shop ||
-          key == Unit.Structure.Terran.Terran_Engineering_Bay ||
-          key == Unit.Structure.Terran.Terran_Armory ||
-          key == Unit.Structure.Terran.Terran_Missile_Turret ||
-          key == Unit.Structure.Terran.Terran_Bunker ||
+      if( key == Unit.Structure.Terran.Terran_Command_Center.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Comsat_Station.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Nuclear_Silo.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Supply_Depot.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Refinery.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Barracks.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Academy.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Factory.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Starport.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Control_Tower.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Science_Facility.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Covert_Ops.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Physics_Lab.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Machine_Shop.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Engineering_Bay.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Armory.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Missile_Turret.getNumValue() ||
+          key == Unit.Structure.Terran.Terran_Bunker.getNumValue() ||
           
-          key == Unit.Structure.Zerg.Zerg_Infested_Command_Center ||
-          key == Unit.Structure.Zerg.Zerg_Hatchery ||
-          key == Unit.Structure.Zerg.Zerg_Lair ||
-          key == Unit.Structure.Zerg.Zerg_Hive ||
-          key == Unit.Structure.Zerg.Zerg_Nydus_Canal ||
-          key == Unit.Structure.Zerg.Zerg_Hydralisk_Den ||
-          key == Unit.Structure.Zerg.Zerg_Defiler_Mound ||
-          key == Unit.Structure.Zerg.Zerg_Greater_Spire ||
-          key == Unit.Structure.Zerg.Zerg_Queen_s_Nest ||
-          key == Unit.Structure.Zerg.Zerg_Evolution_Chamber ||
-          key == Unit.Structure.Zerg.Zerg_Ultralisk_Cavern ||
-          key == Unit.Structure.Zerg.Zerg_Spire ||
-          key == Unit.Structure.Zerg.Zerg_Spawning_Pool ||
-          key == Unit.Structure.Zerg.Zerg_Creep_Colony ||
-          key == Unit.Structure.Zerg.Zerg_Spore_Colony ||
-          key == Unit.Structure.Zerg.Zerg_Sunken_Colony ||
-          key == Unit.Structure.Zerg.Zerg_Extractor ||
+          key == Unit.Structure.Zerg.Zerg_Infested_Command_Center.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Hatchery.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Lair.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Hive.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Nydus_Canal.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Hydralisk_Den.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Defiler_Mound.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Greater_Spire.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Queen_s_Nest.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Evolution_Chamber.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Ultralisk_Cavern.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Spire.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Spawning_Pool.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Creep_Colony.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Spore_Colony.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Sunken_Colony.getNumValue() ||
+          key == Unit.Structure.Zerg.Zerg_Extractor.getNumValue() ||
           
-          key == Unit.Structure.Protoss.Protoss_Nexus ||
-          key == Unit.Structure.Protoss.Protoss_Robotics_Facility ||
-          key == Unit.Structure.Protoss.Protoss_Pylon ||
-          key == Unit.Structure.Protoss.Protoss_Assimilator ||
-          key == Unit.Structure.Protoss.Protoss_Observatory ||
-          key == Unit.Structure.Protoss.Protoss_Gateway ||
-          key == Unit.Structure.Protoss.Protoss_Photon_Cannon ||
-          key == Unit.Structure.Protoss.Protoss_Citadel_of_Adun ||
-          key == Unit.Structure.Protoss.Protoss_Cybernetics_Core ||
-          key == Unit.Structure.Protoss.Protoss_Templar_Archives ||
-          key == Unit.Structure.Protoss.Protoss_Forge ||
-          key == Unit.Structure.Protoss.Protoss_Stargate ||
-          key == Unit.Structure.Protoss.Protoss_Fleet_Beacon ||
-          key == Unit.Structure.Protoss.Protoss_Arbiter_Tribunal ||
-          key == Unit.Structure.Protoss.Protoss_Robotics_Support_Bay ||
-          key == Unit.Structure.Protoss.Protoss_Shield_Battery )
+          key == Unit.Structure.Protoss.Protoss_Nexus.getNumValue() ||
+          key == Unit.Structure.Protoss.Protoss_Robotics_Facility.getNumValue() ||
+          key == Unit.Structure.Protoss.Protoss_Pylon.getNumValue() ||
+          key == Unit.Structure.Protoss.Protoss_Assimilator.getNumValue() ||
+          key == Unit.Structure.Protoss.Protoss_Observatory.getNumValue() ||
+          key == Unit.Structure.Protoss.Protoss_Gateway.getNumValue() ||
+          key == Unit.Structure.Protoss.Protoss_Photon_Cannon.getNumValue() ||
+          key == Unit.Structure.Protoss.Protoss_Citadel_of_Adun.getNumValue() ||
+          key == Unit.Structure.Protoss.Protoss_Cybernetics_Core.getNumValue() ||
+          key == Unit.Structure.Protoss.Protoss_Templar_Archives.getNumValue() ||
+          key == Unit.Structure.Protoss.Protoss_Forge.getNumValue() ||
+          key == Unit.Structure.Protoss.Protoss_Stargate.getNumValue() ||
+          key == Unit.Structure.Protoss.Protoss_Fleet_Beacon.getNumValue() ||
+          key == Unit.Structure.Protoss.Protoss_Arbiter_Tribunal.getNumValue() ||
+          key == Unit.Structure.Protoss.Protoss_Robotics_Support_Bay.getNumValue() ||
+          key == Unit.Structure.Protoss.Protoss_Shield_Battery.getNumValue() )
         
-        structures.put(Integer.parseInt(key.toString()), myPlayersUnits.get(Integer.parseInt(key.toString())));
+        structures.put(key, myPlayersUnits.get(key));
       }
 
     return structures;
@@ -396,7 +396,7 @@ public class Units implements Serializable {
           key == Unit.NonStructure.Neutral.Spell_Dark_Swarm.getNumValue() ||
           key == Unit.NonStructure.Neutral.None.getNumValue() ||
           key == Unit.NonStructure.Neutral.Unknown.getNumValue() )
-        System.out.println("nonstruct trigger: " + key );
+        
         nonstructures.put(key, myPlayersUnits.get(key));
      }
     
