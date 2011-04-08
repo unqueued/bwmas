@@ -89,7 +89,7 @@ public class ResourceManagerAgent extends KhasBotAgent {
 		
 		if(!(this.gameObj == null))
 		{
-			System.out.println(getLocalName() +":: gameObj is->"+this.gameObj +" g is ->"+g);
+			//System.out.println(getLocalName() +":: gameObj is->"+this.gameObj +" g is ->"+g);
 			//this.myDS.put(getLocalName()+"game", this.gameObj);
 			Units us = this.gameObj.getUnitsInGame();
 			if(us != null)

@@ -68,7 +68,7 @@ public class GameObjectUpdate implements Serializable {
     return unitsInGame;
   }
 
-public ArrayList<PlayerObject> getPlayersInGame(){
+  public ArrayList<PlayerObject> getPlayersInGame(){
     return playersInGame;
   }
  

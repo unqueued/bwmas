@@ -125,5 +125,9 @@ public class GameObject implements Serializable {
 	  return s;
   }
 
+  public MapObject getMapObj(){
+    return map;
+  }
+
 }//end GameObject
 

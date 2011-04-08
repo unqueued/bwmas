@@ -82,55 +82,64 @@ public class MapObject implements Serializable{
   	 */
   	public String toString()
   	{
-  		return "MapObject";
+  		return "MapObject: \nBuildable:\n" + displayBuildable() + "\nWalkable:\n" + displayWalkable() +
+              "\nHeight:\n" + displayHeight();
   	}
 
 	/**
 	 * Displays the main properties.
 	 */
-	public void print() {
-		System.out.println("Name: " + mapName);
-		System.out.println("Size: " + mapWidth + " x " + mapLength);
+	public String displayBuildable() {
+    String out = "Name: " + mapName + "\nSize: " + mapWidth + " x " + mapLength + "\n";
 
-		System.out.println("\nBuildable");
-		System.out.println("---------");
+		out += "\nBuildable:\n";
+		out += "---------\n";
 		for (int y = 0; y < mapLength; y++) {
 			for (int x = 0; x < mapWidth; x++) {
-				System.out.print(buildable[y][x] ? " " : "X");
+				out += buildable[y][x] ? " " : "X";
 			}
-
-			System.out.println();
+			out += "\n";
 		}
+    return out;
+  }
+public String displayWalkable() {
+    String out = "Name: " + mapName + "\nSize: " + mapWidth + " x " + mapLength + "\n";
 
-		System.out.println("\nWalkable");
-		System.out.println("--------");
+		out += "\nWalkable:\n";
+		out += "---------\n";
+		
 		for (int y = 0; y < mapLength; y++) {
 			for (int x = 0; x < mapWidth; x++) {
-				System.out.print(walkable[y][x] ? " " : "X");
+				out += buildable[y][x] ? " " : "X";
 			}
-
-			System.out.println();
+			out += "\n";
 		}
+    return out;
+  }
+public String displayHeight() {
+    String out = "Name: " + mapName + "\nSize: " + mapWidth + " x " + mapLength + "\n";
 
-		System.out.println("\nHeight");
-		System.out.println("------");
+		out += "\nHeight:\n";
+		out += "---------\n";
+    
 		for (int y = 0; y < mapLength; y++) {
 			for (int x = 0; x < mapWidth; x++) {
 				switch (mapHeight[y][x]) {
 				case 2:
-					System.out.print(" ");
+					out += " ";
 					break;
 				case 1:
-					System.out.print("*");
+					//System.out.print("*");
+          out += "O";
 					break;
 				case 0:
-					System.out.print("X");
+					out += "X";
 					break;
 				}
 			}
-
-			System.out.println();
+      out += "\n";
 		}
+    return out;
 	}
 
 }

@@ -8,6 +8,7 @@ import starcraftbot.proxybot.khasbot.KhasBotAgent;
 @SuppressWarnings("serial")
 public class BattleManagerAgent extends KhasBotAgent {
 
+  @Override
 	protected void setup(){
     super.setup();
 
@@ -42,15 +43,29 @@ public class BattleManagerAgent extends KhasBotAgent {
     return false; 
   }
 
+  @Override
 	public void setGameObject(GameObject g)
 	{
+    //System.out.println("GameObject: " + g);
    	gameObj = g;
 	}
 
+  @Override
   public void setGameObjectUpdate(GameObjectUpdate g)
 	{
+    //System.out.println("GameObjectUpdate: " + g);
 		gameObjUp = g;
+    testGameObjUp();
 	}
+
+  public void testGameObjUp(){
+    if( gameObjUp == null ){
+      //System.out.println("GameObjectUpdate: is null" );
+    }else{
+      //System.out.println("GameObjectUpdate: is NOT null" + gameObjUp);
+    }
+
+  }
 
 }//end BattleManagerAgent
 
