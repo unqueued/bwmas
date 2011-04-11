@@ -108,7 +108,10 @@ namespace BWAPI
 
       virtual bool  isFlagEnabled(int flag);
       virtual void  enableFlag(int flag);
-      virtual std::set<Unit*>& unitsOnTile(int x, int y);
+      virtual std::set<Unit*>& getUnitsOnTile(int x, int y);
+      virtual std::set<Unit*>& getUnitsInRectangle(int left, int top, int right, int bottom) const;
+      virtual std::set<Unit*>& getUnitsInRectangle(BWAPI::Position topLeft, BWAPI::Position bottomRight) const;
+      virtual std::set<Unit*>& getUnitsInRadius(BWAPI::Position center, int radius) const;
       virtual Error getLastError() const;
       virtual bool  setLastError(BWAPI::Error e);
 
@@ -122,8 +125,8 @@ namespace BWAPI
       virtual bool isWalkable(int x, int y);
       virtual int  getGroundHeight(int x, int y);
       virtual int  getGroundHeight(TilePosition position);
-      virtual bool isBuildable(int x, int y);
-      virtual bool isBuildable(TilePosition position);
+      virtual bool isBuildable(int x, int y, bool includeBuildings = false);
+      virtual bool isBuildable(TilePosition position, bool includeBuildings = false);
       virtual bool isVisible(int x, int y);
       virtual bool isVisible(TilePosition position);
       virtual bool isExplored(int x, int y);
@@ -212,5 +215,8 @@ namespace BWAPI
       virtual int  getReplayFrameCount();
       virtual void setGUI(bool enabled = true);
       virtual int  getInstanceNumber();
+      virtual int  getAPM(bool includeSelects = false);
+      virtual bool setMap(const char *mapFileName);
+      virtual void setFrameSkip(int frameSkip = 1);
   };
 }

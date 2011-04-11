@@ -168,7 +168,7 @@ void ExampleAIModule::onStart()
 	
 	for (int y=0; y<mapHeight; y++) {	
 		for (int x=0; x<mapWidth; x++) {
-			mapData += toString(Broodwar->getGroundHeight(4*x, 4*y));
+			mapData += toString(Broodwar->getGroundHeight(x, y));
 			mapData += (Broodwar->isBuildable(x, y)) ? "1" : "0";
 			mapData += (Broodwar->isWalkable(4*x, 4*y)) ? "1" : "0";
 		}

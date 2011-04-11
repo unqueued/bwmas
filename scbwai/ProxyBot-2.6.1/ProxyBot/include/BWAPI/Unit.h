@@ -85,10 +85,10 @@ namespace BWAPI
       virtual int getResourceGroup() const = 0;
 
       /** Returns the edge-to-edge distance between the current unit and the target unit. */
-      virtual double getDistance(Unit* target) const = 0;
+      virtual int getDistance(Unit* target) const = 0;
 
       /** Returns the distance from the edge of the current unit to the target position. */
-      virtual double getDistance(Position target) const = 0;
+      virtual int getDistance(Position target) const = 0;
 
       /** Returns true if the unit is able to move to the target unit */
       virtual bool hasPath(Unit* target) const = 0;
@@ -290,6 +290,12 @@ namespace BWAPI
        * GUI. */
       virtual std::set<Unit*> getLarva() const = 0;
 
+      /** Returns the set of units within the given radius of this unit */
+      virtual std::set<Unit*>& getUnitsInRadius(int radius) const = 0;
+
+      /** Returns the set of units within weapon range of this unit. */
+      virtual std::set<Unit*>& getUnitsInWeaponRange(WeaponType weapon) const = 0;
+
       /**
        * 3 cases to consider:
        *
@@ -426,7 +432,7 @@ namespace BWAPI
       virtual bool isMorphing() const = 0;
 
       /** Returns true if the unit is moving.
-       * \see Unit::attackMove, Unit::stop. */
+       * \see Unit::attack, Unit::stop. */
       virtual bool isMoving() const = 0;
 
       /** Returns true if the unit has been parasited by some other player. */
@@ -479,6 +485,12 @@ namespace BWAPI
       /** Returns true if the unit is under a Protoss Psionic Storm. */
       virtual bool isUnderStorm() const = 0;
 
+      /** Returns true if the unit is under a Dark Swarm. */
+      virtual bool isUnderDarkSwarm() const = 0;
+
+      /** Returns true if the unit is under a Disruption Web. */
+      virtual bool isUnderDisruptionWeb() const = 0;
+
       /** Returns true if the unit is a Protoss building that is unpowered because no pylons are in range. */
       virtual bool isUnpowered() const = 0;
 
@@ -500,10 +512,10 @@ namespace BWAPI
       virtual bool issueCommand(UnitCommand command) = 0;
 
       /** Orders the unit to attack move to the specified location. */
-      virtual bool attackMove(Position target) = 0;
+      virtual bool attack(Position target, bool shiftQueueCommand = false) = 0;
 
       /** Orders the unit to attack the specified unit. */
-      virtual bool attackUnit(Unit* target) = 0;
+      virtual bool attack(Unit* target, bool shiftQueueCommand = false) = 0;
 
       /** Orders the unit to build the given unit type at the given position. Note that if the player does not
        * have enough resources when the unit attempts to place the building down, the order will fail. The
@@ -542,35 +554,35 @@ namespace BWAPI
 
       /** Orders the unit to move from its current position to the specified position.
        * \see Unit::isMoving.  */
-      virtual bool move(Position target) = 0;
+      virtual bool move(Position target, bool shiftQueueCommand = false) = 0;
 
       /** Orders the unit to patrol between its current position and the specified position.
        * \see Unit::isPatrolling.  */
-      virtual bool patrol(Position target) = 0;
+      virtual bool patrol(Position target, bool shiftQueueCommand = false) = 0;
 
       /** Orders the unit to hold its position.*/
-      virtual bool holdPosition() = 0;
+      virtual bool holdPosition(bool shiftQueueCommand = false) = 0;
 
       /** Orders the unit to stop. */
-      virtual bool stop() = 0;
+      virtual bool stop(bool shiftQueueCommand = false) = 0;
 
       /** Orders the unit to follow the specified unit.
        * \see Unit::isFollowing. */
-      virtual bool follow(Unit* target) = 0;
+      virtual bool follow(Unit* target, bool shiftQueueCommand = false) = 0;
 
       /** Orders the unit to gather the specified unit (must be mineral or refinery type).
        * \see Unit::isGatheringGas, Unit::isGatheringMinerals. */
-      virtual bool gather(Unit* target) = 0;
+      virtual bool gather(Unit* target, bool shiftQueueCommand = false) = 0;
 
       /** Orders the unit to return its cargo to a nearby resource depot such as a Command Center. Only
        * workers that are carrying minerals or gas can be ordered to return cargo.
        * \see Unit::isCarryingGas, Unit::isCarryingMinerals. */
-      virtual bool returnCargo() = 0;
+      virtual bool returnCargo(bool shiftQueueCommand = false) = 0;
 
       /** Orders the unit to repair the specified unit. Only Terran SCVs can be ordered to repair, and the
        * target must be a mechanical Terran unit or building.
        * \see Unit::isRepairing. */
-      virtual bool repair(Unit* target) = 0;
+      virtual bool repair(Unit* target, bool shiftQueueCommand = false) = 0;
 
       /** Orders the unit to burrow. Either the unit must be a Zerg Lurker, or the unit must be a Zerg ground
        * unit and burrow tech must be researched.
@@ -608,7 +620,7 @@ namespace BWAPI
 
       /** Orders the unit to load the target unit.
        * \see Unit::unload, Unit::unloadAll, Unit::getLoadedUnits, Unit:isLoaded. */
-      virtual bool load(Unit* target) = 0;
+      virtual bool load(Unit* target, bool shiftQueueCommand = false) = 0;
 
       /** Orders the unit to unload the target unit.
        * \see Unit::load, Unit::unloadAll, Unit::getLoadedUnits, Unit:isLoaded. */
@@ -616,20 +628,20 @@ namespace BWAPI
 
       /** Orders the unit to unload all loaded units at the unit's current position.
        * \see Unit::load, Unit::unload, Unit::unloadAll, Unit::getLoadedUnits, Unit:isLoaded. */
-      virtual bool unloadAll() = 0;
+      virtual bool unloadAll(bool shiftQueueCommand = false) = 0;
 
       /** Orders the unit to unload all loaded units at the specified location. Unit should be a Terran
        * Dropship, Protoss Shuttle, or Zerg Overlord. If the unit is a Terran Bunker, the units will be
        * unloaded right outside the bunker, like in the first version of unloadAll.
        * \see Unit::load, Unit::unload, Unit::unloadAll, Unit::getLoadedUnits, Unit:isLoaded. */
-      virtual bool unloadAll(Position target) = 0;
+      virtual bool unloadAll(Position target, bool shiftQueueCommand = false) = 0;
 
       /** Works like the right click in the GUI. */
-      virtual bool rightClick(Position target) = 0;
+      virtual bool rightClick(Position target, bool shiftQueueCommand = false) = 0;
 
       /** Works like the right click in the GUI. Right click on a mineral patch to order a worker to mine,
        * right click on an enemy to attack it. */
-      virtual bool rightClick(Unit* target) = 0;
+      virtual bool rightClick(Unit* target, bool shiftQueueCommand = false) = 0;
 
       /** Orders the SCV to stop constructing the building, and the building is left in a partially complete
        * state until it is canceled, destroyed, or completed.
@@ -679,5 +691,11 @@ namespace BWAPI
 
       /** Moves a Flag Beacon to the target location. */
       virtual bool placeCOP(TilePosition target) = 0;
+
+      /** Returns true if the unit was recently attacked. */
+      virtual bool          isUnderAttack() const = 0;
+
+      /** Returns the player that last attacked this unit. */
+      virtual BWAPI::Player *getLastAttackingPlayer() const = 0;
   };
 }

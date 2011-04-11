@@ -14,9 +14,7 @@ namespace BWAPI
       WeaponType(int id);
       WeaponType(const WeaponType& other);
       WeaponType& operator=(const WeaponType& other);
-      bool operator==(const WeaponType& other) const;
-      bool operator!=(const WeaponType& other) const;
-      bool operator<(const WeaponType& other) const;
+      operator int() const;
 
       /** Returns a unique ID for this weapon type. */
       int getID() const;
@@ -175,6 +173,7 @@ namespace BWAPI
     extern const WeaponType Warp_Blades;
     extern const WeaponType Warp_Blades_Hero;
     extern const WeaponType Warp_Blades_Zeratul;
+    extern const WeaponType Independant_Laser_Battery;
 
     extern const WeaponType Yamato_Gun;
     extern const WeaponType Nuclear_Strike;

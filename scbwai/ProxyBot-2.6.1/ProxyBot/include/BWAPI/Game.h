@@ -148,9 +148,15 @@ namespace BWAPI
        * the AIModule::onStart callback. */
       virtual void enableFlag(int flag) = 0;
 
-      /** Returns the set of units that are on the given build tile. Only returns accessible units on
-       * accessible tiles. */
-      virtual std::set<Unit*>& unitsOnTile(int tileX, int tileY) = 0;
+      /** Returns the set of accessible units that are on the given build tile. */
+      virtual std::set<Unit*>& getUnitsOnTile(int tileX, int tileY) = 0;
+
+      /** Returns the set of accessible units that are in or overlapping the given rectangle. */
+      virtual std::set<Unit*>& getUnitsInRectangle(int left, int top, int right, int bottom) const = 0;
+      virtual std::set<Unit*>& getUnitsInRectangle(BWAPI::Position topLeft, BWAPI::Position bottomRight) const = 0;
+
+      /** Returns the set of accessible units within or overlapping a circle at the given point with the given radius. */
+      virtual std::set<Unit*>& getUnitsInRadius(BWAPI::Position center, int radius) const = 0;
 
       /** Returns the last error that was set. If you try to order enemy units around, or morph bunkers into
        * lurkers, BWAPI will set error codes, which can be retrieved using this function. */
@@ -195,9 +201,9 @@ namespace BWAPI
       /** Returns true if the specified build tile is buildable. Note that this just uses the static map data.
        * You will also need to make sure no ground units on the tile to see if its currently buildable. To do
        * this, see unitsOnTile. */
-      virtual bool isBuildable(int tileX, int tileY) = 0;
+      virtual bool isBuildable(int tileX, int tileY, bool includeBuildings = false) = 0;
       /** \copydoc isBuildable(int, int) */
-      virtual bool isBuildable(TilePosition position) = 0;
+      virtual bool isBuildable(TilePosition position, bool includeBuildings = false) = 0;
 
       /** Returns true if the specified build tile is visible. If the tile is concealed by fog of war, the
        * function will return false. */
@@ -400,6 +406,15 @@ namespace BWAPI
 
       /** Retrieves the instance number recorded by BWAPI to identify which instance an AI module belongs to */
       virtual int  getInstanceNumber() = 0;
+
+      /** Retrieves the bot's APM. Can include or exclude select commands. */
+      virtual int getAPM(bool includeSelects = false) = 0;
+
+      /** Changes the map to the one specified. Changes do not take effect unless the game is restarted. */
+      virtual bool setMap(const char *mapFileName) = 0;
+
+      /** Sets the frame skip value. 1 = normal */
+      virtual void setFrameSkip(int frameSkip = 1) = 0;
   };
   extern Game* Broodwar;
 }

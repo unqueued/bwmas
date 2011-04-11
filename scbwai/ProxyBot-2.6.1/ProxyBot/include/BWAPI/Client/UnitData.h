@@ -96,8 +96,13 @@ namespace BWAPI
     bool isStuck;
     bool isTraining;
     bool isUnderStorm;
+    bool isUnderDarkSwarm;
+    bool isUnderDWeb;
     bool isUnpowered;
     bool isVisible[9];
     int  buttonset;
+
+    int  lastAttackerPlayer;
+    bool recentlyAttacked;
   };
 }
