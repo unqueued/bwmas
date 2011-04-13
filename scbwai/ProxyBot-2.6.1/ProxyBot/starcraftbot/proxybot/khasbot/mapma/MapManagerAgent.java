@@ -40,18 +40,6 @@ public class MapManagerAgent extends KhasBotAgent {
 	protected void setGameObject(GameObject g)
 	{
 		gameObj = g;
-
-    try {
-      //FileOutputStream output = new FileOutputStream(new File("map-data" + System.currentTimeMillis() + ".txt"));
-      BufferedWriter output = new BufferedWriter(new FileWriter(new File("map-data" + System.currentTimeMillis() + ".txt")));
-      output.write(gameObj.getMapObj().toString());
-      output.close();
-    } catch (FileNotFoundException ex) {
-      Logger.getLogger(MapManagerAgent.class.getName()).log(Level.SEVERE, null, ex);
-    }catch (IOException ex) {
-        Logger.getLogger(MapManagerAgent.class.getName()).log(Level.SEVERE, null, ex);
-    }
-
 	}
   
   @Override

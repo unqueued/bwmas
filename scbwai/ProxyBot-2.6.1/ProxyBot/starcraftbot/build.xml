@@ -19,7 +19,7 @@
   <property name="build-khasbot" location="${build-proxybot}"/>
   <property name="dist-khasbot"  location="${dist-proxybot}"/>
 
-  <property name="proxybot-exe-path" location="${build-proxybot}"/>
+  <property name="proxybot-exe-path" location="${build-proxybot}${file.separator}"/>
   <property name="khasbot-exe-path" location="${build-khasbot}"/>
 
   <!-- ensure Ant uses the CLASSPATH defined in the environment -->
@@ -72,9 +72,12 @@
 
   <!-- <target name="proxybot-test" depends="proxybot-jade" description="test Proxybot"> -->
   <target name="proxybot-test" depends="proxybot" description="test Proxybot">
+      
     <exec executable="java" dir="${proxybot-exe-path}">
       <arg value="starcraftbot.proxybot.ProxyBot"/>
     </exec>
+    <echo message="${proxybot-exe-path}${file.separator}"/>
+   <echo message="${user.dir}"/>
   </target>
   
 
