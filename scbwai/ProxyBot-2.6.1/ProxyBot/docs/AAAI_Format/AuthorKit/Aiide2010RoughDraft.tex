@@ -59,8 +59,17 @@ To start with, we took our base ideas from another RTS AI framework, BWSAL.  How
 
 In addition to the above agents, we also developed one, \emph{Proxy Bot Agent}, that was in charge of interfacing with the BWAPI and socket information from the StarCraft game and converting that information into messages the Agent System could understand.  It also converted messages from the Agent System to something the BWAPI and socket information understand.
 
+Most of our ManagerAgents follow a similar behavior to each other. Due to this, we were able to create a superclass KhasbotAgent that took care of most of the repetitive tasks.
+
+With many agents working on seperate areas, the key here is organizing their communication with each other.  Luckily, all of our protocols exhibit a request/inform type flow.  All manager agents are informed of game updates by \emph{Commander Agent} and all Manager Agents request units and inform new commands to units to \emph{Unit Manager Agent}.
+
+The actual Starcraft Game is mapped to a \emph{GameObject} that the agents use to keep track of what they are doing.  As the game progresses, the MAS continues to get game updates via a \emph{GameUpdateObject}, which is essentially a reduced game object.  The \emph{GameObject} is broken down into two different things, Player Information and Map Information. Map Information includes stuff like where is it safe to build or walk and what the starting locations are for the map in the game.  Player Information handles all units and ways the units can do research or upgrades.  These units include structures, mineral patches, and all other pieces in the game that can change.
 
 \section{Implementation}
+
+The basic idea that each Manager Agent follows is that they are each an agent inside of JADE that have multiple threaded behaviours that focus on different protocols between the various Manager Agents.
+
+Due to the multiple behaviours at once, each Agent heavily used the DataStore ability from JADE to keep its information consistent with the other behaviours.
 
 \section{Results}
 
