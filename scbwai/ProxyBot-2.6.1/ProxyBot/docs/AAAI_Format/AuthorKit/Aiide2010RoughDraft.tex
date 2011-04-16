@@ -14,7 +14,7 @@
 % The file aaai.sty is the style file for AAAI Press 
 % proceedings, working notes, and technical reports.
 %
-\title{Agent-Orient Programming Framework Design for Real-Time Strategy AI}
+\title{Agent-Oriented Programming Framework Design for Real-Time Strategy AI}
 
 %\author{Antonio Arredondo\and Daniel Jaramillo\and Frank Navidad\and Ben Wright\\
 %New Mexico State University \\ Department of Computer Science \\ Box 30001 MSC CS \\ Las Cruces, NM 88003-8001
@@ -33,17 +33,36 @@ We present a Multi-Agent System Framework, KhasBot, to handle the Artificial Int
 \end{abstract}
 
 \section{Introduction}
-Real-Time Strategy Games are of interest for making Artificial Intelligence systems around for many reasons.  They must adapt quickly to changing environments, must make decisions on non-complete information, and involve multiple complex AI issues in general.
+Real-Time Strategy(RTS) Games are an area of  interest in Artificial Intelligence Systems for many reasons.  They must adapt quickly to changing environments, make decisions on non-complete information, and involve multiple complex AI issues in general (for example, reactive planning, path-finding, and resource scheduling).
 
 \section{Background}
-What we do in this project is combine two different areas together, BWAPI (BroodWar API) and JADE (Java Agent Development Environment).
+What we do in this project is combine two different areas together, BWAPI (BroodWar API) and JADE (Java Agent DEvelopment Framework).
 
 \subsection{BWAPI}
 BWAPI is an open-source api that allows injection of the game Starcraft: Broodwar.  It was developed in C++, but many extensions have allowed access to other languages such as Python, C\#, and Java.  We used Java.
 
+BWAPI breaks down the StarCraft game into 5 basic objects: 
+\begin{itemize}
+\item \emph{Game}:  holds all information about the current game being played. 
+\item \emph{Player}:  holds all information a player would have, for instance current resources, buildings, and controllable units.
+\item \emph{Unit}: represents a piece in the game, be it a mineral, building, or probe.
+\item \emph{Bullet}: represents a projectile from an attack.
+\item \emph{Force}: represents a collection of players attempting a singular objective.
+\end{itemize}
 
-\subsection{JADE}
-JADE is a java framework middleware for designing multi-agent systems.
+With these objects, what generally happens is that another object \emph{AIModule.cpp} is made as a \emph{dll} which is used as the injected code.
+
+The basic flow of BWAPI then works as follows, when the actual game begins BWAPI will call up an \emph{onStart()} method from the \emph{AIModule} which will setup all the above objects with the begining of the game information.  After this, an \emph{onFrame()} method is called every frame of the game.  This is the looping method which holds all the reasoning and compuation of the actual AI.  
+
+The \emph{AIModule} returns orders to the StarCraft game via \emph{UnitCommand}s.  By giving various Units in control of the AI player, the game can progress.  These commands are things such as build, attack, research, and upgrade. 
+
+
+\subsection{Agent-Oriented Programming}
+Agent-Orient Programming is a Programming Paradigm started back in the 1990s.  The basis is to on the concept of 'agents' as opposed to say, objects.  By doing this, one can focus more readily on the reasoning processes and communication paths of a system, rather than getting lost in all the method calls.  Aside from communication, Agents really only do one or two things.  
+
+The basic flow of Agent-Oriented Programming, which our Agents follow, is that Agents hold a set of beliefs and then based off changes (or additions) to them, the agents belief set will change, causing a possible reaction or change in the behaviour of said Agent.  Behaviours are actions attempted by the Agents.
+
+For this particular framework, we used JADE (Java Agent DEvelopment Framework) to model our agents.  JADE is a Java middleware framework designed to handle and run agents developed from a package given by JADE.  JADE also handles running the agents platform along with all the communication.
 
 \section{Design}
 To start with, we took our base ideas from another RTS AI framework, BWSAL.  However, this is developed in C++ and is not Agent-Based. The idea behind using an Agent-Oriented design was to offload reasoning for the RTS game to individual Agents that only cared about one facet of the overall problem.  We split the problem into 7 different agents as follows:
