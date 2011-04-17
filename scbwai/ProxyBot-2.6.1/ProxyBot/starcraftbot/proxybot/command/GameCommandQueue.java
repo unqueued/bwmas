@@ -1,19 +1,17 @@
 package starcraftbot.proxybot.command;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-
 
 /**
  * Class for queueing up commands to be sent to StarCraft. This class handles
  * the asynchronuous communication between the agent and StarCraft.
  */
 @SuppressWarnings("serial")
-public class GameCommandQueue implements Serializable{
+public class GameCommandQueue{
 
 	/** queued up commands (orders) to send to StarCraft */
-	private ArrayList<GameCommand> cmdQueue = null; 
-	private ArrayList<GameCommandListener> listeners = null;
+	private final ArrayList<GameCommand> cmdQueue = new ArrayList<GameCommand>();
+	private ArrayList<GameCommandListener> listeners = new ArrayList<GameCommandListener>();
 
 	/** message number of commands to send to starcraft per response */
 	private int maxCommandsPerMessage = 1000;
@@ -23,8 +21,6 @@ public class GameCommandQueue implements Serializable{
    * Default constructor.
    */
   public GameCommandQueue(){
-    cmdQueue = new ArrayList<GameCommand>();
-    listeners = new ArrayList<GameCommandListener>();
 
   }
 
@@ -38,15 +34,19 @@ public class GameCommandQueue implements Serializable{
 	private StringBuilder getCommands() {
 		StringBuilder commandData = new StringBuilder("commands");
 
-		//synchronized (cmdQueue) {
-			int commandsAdded = 0;
+		synchronized (cmdQueue) {
+      int commandsAdded = 0;
 
-      //send as many commands as we can fit in the buffer
-			while (cmdQueue.size() > 0 && commandsAdded < maxCommandsPerMessage) {
-				commandsAdded++;
-				commandData.append(cmdQueue.remove(cmdQueue.size() - 1).formatCmd());
-			}
-		//}
+      if( cmdQueue.isEmpty()){
+        commandData.append("");
+      }else{
+        //send as many commands as we can fit in the buffer
+        while (cmdQueue.size() > 0 && commandsAdded < maxCommandsPerMessage) {
+          commandsAdded++;
+          commandData.append(cmdQueue.remove(cmdQueue.size() - 1).formatCmd());
+        }
+      }
+		}
 
 		return commandData;
 	}
@@ -78,18 +78,16 @@ public class GameCommandQueue implements Serializable{
     return getCommands().toString().getBytes();
   }
 
-public GameCommand pop() {
-	//GameCommand t = cmdQueue.remove(cmdQueue.size()-1);
-	return cmdQueue.remove(cmdQueue.size()-1);
-}
-
-public boolean empty() {
-	return (cmdQueue.size() == 0);
-}
-
-public void push(GameCommand pop) {
-	cmdQueue.add(pop);
-	
-}
-  	
+  public boolean isEmpty() {
+    return cmdQueue.isEmpty();
+  }
+  
+  @Override
+  public String toString(){
+    String temp = "GameCommandQueue> ";
+    for( GameCommand g : cmdQueue ){
+      temp += g.toString() + " ";
+    }
+    return temp + "\n";
+  }
 }

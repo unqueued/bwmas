@@ -26,128 +26,120 @@ import starcraftbot.proxybot.game.GameObjectUpdate;
  *
  * \see ProxyBotAgent
  */
-public class ProxyBot {
+public class ProxyBot{
+
   /**< port to start the server socket on */
-	public static int port = 12345;
-	
-	/**< allow the user to control units */
-	public static boolean allowUserControl = true;
-	
-	/**< turn on complete information */
-	public static boolean completeInformation = false;
-
-	/**< display agent commands in SC? */
-	public static boolean logCommands = true;
-
-	/**< display agent commands in SC? */
-	public static boolean terrainAnalysis = false;
-
-	/**< run the game very fast. 0 = really fast, 25 = slow enough to 
+  public static int port = 12345;
+  /**< allow the user to control units */
+  public static boolean allowUserControl = true;
+  /**< turn on complete information */
+  public static boolean completeInformation = false;
+  /**< display agent commands in SC? */
+  public static boolean logCommands = true;
+  /**< display agent commands in SC? */
+  public static boolean terrainAnalysis = false;
+  /**< run the game very fast. 0 = really fast, 25 = slow enough to
    * watch what is happening 
    */
-	public static boolean speedUp = true;
-	
-	/**< The proxy bot client object */
+  public static boolean speedUp = true;
+  /**< The proxy bot client object */
   private ProxyBotAgentClient pba = null;
-
-	/**< This is the game object that will contain game relevant data */
+  /**< This is the game object that will contain game relevant data */
   private GameObject gameObj = null;
   private GameObjectUpdate gameObjUp = null;
-
   private GameCommandQueue starcraft_cmds = null;
-
   private int game_counter = 0;
 
   /**
    * The main class for ProxyBot.java
    * \arg \c String[] array of string arguments
    */
-	public static void main(String[] args) {		
-		new ProxyBot().start();
-	}
+  public static void main(String[] args){
+    new ProxyBot().start();
+  }
 
-	/**
-	 * Starts the ProxyBot as a new thread. A server socket is opened and waits for 
+  /**
+   * Starts the ProxyBot as a new thread. A server socket is opened and waits for
    * client connections from the StarCraft game.
-	 * \todo not sure why this is done, but further investigation of this is needed
+   * \todo not sure why this is done, but further investigation of this is needed
    * \throws Exception
-	 */
-	public void start() {
+   */
+  public void start(){
     //This is the command queue that will store the commands that
     //will be sent to StarCraft
     starcraft_cmds = new GameCommandQueue();
 
     //create the ProxyBotAgentClient object
     pba = new ProxyBotAgentClient();
-    
+
     //start the client with the initial data
     //DANGER: the bot name(s) will have to all have the same prefix in
     //order to get the jade.sniffer to listen to all of them
     pba.startClient("localhost", "1099", "KhasProxyBot");
-    
-		try {			
+
+    try{
       ServerSocket serverSocket = new ServerSocket(port);
-      
-      while (true) {
+
+      while(true){
         System.out.println("Waiting for client connection");
-        Socket clientSocket = serverSocket.accept();	
+        Socket clientSocket = serverSocket.accept();
         System.out.println("Received a client connection");
         runGame(clientSocket);
       }
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+    }catch(Exception e){
+      e.printStackTrace();
+    }
 
-	}//end start
+  }//end start
 
-	/**
-	 * Manages communication with StarCraft.
+  /**
+   * Manages communication with StarCraft.
    * \arg \c Socket socket that connects us to StarCraft
    * \throws SocketException
    * \throws Exception
-	 */
-	private void runGame(Socket socket) {		
+   */
+  private void runGame(Socket socket){
     //NOTE: enable this to test the example bot
-		//final StarCraftBot bot = new ExampleStarCraftBot();
+    //final StarCraftBot bot = new ExampleStarCraftBot();
     Game gameRef = null;
 
-		try {
-			// 1. get the initial game information
+    try{
+      // 1. get the initial game information
       BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       String playerData = reader.readLine();
 
       // 2. respond with bot options
-      String botOptions = (allowUserControl ? "1" : "0") 
-                        + (completeInformation ? "1" : "0")
-                        + (logCommands ? "1" : "0")
-                        + (terrainAnalysis ? "1" : "0");
-              
+      String botOptions = (allowUserControl ? "1" : "0")
+              + (completeInformation ? "1" : "0")
+              + (logCommands ? "1" : "0")
+              + (terrainAnalysis ? "1" : "0");
+
       socket.getOutputStream().write(botOptions.getBytes());
-    
+
       // 3. get the starting locations and map information
       String locationData = reader.readLine();
       String mapData = reader.readLine();
-      
+
       // TA
       String regionsData = "Regions:";
       String chokesData = "Chokes:";
       String basesData = "Bases:";
-      
-      if (terrainAnalysis) {
+
+      if(terrainAnalysis){
         regionsData = reader.readLine();
         chokesData = reader.readLine();
         basesData = reader.readLine();
       }
-      
+
       //currently the old game object
       //final Game game = new Game(playerData, locationData, mapData, chokesData, basesData, regionsData);
 
       //this is the new game object
       gameObj = new GameObject(playerData, locationData, mapData, chokesData, basesData, regionsData);
-       
+
       //this is the game update object
       gameObjUp = new GameObjectUpdate(gameObj);
-      
+
       //gameRef = game;
       //NOTE: enable this to test the example bot
       //boolean firstFrame = true;
@@ -155,60 +147,66 @@ public class ProxyBot {
       //DEBUG
       //gameObj.printMapInfo();
 
-      if (speedUp) {
+      if(speedUp){
         GameCommand game_speed = GameCommand.setGameSpeed(20);
         starcraft_cmds.addCommand(game_speed);
       }
 
       // 4. game updates
-      while (true) {
+      while(true){
 
         //at the game's fastest speed wait to run this loop once a second
-    	  Thread.sleep( (1000 / 24) );
+        Thread.sleep((1000 / 24));
+        //Thread.sleep((1000 / 48));
+        //Thread.sleep((1000 / 100));
 
-        if( (game_counter < 3) )
+        if((game_counter < 2)){
           game_counter++;
+        }
 
 
-    	  //get update from StarCraft via the socket
+        //get update from StarCraft via the socket
         String update = reader.readLine();
-        if (update.startsWith("ended")) {
+        if(update.startsWith("ended")){
           break;
-        } else if (update == null) {
+        }else if(update == null){
           break;
-        } else {	    				    			
+        }else{
           // update the game
           //game.updateData(update);
 
-          if( game_counter < 3 )
+          if(game_counter < 2){
             gameObj.processGameUpdate(update);
-          else
+          }else{
             gameObjUp.processGameUpdate(update);
+          }
 
-          if( game_counter < 3 )
+          if(game_counter < 2){
             pba.sendGameObjToJADE(gameObj);
-          else
+          }else{
             pba.sendGameObjUpdateToJADE(gameObjUp);
+          }
 
           pba.getGameUpdateFromJADE();
 
           socket.getOutputStream().write(starcraft_cmds.cmdsToExe());
         }
       }//end while - game update loop
-		} catch (SocketException e) {
-			System.out.println("Socket Exception occurred");
-			e.printStackTrace();
-		} catch (Exception e) {
-			System.out.println("A General Exception occurred");
-			e.printStackTrace();
-		} finally {
-			System.out.println("StarCraft game over");
-			
-			// stop update thread 
-			gameRef.stop();
+    }catch(SocketException e){
+      System.out.println("Socket Exception occurred");
+      e.printStackTrace();
+    }catch(Exception e){
+      System.out.println("A General Exception occurred");
+      e.printStackTrace();
+    }finally{
+      System.out.println("StarCraft game over");
 
-		}
-	}
+      // stop update thread
+      gameRef.stop();
+
+    }
+  }
+
   /**
    * This class is the client that ProxyBot.java will use to communicate with ProxyBotAgent.java.
    * This is done, since communication between JADE and Java Applications must use the 
@@ -219,21 +217,19 @@ public class ProxyBot {
    * \arg \c String port of the JADE environment Main Container
    * \arg \c String name the name of the agent
    */
-  class ProxyBotAgentClient {
+  class ProxyBotAgentClient{
 
     //Agent that will be used to communicate with between ProxyBot <-> ProxyBotAgent
     //communication between JADE and non-JADE application
     AgentController ac;
-
     //This will be used to communicate back and forth
     //\todo the return type, currently String must be finalized
-    ArrayBlockingQueue<GameCommandQueue> jadeReplyQueue = null;
+    ArrayBlockingQueue<ArrayList<GameCommand>> jadeReplyQueue = null;
 
     /**
      * Empty Constructor.
      */
     public ProxyBotAgentClient(){
-
     }
 
     /**
@@ -245,7 +241,7 @@ public class ProxyBot {
      * \return \c AgentController
      * \throws Exception
      */
-    public AgentController startClient(String host, String port, String name ) {
+    public AgentController startClient(String host, String port, String name){
       // Retrieve the singleton instance of the JADE Runtime
       Runtime rt = Runtime.instance();
 
@@ -253,14 +249,14 @@ public class ProxyBot {
       Profile p = new ProfileImpl();
       p.setParameter(Profile.MAIN_HOST, host);
       p.setParameter(Profile.MAIN_PORT, port);
-      ContainerController cc = rt.createMainContainer(p); 
+      ContainerController cc = rt.createMainContainer(p);
 
       //Parameters to pass to the agent
       Object[] agentArgs = new Object[2];
 
       //array queue of 20 for ProxyBot to Tx & RX with ProxyBotAgent
-      jadeReplyQueue = new ArrayBlockingQueue<GameCommandQueue>(1);
-    
+      jadeReplyQueue = new ArrayBlockingQueue<ArrayList<GameCommand>>(1);
+
       //pass a wait switch so that we can communicate with the agent once it has
       //been created
       ReadyToGo flip_switch = new ReadyToGo();
@@ -270,9 +266,9 @@ public class ProxyBot {
       agentArgs[1] = flip_switch;
 
       // notice that in the book it was rt.createAgentContainer(p) which requires a main-container to be already active
-      if (cc != null) {
+      if(cc != null){
         // Create the ProxyBotAgent and start it
-        try {
+        try{
           ac = cc.createNewAgent(name, "starcraftbot.proxybot.ProxyBotAgent", agentArgs);
           ac.start();
 
@@ -280,9 +276,9 @@ public class ProxyBot {
           flip_switch.waitOn();
 
           return ac;
-        } catch (Exception e) {
+        }catch(Exception e){
           e.printStackTrace();
-        } 
+        }
       }
       return null;
     }
@@ -297,8 +293,8 @@ public class ProxyBot {
     public void sendGameObjToJADE(GameObject game){
       //System.out.println("Sending game object to jade");
       try{
-        ac.putO2AObject(game,AgentController.ASYNC);
-       }catch(Exception e){
+        ac.putO2AObject(game, AgentController.ASYNC);
+      }catch(Exception e){
         e.printStackTrace();
       }
     }//end sendGameUpdateToJADE
@@ -306,8 +302,8 @@ public class ProxyBot {
     public void sendGameObjUpdateToJADE(GameObjectUpdate game_update){
       //System.out.println("Sending game object update to jade");
       try{
-        ac.putO2AObject(game_update,AgentController.ASYNC);
-       }catch(Exception e){
+        ac.putO2AObject(game_update, AgentController.ASYNC);
+      }catch(Exception e){
         e.printStackTrace();
       }
     }//end sendGameUpdateToJADE
@@ -320,52 +316,31 @@ public class ProxyBot {
      * \throws InterruptedException
      */
     public ArrayList<GameCommand> getUpdate(){
-      ArrayList<GameCommand> reply = null;
-      /*GameCommand temp = null;
-      
-      if(! jadeReplyQueue.isEmpty() ) {
-        for(GameCommand cmd : jadeReplyQueue){
-          try {
-            temp = (GameCommand) jadeReplyQueue.take();
-            reply.add(temp);
-          } catch (InterruptedException ex) {
-            Logger.getLogger(ProxyBot.class.getName()).log(Level.SEVERE, null, ex);
-          }
+
+      if(!jadeReplyQueue.isEmpty()){
+        ArrayList<GameCommand> cmd = null;
+        try{
+           cmd = jadeReplyQueue.take();
+        }catch(InterruptedException ex){
+          Logger.getLogger(ProxyBot.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return reply;
+        return cmd;
       }else{
         return null;
-      }*/
-      
-      /*try {
-		reply = (ArrayList<GameCommand>) jadeReplyQueue.take();
-	} catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}*/
-	return reply;
-      
+      }
     }//end getGameUpdateFromJADE
 
     public void getGameUpdateFromJADE(){
-      //ArrayList<GameCommand> commands = getUpdate();
-      //GameCommand temp = null;
+      ArrayList<GameCommand> commands = getUpdate();
 
-      try {
-		starcraft_cmds = (GameCommandQueue)jadeReplyQueue.take();
-	} catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}	
-    	
-      /*if(commands != null){
+      if(commands != null){
         for(GameCommand cmd : commands){
+          if(cmd != null){
             starcraft_cmds.addCommand(cmd);
+          }
         }
-      }*/
+      }
     }//end getGameUpdateFromJADE
-
   }//end ProxyBotAgentClient
-  
 }//end ProxyBot
 

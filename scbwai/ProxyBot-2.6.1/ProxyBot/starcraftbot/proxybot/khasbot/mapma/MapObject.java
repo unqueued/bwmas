@@ -106,14 +106,10 @@ public class MapObject implements Serializable{
 			startingLocations.add(loc);
 		}
   }
-  	/**
-  	 * @return MapObject
-  	 */
-  	public String toString()
-  	{
-  		return "MapObject: \nBuildable:\n" + displayBuildable() + "\nWalkable:\n" + displayWalkable() +
-              "\nHeight:\n" + displayHeight();
-  	}
+
+  public MapLocation getStartLocation(int playerId){
+    return startingLocations.get(playerId);
+  }
 
 	/**
 	 * Displays the main properties.
@@ -175,5 +171,15 @@ public String displayHeight() {
 		}
     return out;
 	}
+
+  	/**
+  	 * @return String
+  	 */
+  	public String toString()
+  	{
+  		return "MapObject: \nBuildable:\n" + displayBuildable() + "\nWalkable:\n" + displayWalkable() +
+              "\nHeight:\n" + displayHeight();
+  	}
+
 
 }

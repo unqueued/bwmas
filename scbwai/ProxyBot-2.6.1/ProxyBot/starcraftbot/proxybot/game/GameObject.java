@@ -58,7 +58,7 @@ public class GameObject implements Serializable {
                     String regionsData){
     
     
-	playersInGame = PlayerObject.parsePlayersData(playersData);
+    playersInGame = PlayerObject.parsePlayersData(playersData);
     
     String[] playerDatas = playersData.split(":");
     myPlayerId = Integer.parseInt(playerDatas[0].split(";")[1]);

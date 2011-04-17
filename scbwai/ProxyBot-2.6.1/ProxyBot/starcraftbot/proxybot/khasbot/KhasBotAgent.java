@@ -8,9 +8,7 @@ import jade.core.*;
 import jade.core.behaviours.*;
 import jade.domain.FIPANames;
 import jade.lang.acl.*;
-
-import starcraftbot.proxybot.game.GameObject;
-import starcraftbot.proxybot.game.GameObjectUpdate;
+import starcraftbot.proxybot.ConverId;
 
 @SuppressWarnings("serial")
 abstract public class KhasBotAgent extends Agent {
@@ -18,9 +16,6 @@ abstract public class KhasBotAgent extends Agent {
 	protected Codec codec = null;
   protected Ontology ontology = null;
 
-  protected GameObject gameObj;
-  protected GameObjectUpdate gameObjUp;
-  
   protected DataStore myDS = null;
 
   protected AID commander = null;
@@ -38,6 +33,8 @@ abstract public class KhasBotAgent extends Agent {
    */
   protected MessageTemplate commander_inform_mt = null;
   protected MessageTemplate unitm_inform_mt = null;
+  protected MessageTemplate exe_cmds_mt = null;
+  protected MessageTemplate inform_commands_mt = null;
 
   /*
    * Message Template: FIPANames.InteractionProtocol.FIPA_REQUEST
@@ -62,71 +59,83 @@ abstract public class KhasBotAgent extends Agent {
                                                MessageTemplate.MatchPerformative(ACLMessage.INFORM),
                                                MessageTemplate.MatchSender(commander)
                                              );
-
     unitm_inform_mt = MessageTemplate.and(
-                                          MessageTemplate.MatchPerformative(ACLMessage.INFORM),
-                                          MessageTemplate.MatchSender(unit_manager)
-                                          );
+                                           MessageTemplate.not(MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST)),
+                                           MessageTemplate.and(
+                                             MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+                                             MessageTemplate.MatchSender(unit_manager)
+                                           )
+                                       );
+
+    exe_cmds_mt = MessageTemplate.and(
+                                      MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+                                      MessageTemplate.MatchConversationId(ConverId.Commands.ExecuteCommand.getConId())
+                                      );
 
     unitm_fipa_req_mt = MessageTemplate.and(
                                              MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
                                              MessageTemplate.and(
-                                                                  MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                                                                  MessageTemplate.MatchSender(unit_manager)
+                                                MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
+                                                MessageTemplate.MatchSender(unit_manager)
                                              )
                                            );
 
     mapm_fipa_req_mt = MessageTemplate.and(
                                              MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
                                              MessageTemplate.and(
-                                                                  MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                                                                  MessageTemplate.MatchSender(map_manager)
+                                                MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
+                                                MessageTemplate.MatchSender(map_manager)
                                               )
                                             );
 
     buildm_fipa_req_mt = MessageTemplate.and(
                                              MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
                                              MessageTemplate.and(
-                                                                  MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                                                                  MessageTemplate.MatchSender(building_manager)
+                                                MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
+                                                MessageTemplate.MatchSender(building_manager)
                                              )
                                            );
 
     structm_fipa_req_mt = MessageTemplate.and(
                                              MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
                                              MessageTemplate.and(
-                                                                  MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                                                                  MessageTemplate.MatchSender(structure_manager)
+                                                MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
+                                                MessageTemplate.MatchSender(structure_manager)
                                               )
                                             );
 
     resm_fipa_req_mt = MessageTemplate.and(
                                              MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
                                              MessageTemplate.and(
-                                                                  MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                                                                  MessageTemplate.MatchSender(resource_manager)
+                                                MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
+                                                MessageTemplate.MatchSender(resource_manager)
                                              )
                                            );
 
     battm_fipa_req_mt = MessageTemplate.and(
                                              MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
                                              MessageTemplate.and(
-                                                                  MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                                                                  MessageTemplate.MatchSender(battle_manager)
+                                                MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
+                                                MessageTemplate.MatchSender(battle_manager)
                                               )
                                             );
 
     cmd_fipa_req_mt = MessageTemplate.and(
-                                             MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-                                             MessageTemplate.and(
-                                                                  MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-                                                                  MessageTemplate.MatchSender(commander)
-                                              )
+                                           MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
+                                           MessageTemplate.and(
+                                              MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
+                                              MessageTemplate.MatchSender(commander)
+                                            )
+                                          );
+    inform_commands_mt = MessageTemplate.and(
+                                            MessageTemplate.not(MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST)),
+                                               MessageTemplate.and(
+                                                 MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+                                                 MessageTemplate.MatchConversationId(ConverId.UnitM.NewCommands.getConId())
+                                                 )
                                             );
-  }
 
-  abstract protected void setGameObject(GameObject g);
-  abstract protected void setGameObjectUpdate(GameObjectUpdate g);
+  }
 
   public DataStore getDS(){
 	  return this.myDS;
@@ -134,17 +143,6 @@ abstract public class KhasBotAgent extends Agent {
   public void setDS(DataStore d){
 	  this.myDS = d;
   }
-  
-  public GameObject getGameObject(){
-	    this.gameObj = ((KhasBotAgent)this.myDS.get(this.getLocalName()+"agent")).gameObj;//, gameObjUp);
-	  
-		return this.gameObj;
-	}
-
-  public GameObjectUpdate getGameObjectUpdate(){
-	  this.gameObjUp = ((KhasBotAgent)this.myDS.get(this.getLocalName()+"agent")).gameObjUp;
-		return this.gameObjUp;
-	}
 
   @Override
   protected void takeDown(){
