@@ -23,55 +23,60 @@ import starcraftbot.proxybot.khasbot.unitma.UnitObject;
  */
 @SuppressWarnings("serial")
 public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
-	ResourceManagerAgent agent=null;
-    DataStore ds = null;
-	ACLMessage msg = null;
 
-  public ResourceManagerAgentInitFIPAReqUnitM(ResourceManagerAgent a, ACLMessage msg) {
-    super(a,msg);
-    this.msg=msg;
-    this.agent=a;
-    ds = this.agent.getDS();
-    
+  ResourceManagerAgent agent = null;
+  DataStore ds = null;
+  ACLMessage msg = null;
+
+  public ResourceManagerAgentInitFIPAReqUnitM(ResourceManagerAgent a, ACLMessage msg){
+    super(a, msg);
+    this.msg = msg;
+    this.agent = a;
+    ds = agent.getDS();
+
   }
 
-  protected void handleAgree(ACLMessage agree) {
-    //System.out.println("Agent "+refuse.getSender().getName()+" refused to perform the requested action");
-
-    System.out.println(agent.getLocalName() + " <<< AGREE: from " + agree.getSender());
+  @Override
+  protected void handleAgree(ACLMessage agree){
+//    System.out.println(agent.getLocalName() + "<  handleAgree < " + ACLMessage.getPerformative(agree.getPerformative()) + " FROM "
+//            + agree.getSender().getLocalName() + " FOR " + agree.getConversationId());
   }
 
   /* This is the inform INFORM letting us know that the request was completed */
-  protected void handleInform(ACLMessage inform) {
-    //System.out.println("ResourceManagerInit "+inform.getSender().getName()+" successfully performed the requested action");
-	this.agent = (ResourceManagerAgent)this.agent.getDS().get(this.agent.getLocalName()+"agent");
-	if(inform.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())) {
-      System.out.println(this.agent.getLocalName() + " <<< INFORM: request for a worker was APPROVED");
-      try {
-        UnitObject worker = (UnitObject)inform.getContentObject();
-        this.agent.addWorker(worker);
-      } catch (UnreadableException ex) {
+  @Override
+  protected void handleInform(ACLMessage inform){
+//      System.out.println(agent.getLocalName() + "<  handleInform < " + ACLMessage.getPerformative(inform.getPerformative()) + " FROM " +
+//          inform.getSender().getLocalName() + " FOR " + inform.getConversationId());
+    if(inform.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())){
+      try{
+        UnitObject worker = (UnitObject) inform.getContentObject();
+        agent.addWorker(worker);
+        //set this to false, so that I can ask again
+        agent.gather_res.setRequestWorker(false);
+      }catch(UnreadableException ex){
         Logger.getLogger(ResourceManagerAgentInitFIPAReqUnitM.class.getName()).log(Level.SEVERE, null, ex);
       }
-      this.agent.getDS().put(this.agent.getLocalName()+"agent", this.agent);
-    }else
-      System.out.println(this.agent.getLocalName() + " <<< INFORM: unknown conversation");
-  }
-
-  protected void handleRefuse(ACLMessage refuse) {
-    //System.out.println("Agent "+refuse.getSender().getName()+" refused to perform the requested action");
-    if(refuse.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())) {
-      System.out.println(agent.getLocalName() + " <<< REFUSE: request for a worker was DENIED");
+    }else{
+      System.out.println(this.agent.getLocalName() + " <<< INFORM: unknown conversation" + inform.getSender());
     }
-    else
-    	System.out.println(agent.getLocalName() + " <<< REFUSE: unknown conversation from " + refuse.getSender());
   }
 
-
-  protected void handleFailure(ACLMessage failure) {
-      // FAILURE notification from the JADE runtime: the receiver
-      // does not exist
-      System.out.println(agent.getLocalName() + " <<< FAILURE: from " + failure.getSender());
+  @Override
+  protected void handleRefuse(ACLMessage refuse){
+      System.out.println(agent.getLocalName() + "<  handleRefuse < " + ACLMessage.getPerformative(refuse.getPerformative()) + " FROM " +
+          refuse.getSender().getLocalName() + " FOR " + refuse.getConversationId());
+    if(refuse.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())){
+      //set this to false, so that I can ask again
+      agent.gather_res.setRequestWorker(false);
+    }else{
+      System.out.println(agent.getLocalName() + " <<< REFUSE: unknown conversation from " + refuse.getSender());
+    }
   }
- 
+
+  @Override
+  protected void handleFailure(ACLMessage failure){
+      System.out.println(agent.getLocalName() + "<  handleFailure < " + ACLMessage.getPerformative(failure.getPerformative()) + " FROM " +
+          failure.getSender().getLocalName() + " FOR " + failure.getConversationId());
+      agent.gather_res.setRequestWorker(false);
+  }
 }

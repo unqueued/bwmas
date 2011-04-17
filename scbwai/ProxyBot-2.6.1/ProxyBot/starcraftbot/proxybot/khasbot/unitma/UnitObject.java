@@ -2,8 +2,10 @@
 package starcraftbot.proxybot.khasbot.unitma;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import starcraftbot.proxybot.CommandId.Order;
+import starcraftbot.proxybot.khasbot.mapma.MapLocation;
 
 
 /**
@@ -17,14 +19,14 @@ import starcraftbot.proxybot.CommandId.Order;
  *
  */
 @SuppressWarnings("serial")
-public class UnitObject implements Serializable{
+public class UnitObject implements Serializable, Comparable {
 	
 	/**
 	 *  THESE ARE ATTRIBUTES TAKEN FROM UNITWME.. MAY WANT TO CHANGE!!!
 	 */
 	private int updateDataID;
 	//private int playerID; //don't need this, thi
-	//private Unit type;
+	private Unit type;
 	private int realX; 			
 	private int realY;			
 	private int hitPoints; 		
@@ -44,6 +46,8 @@ public class UnitObject implements Serializable{
 	private int y;      		
 
 
+  private MapLocation destLoc = null;
+  
 	public UnitObject(){
     
   }
@@ -64,7 +68,23 @@ public class UnitObject implements Serializable{
 	public int getID() {
 		return updateDataID;
 	}
-  
+
+  /**
+	 *
+	 * @param iD
+	 */
+	public void setType(int id) {
+		type = Unit.getUnit(id);
+	}
+
+	/**
+	 *
+	 * @return ID of unit
+	 */
+	public Unit getType() {
+		return type;
+	}
+
 	/**
 	 * 
 	 * @param hitPoints
@@ -331,15 +351,99 @@ public class UnitObject implements Serializable{
   }
 
 
-public boolean isMining() {
-	return ((this.getOrder() == Order.MiningMinerals.ordinal()) ||
-	(this.getOrder() == Order.MoveToMinerals.ordinal()) ||
-	(this.getOrder() == Order.ReturnMinerals.ordinal()) ||
-	(this.getOrder() == Order.WaitForMinerals.ordinal()));
-}
+  public boolean isMining() {
+    return ((this.getOrder() == Order.MiningMinerals.ordinal()) ||
+    (this.getOrder() == Order.MoveToMinerals.ordinal()) ||
+    (this.getOrder() == Order.ReturnMinerals.ordinal()) ||
+    (this.getOrder() == Order.WaitForMinerals.ordinal()));
+  }
 
-public String toString(){
-	return "Unit[ "+ this.getID() + "] at (" + this.getRealX() + "," + this.getRealY() +") is doing: " + Order.values()[this.getOrder()];
-}
+  public String toString(){
+    return "Unit[ "+ this.getID() + "] at (" + this.getRealX() + "," + this.getRealY() +") is doing: " + Order.values()[this.getOrder()];
+  }
 
+  public void setLoc(MapLocation loc){
+    destLoc = loc;
+  }
+
+  public double distance(){
+    double dx = getRealX() - destLoc.getX();
+    double dy = getRealY() - destLoc.getY();
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  @Override
+  public int compareTo(Object o){
+    if( this.distance() == ((UnitObject)o).distance() )
+      return 0;
+    else if(this.distance() > ((UnitObject)o).distance())
+      return 1;
+    else
+      return -1;
+  }
+  /* not the best place for this I know */
+  public static void heapSort(ArrayList<UnitObject> array) {
+      /* This method performs an in-place heapsort. Starting
+       * from the beginning of the array, the array is swapped
+       * into a binary max heap.  Then elements are removed
+       * from the heap, and added to the front of the sorted
+       * section of the array. */
+
+      /* Insertion onto heap */
+      for (int heapsize=0; heapsize<array.size(); heapsize++) {
+          /* Step one in adding an element to the heap in the
+           * place that element at the end of the heap array-
+           * in this case, the element is already there. */
+          int n = heapsize; // the index of the inserted int
+          while (n > 0) { // until we reach the root of the heap
+              int p = (n-1)/2; // the index of the parent of n
+              if( array.get(n).compareTo(array.get(p)) == 1) { // child is larger than parent
+                  arraySwap(array, n, p); // swap child with parent
+                  n = p; // check parent
+              }
+              else // parent is larger than child
+                  break; // all is good in the heap
+          }
+      }
+
+      /* Removal from heap */
+      for (int heapsize=array.size(); heapsize>0;) {
+          arraySwap(array, 0, --heapsize); // swap root with the last heap element
+          int n = 0; // index of the element being moved down the tree
+          while (true) {
+              int left = (n*2)+1;
+              if (left >= heapsize) // node has no left child
+                  break; // reached the bottom; heap is heapified
+              int right = left+1;
+              if (right >= heapsize) { // node has a left child, but no right child
+                  if (array.get(left).compareTo(array.get(n)) == 1) // if left child is greater than node
+                      arraySwap(array, left, n); // swap left child with node
+                  break; // heap is heapified
+              }
+              if (array.get(left).compareTo(array.get(n)) == 1) { // (left > n)
+                  if (array.get(left).compareTo(array.get(right)) == 1) { // (left > right) & (left > n)
+                      arraySwap(array, left, n);
+                      n = left; continue; // continue recursion on left child
+                  } else { // (right > left > n)
+                      arraySwap(array, right, n);
+                      n = right; continue; // continue recursion on right child
+                  }
+              } else { // (n > left)
+                  if (array.get(right).compareTo(array.get(n)) == 1) { // (right > n > left)
+                      arraySwap(array, right, n);
+                      n = right; continue; // continue recursion on right child
+                  } else { // (n > left) & (n > right)
+                      break; // node is greater than both children, so it's heapified
+                  }
+              }
+          }
+      }
+  }
+  public static void arraySwap(ArrayList<UnitObject> array, int a, int b) {
+    UnitObject temp = array.get(a);
+    array.set(a,array.get(b));
+    array.set(b,temp);
+  }
+
+  
 }

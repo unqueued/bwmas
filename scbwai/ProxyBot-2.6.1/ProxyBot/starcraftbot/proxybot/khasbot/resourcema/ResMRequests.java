@@ -3,7 +3,9 @@ package starcraftbot.proxybot.khasbot.resourcema;
 
 /* conversation id's that are focused around the map manager */
 public enum ResMRequests{
-  RequestWorker("Request-Worker"), 
+  RequestWorker("Request-Worker"),
+  MineralList("Mineral-List"),
+  GasList("Gas-List"),
   doCommands("Do-Commands");
 
   String conversation_id;

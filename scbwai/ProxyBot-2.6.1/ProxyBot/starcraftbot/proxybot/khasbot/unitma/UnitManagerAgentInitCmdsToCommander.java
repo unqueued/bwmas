@@ -11,7 +11,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import starcraftbot.proxybot.command.GameCommand;
-import starcraftbot.proxybot.command.GameCommandQueue;
 import starcraftbot.proxybot.ConverId;
 
 /**
@@ -24,40 +23,43 @@ public class UnitManagerAgentInitCmdsToCommander extends SimpleBehaviour{
 	UnitManagerAgent agent=null;
 	DataStore ds = null;
   AID commander = null;
-  GameCommandQueue msg_cmds = null;
+  ArrayList<GameCommand> msg_cmds = null;
 
   public UnitManagerAgentInitCmdsToCommander(UnitManagerAgent a, AID commander) {
     super(a);
-    this.agent=a;
-    this.ds = this.agent.getDS();
+    agent=a;
+    ds = agent.getDS();
     this.commander = commander;
   }
 
-  public void cmdToSend(GameCommandQueue cmds){
-    this.msg_cmds = cmds;
+  public void cmdToSend(ArrayList<GameCommand> cmds){
+    msg_cmds = cmds;
   }
 
   /*
    *
    */
+  @Override
   public void action() {
-    //send command message back to the commander
+    //System.out.println(agent.getLocalName() + " sending commands to commander");
     ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
     msg.addReceiver(commander);
     msg.setConversationId(ConverId.Commands.ExecuteCommand.getConId());
 
     try {
-      msg.setContentObject(this.msg_cmds);
+      if(msg_cmds != null){
+        msg.setContentObject((ArrayList<GameCommand>)msg_cmds);
+        agent.send(msg);
+      }
     } catch (IOException ex) {
       Logger.getLogger(UnitManagerAgentInitCmdsToCommander.class.getName()).log(Level.SEVERE, null, ex);
     }
-   
-    this.agent.send(msg);
-
+    
 	}//end action
 
   @Override
   public boolean done() {
+    System.out.println(agent.getLocalName() + " finished sending commands to Commander");
     return true;
   }
 

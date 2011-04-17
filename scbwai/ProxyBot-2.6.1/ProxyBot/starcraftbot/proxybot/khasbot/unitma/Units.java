@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
+
 
 /**
  *
@@ -81,7 +81,7 @@ public class Units implements Serializable {
 
 			unit.setID(Integer.parseInt(attributes[0]));
       //unit.setPlayerID(attributes[1]);  //skipped since separate units for player and enemy
-			//unit.setType(attributes[2]);  //skipped since the units are stored by type (key) in a hashmap 
+			unit.setType(Integer.parseInt(attributes[2]));  //skipped since the units are stored by type (key) in a hashmap
 			unit.setRealX(Integer.parseInt(attributes[3]));
 			unit.setRealY(Integer.parseInt(attributes[4]));
 			unit.setHitPoints(Integer.parseInt(attributes[5]));
@@ -102,6 +102,10 @@ public class Units implements Serializable {
       unit.setX(unit.getRealX() / 32);
 			unit.setY(unit.getRealY() / 32);
 
+      /* I will only put units into my map that belong to me. All the other ones will go into
+       * netural.
+       * BUG: the playerID of neutral is not coming in properly, so i'm going to set it here
+       */
       /*
        *  NOTE: if i'm not creating a hashmap everytime, then I must check for the units based 
        *  on their id so that i don't put duplicates
@@ -113,46 +117,34 @@ public class Units implements Serializable {
           unit_list = (ArrayList<UnitObject>)myPlayersUnits.remove(unit_type);
           //this insert must be done to avoid adding duplicate unit ids for the same unit
           unit_list = unitInsertIntoUnits(unit_list,unit);
-          unit_list.trimToSize();
+          //unit_list.trimToSize();
           myPlayersUnits.put(unit_type, unit_list);
         }else{
           //key doesn't exits so we create the ArrayList and add the new UnitObject
           unit_list = new ArrayList<UnitObject>();
           unit_list.add(unit);
-          unit_list.trimToSize();
+          //unit_list.trimToSize();
           myPlayersUnits.put(unit_type,unit_list);
         }
-      }else if(pID == -1){
+      }
+      /* now test for Minerals and Gas and assign them to the Neutral player */
+      if(Unit.getUnit(unit_type) == Unit.Resource_Mineral_Field ||
+         Unit.getUnit(unit_type) == Unit.Resource_Vespene_Geyser ){
         if(neutralPlayersUnits.containsKey((int)unit_type)) {
           //key exits so get the ArrayList and add the new UnitObject
           unit_list = (ArrayList<UnitObject>)neutralPlayersUnits.remove(unit_type);
           //this insert must be done to avoid adding duplicate unit ids for the same unit
           unit_list = unitInsertIntoUnits(unit_list,unit);
-          unit_list.trimToSize();
+          //unit_list.trimToSize();
           neutralPlayersUnits.put(unit_type, unit_list);
         }else{
           //key doesn't exits so we create the ArrayList and add the new UnitObject
           unit_list = new ArrayList<UnitObject>();
           unit_list.add(unit);
-          unit_list.trimToSize();
+          //unit_list.trimToSize();
           neutralPlayersUnits.put(unit_type,unit_list);
         }
-      }else{
-        if(enemyPlayersUnits.containsKey((int)unit_type)) {
-          //key exits so get the ArrayList and add the new UnitObject
-          unit_list = (ArrayList<UnitObject>)enemyPlayersUnits.remove(unit_type);
-          //this insert must be done to avoid adding duplicate unit ids for the same unit
-          unit_list = unitInsertIntoUnits(unit_list,unit);
-          unit_list.trimToSize();
-          enemyPlayersUnits.put(unit_type, unit_list);
-        }else{
-          //key doesn't exits so we create the ArrayList and add the new UnitObject
-          unit_list = new ArrayList<UnitObject>();
-          unit_list.add(unit);
-          unit_list.trimToSize();
-          enemyPlayersUnits.put(unit_type,unit_list);
-        }
-      }//end player id checks
+      }
 		}//end for 
 		
 		
@@ -173,7 +165,7 @@ public class Units implements Serializable {
         u.setID(unit.getID());
 
         //u.setPlayerID(unit);  //skipped since separate units for player and enemy
-        //u.setType(unit);  //skipped since the units are stored by type (key) in a hashmap 
+        u.setType(unit.getType().getNumValue());  
         u.setRealX(unit.getRealX());
         u.setRealY(unit.getRealY());
         u.setHitPoints(unit.getHitPoints());
@@ -201,46 +193,15 @@ public class Units implements Serializable {
     return unit_list;
   }//end unitInsertIntoUnits
 
-  //
-  // For these definitions look see Unit.java
-  //
 
   //
   // my player's units
   //
 
-  /* neutral units */
-  public ArrayList<UnitObject> getMyPlayersUnit(Unit.NonStructure.Neutral u){
-    return myPlayersUnits.get(u.getNumValue());
-  }
-
-  /* terran units */
-  public ArrayList<UnitObject> getMyPlayersUnit(Unit.NonStructure.Terran u){
-    return myPlayersUnits.get(u.getNumValue());
-  }
-
-  /* terran structures */
-  public ArrayList<UnitObject> getMyPlayersUnit(Unit.Structure.Terran u){
-    return myPlayersUnits.get(u.getNumValue());
-  }
-
-  /* zerg units */
-  public ArrayList<UnitObject> getMyPlayersUnit(Unit.NonStructure.Zerg u){
-    return myPlayersUnits.get(u.getNumValue());
-  }
-
-  /* zerg structures */
-  public ArrayList<UnitObject> getMyPlayersUnit(Unit.Structure.Zerg u){
-    return myPlayersUnits.get(u.getNumValue());
-  }
-
-  /* protoss units */
-  public ArrayList<UnitObject> getMyPlayersUnit(Unit.NonStructure.Protoss u){
-    return myPlayersUnits.get(u.getNumValue());
-  }
-
-  /* protoss structures */
-  public ArrayList<UnitObject> getMyPlayersUnit(Unit.Structure.Protoss u){
+  /*
+   * This method will return a specific arraylist based on the Unit passed in.
+   */
+  public ArrayList<UnitObject> getMyPlayersUnit(Unit u){
     return myPlayersUnits.get(u.getNumValue());
   }
 
@@ -254,64 +215,65 @@ public class Units implements Serializable {
 
     //get only the keys in the hashmap
     for(Iterator itr = myPlayersUnits.keySet().iterator(); itr.hasNext(); ){
-      int key = Integer.parseInt(itr.next().toString());
+      Unit key = Unit.getUnit(Integer.parseInt(itr.next().toString()));
 
-      if( key == Unit.Structure.Terran.Terran_Command_Center.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Comsat_Station.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Nuclear_Silo.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Supply_Depot.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Refinery.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Barracks.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Academy.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Factory.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Starport.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Control_Tower.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Science_Facility.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Covert_Ops.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Physics_Lab.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Machine_Shop.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Engineering_Bay.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Armory.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Missile_Turret.getNumValue() ||
-          key == Unit.Structure.Terran.Terran_Bunker.getNumValue() ||
-          
-          key == Unit.Structure.Zerg.Zerg_Infested_Command_Center.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Hatchery.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Lair.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Hive.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Nydus_Canal.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Hydralisk_Den.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Defiler_Mound.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Greater_Spire.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Queen_s_Nest.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Evolution_Chamber.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Ultralisk_Cavern.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Spire.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Spawning_Pool.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Creep_Colony.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Spore_Colony.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Sunken_Colony.getNumValue() ||
-          key == Unit.Structure.Zerg.Zerg_Extractor.getNumValue() ||
-          
-          key == Unit.Structure.Protoss.Protoss_Nexus.getNumValue() ||
-          key == Unit.Structure.Protoss.Protoss_Robotics_Facility.getNumValue() ||
-          key == Unit.Structure.Protoss.Protoss_Pylon.getNumValue() ||
-          key == Unit.Structure.Protoss.Protoss_Assimilator.getNumValue() ||
-          key == Unit.Structure.Protoss.Protoss_Observatory.getNumValue() ||
-          key == Unit.Structure.Protoss.Protoss_Gateway.getNumValue() ||
-          key == Unit.Structure.Protoss.Protoss_Photon_Cannon.getNumValue() ||
-          key == Unit.Structure.Protoss.Protoss_Citadel_of_Adun.getNumValue() ||
-          key == Unit.Structure.Protoss.Protoss_Cybernetics_Core.getNumValue() ||
-          key == Unit.Structure.Protoss.Protoss_Templar_Archives.getNumValue() ||
-          key == Unit.Structure.Protoss.Protoss_Forge.getNumValue() ||
-          key == Unit.Structure.Protoss.Protoss_Stargate.getNumValue() ||
-          key == Unit.Structure.Protoss.Protoss_Fleet_Beacon.getNumValue() ||
-          key == Unit.Structure.Protoss.Protoss_Arbiter_Tribunal.getNumValue() ||
-          key == Unit.Structure.Protoss.Protoss_Robotics_Support_Bay.getNumValue() ||
-          key == Unit.Structure.Protoss.Protoss_Shield_Battery.getNumValue() )
+      switch(key) {
+        case Terran_Command_Center:
+        case Terran_Comsat_Station:
+        case Terran_Nuclear_Silo:
+        case Terran_Supply_Depot:
+        case Terran_Refinery:
+        case Terran_Barracks:
+        case Terran_Academy:
+        case Terran_Factory:
+        case Terran_Starport:
+        case Terran_Control_Tower:
+        case Terran_Science_Facility:
+        case Terran_Covert_Ops:
+        case Terran_Physics_Lab:
+        case Terran_Machine_Shop:
+        case Terran_Engineering_Bay:
+        case Terran_Armory:
+        case Terran_Missile_Turret:
+        case Terran_Bunker:
         
-        structures.put(key, myPlayersUnits.get(key));
+        case Zerg_Infested_Command_Center:
+        case Zerg_Hatchery:
+        case Zerg_Lair:
+        case Zerg_Hive:
+        case Zerg_Nydus_Canal:
+        case Zerg_Hydralisk_Den:
+        case Zerg_Defiler_Mound:
+        case Zerg_Greater_Spire:
+        case Zerg_Queen_s_Nest:
+        case Zerg_Evolution_Chamber:
+        case Zerg_Ultralisk_Cavern:
+        case Zerg_Spire:
+        case Zerg_Spawning_Pool:
+        case Zerg_Creep_Colony:
+        case Zerg_Spore_Colony:
+        case Zerg_Sunken_Colony:
+        case Zerg_Extractor:
+        
+        case Protoss_Nexus:
+        case Protoss_Robotics_Facility:
+        case Protoss_Pylon:
+        case Protoss_Assimilator:
+        case Protoss_Observatory:
+        case Protoss_Gateway:
+        case Protoss_Photon_Cannon:
+        case Protoss_Citadel_of_Adun:
+        case Protoss_Cybernetics_Core:
+        case Protoss_Templar_Archives:
+        case Protoss_Forge:
+        case Protoss_Stargate:
+        case Protoss_Fleet_Beacon:
+        case Protoss_Arbiter_Tribunal:
+        case Protoss_Robotics_Support_Bay:
+        case Protoss_Shield_Battery:
+          structures.put(key.getNumValue(), myPlayersUnits.get(key.getNumValue()));
       }
+    }
 
     return structures;
   }
@@ -333,89 +295,89 @@ public class Units implements Serializable {
 
     //get only the keys in the hashmap
     for(Iterator itr = myPlayersUnits.keySet().iterator(); itr.hasNext(); ){
-      int key = Integer.parseInt(itr.next().toString());
+      Unit key = Unit.getUnit(Integer.parseInt(itr.next().toString()));
 
-      if( key == Unit.NonStructure.Terran.Terran_Marine.getNumValue() ||
-          key == Unit.NonStructure.Terran.Terran_Ghost.getNumValue() ||
-          key == Unit.NonStructure.Terran.Terran_Vulture.getNumValue() ||
-          key == Unit.NonStructure.Terran.Terran_Goliath.getNumValue() ||
-          key == Unit.NonStructure.Terran.Terran_Siege_Tank_Tank_Mode.getNumValue() ||
-          key == Unit.NonStructure.Terran.Terran_SCV.getNumValue() ||
-          key == Unit.NonStructure.Terran.Terran_Wraith.getNumValue() ||
-          key == Unit.NonStructure.Terran.Terran_Science_Vessel.getNumValue() ||
-          key == Unit.NonStructure.Terran.Terran_Dropship.getNumValue() ||
-          key == Unit.NonStructure.Terran.Terran_Battlecruiser.getNumValue() ||
-          key == Unit.NonStructure.Terran.Terran_Vulture_Spider_Mine.getNumValue() ||
-          key == Unit.NonStructure.Terran.Terran_Nuclear_Missile.getNumValue() ||
-          key == Unit.NonStructure.Terran.Terran_Siege_Tank_Siege_Mode.getNumValue() ||
-          key == Unit.NonStructure.Terran.Terran_Firebat.getNumValue() ||
-          key == Unit.NonStructure.Terran.Spell_Scanner_Sweep.getNumValue() ||
-          key == Unit.NonStructure.Terran.Terran_Medic.getNumValue() ||
-          key == Unit.NonStructure.Terran.Terran_Valkyrie.getNumValue() ||
+      switch(key) {
+        case Terran_Marine:
+        case Terran_Ghost:
+        case Terran_Vulture:
+        case Terran_Goliath:
+        case Terran_Siege_Tank_Tank_Mode:
+        case Terran_SCV:
+        case Terran_Wraith:
+        case Terran_Science_Vessel:
+        case Terran_Dropship:
+        case Terran_Battlecruiser:
+        case Terran_Vulture_Spider_Mine:
+        case Terran_Nuclear_Missile:
+        case Terran_Siege_Tank_Siege_Mode:
+        case Terran_Firebat:
+        case Spell_Scanner_Sweep:
+        case Terran_Medic:
+        case Terran_Valkyrie:
 
-          key == Unit.NonStructure.Zerg.Zerg_Larva.getNumValue() ||
-          key == Unit.NonStructure.Zerg.Zerg_Egg.getNumValue() ||
-          key == Unit.NonStructure.Zerg.Zerg_Zergling.getNumValue() ||
-          key == Unit.NonStructure.Zerg.Zerg_Hydralisk.getNumValue() ||
-          key == Unit.NonStructure.Zerg.Zerg_Ultralisk.getNumValue() ||
-          key == Unit.NonStructure.Zerg.Zerg_Broodling.getNumValue() ||
-          key == Unit.NonStructure.Zerg.Zerg_Drone.getNumValue() ||
-          key == Unit.NonStructure.Zerg.Zerg_Overlord.getNumValue() ||
-          key == Unit.NonStructure.Zerg.Zerg_Mutalisk.getNumValue() ||
-          key == Unit.NonStructure.Zerg.Zerg_Guardian.getNumValue() ||
-          key == Unit.NonStructure.Zerg.Zerg_Queen.getNumValue() ||
-          key == Unit.NonStructure.Zerg.Zerg_Defiler.getNumValue() ||
-          key == Unit.NonStructure.Zerg.Zerg_Scourge.getNumValue() ||
-          key == Unit.NonStructure.Zerg.Zerg_Infested_Terran.getNumValue() ||
-          key == Unit.NonStructure.Zerg.Zerg_Cocoon.getNumValue() ||
-          key == Unit.NonStructure.Zerg.Zerg_Devourer.getNumValue() ||
+        case Zerg_Larva:
+        case Zerg_Egg:
+        case Zerg_Zergling:
+        case Zerg_Hydralisk:
+        case Zerg_Ultralisk:
+        case Zerg_Broodling:
+        case Zerg_Drone:
+        case Zerg_Overlord:
+        case Zerg_Mutalisk:
+        case Zerg_Guardian:
+        case Zerg_Queen:
+        case Zerg_Defiler:
+        case Zerg_Scourge:
+        case Zerg_Infested_Terran:
+        case Zerg_Cocoon:
+        case Zerg_Devourer:
+        case Protoss_Corsair:
+        case Protoss_Dark_Templar:
+        case Protoss_Dark_Archon:
+        case Protoss_Probe:
+        case Protoss_Zealot:
+        case Protoss_Dragoon:
+        case Protoss_High_Templar:
+        case Protoss_Archon:
+        case Protoss_Shuttle:
+        case Protoss_Scout:
+        case Protoss_Arbiter:
+        case Protoss_Carrier:
+        case Protoss_Interceptor:
+        case Protoss_Reaver:
+        case Protoss_Observer:
+        case Protoss_Scarab:
 
-          key == Unit.NonStructure.Protoss.Protoss_Corsair.getNumValue() ||
-          key == Unit.NonStructure.Protoss.Protoss_Dark_Templar.getNumValue() ||
-          key == Unit.NonStructure.Protoss.Protoss_Dark_Archon.getNumValue() ||
-          key == Unit.NonStructure.Protoss.Protoss_Probe.getNumValue() ||
-          key == Unit.NonStructure.Protoss.Protoss_Zealot.getNumValue() ||
-          key == Unit.NonStructure.Protoss.Protoss_Dragoon.getNumValue() ||
-          key == Unit.NonStructure.Protoss.Protoss_High_Templar.getNumValue() ||
-          key == Unit.NonStructure.Protoss.Protoss_Archon.getNumValue() ||
-          key == Unit.NonStructure.Protoss.Protoss_Shuttle.getNumValue() ||
-          key == Unit.NonStructure.Protoss.Protoss_Scout.getNumValue() ||
-          key == Unit.NonStructure.Protoss.Protoss_Arbiter.getNumValue() ||
-          key == Unit.NonStructure.Protoss.Protoss_Carrier.getNumValue() ||
-          key == Unit.NonStructure.Protoss.Protoss_Interceptor.getNumValue() ||
-          key == Unit.NonStructure.Protoss.Protoss_Reaver.getNumValue() ||
-          key == Unit.NonStructure.Protoss.Protoss_Observer.getNumValue() ||
-          key == Unit.NonStructure.Protoss.Protoss_Scarab.getNumValue() ||
-
-          key == Unit.NonStructure.Neutral.Critter_Rhynadon.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Critter_Bengalaas.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Critter_Scantid.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Critter_Kakaru.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Critter_Ragnasaur.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Critter_Ursadon.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Special_Crashed_Norad_II.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Special_Ion_Cannon.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Special_Overmind_With_Shell.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Special_Overmind.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Special_Mature_Chrysalis.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Special_Cerebrate.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Special_Cerebrate_Daggoth.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Special_Stasis_Cell_Prison.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Special_Khaydarin_Crystal_Form.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Special_Protoss_Temple.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Special_XelNaga_Temple.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Resource_Mineral_Field.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Resource_Vespene_Geyser.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Special_Warp_Gate.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Special_Psi_Disrupter.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Special_Power_Generator.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Special_Overmind_Cocoon.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Spell_Dark_Swarm.getNumValue() ||
-          key == Unit.NonStructure.Neutral.None.getNumValue() ||
-          key == Unit.NonStructure.Neutral.Unknown.getNumValue() )
-        //System.out.println("nonstruct trigger: " + key );
-        nonstructures.put(key, myPlayersUnits.get(key));
-     }
+        case Critter_Rhynadon:
+        case Critter_Bengalaas:
+        case Critter_Scantid:
+        case Critter_Kakaru:
+        case Critter_Ragnasaur:
+        case Critter_Ursadon:
+        case Special_Crashed_Norad_II:
+        case Special_Ion_Cannon:
+        case Special_Overmind_With_Shell:
+        case Special_Overmind:
+        case Special_Mature_Chrysalis:
+        case Special_Cerebrate:
+        case Special_Cerebrate_Daggoth:
+        case Special_Stasis_Cell_Prison:
+        case Special_Khaydarin_Crystal_Form:
+        case Special_Protoss_Temple:
+        case Special_XelNaga_Temple:
+        case Resource_Mineral_Field:
+        case Resource_Vespene_Geyser:
+        case Special_Warp_Gate:
+        case Special_Psi_Disrupter:
+        case Special_Power_Generator:
+        case Special_Overmind_Cocoon:
+        case Spell_Dark_Swarm:
+        case None:
+        case Unknown:
+          nonstructures.put(key.getNumValue(), myPlayersUnits.get(key.getNumValue()));
+       }
+    }
     
     return nonstructures;
   }
@@ -425,76 +387,98 @@ public class Units implements Serializable {
   // Enemy units
   //
   /* neutral units */
-  public ArrayList<UnitObject> getEnemyPlayersUnit(Unit.NonStructure.Neutral u){
+  public ArrayList<UnitObject> getEnemyPlayersUnit(Unit u){
     return enemyPlayersUnits.get(u.getNumValue());
   }
-
-  /* terran units */
-  public ArrayList<UnitObject> getEnemyPlayersUnit(Unit.NonStructure.Terran u){
-    return enemyPlayersUnits.get(u.getNumValue());
-  }
-
-  /* terran structures */
-  public ArrayList<UnitObject> getEnemyPlayersUnit(Unit.Structure.Terran u){
-    return enemyPlayersUnits.get(u.getNumValue());
-  }
-
-  /* zerg units */
-  public ArrayList<UnitObject> getEnemyPlayersUnit(Unit.NonStructure.Zerg u){
-    return enemyPlayersUnits.get(u.getNumValue());
-  }
-
-  /* zerg structures */
-  public ArrayList<UnitObject> getEnemyPlayersUnit(Unit.Structure.Zerg u){
-    return enemyPlayersUnits.get(u.getNumValue());
-  }
-
-  /* protoss units */
-  public ArrayList<UnitObject> getEnemyPlayersUnit(Unit.NonStructure.Protoss u){
-    return enemyPlayersUnits.get(u.getNumValue());
-  }
-
-  /* protoss structures */
-  public ArrayList<UnitObject> getEnemyPlayersUnit(Unit.Structure.Protoss u){
-    return enemyPlayersUnits.get(u.getNumValue());
-  }
-
 
   //
   // Neutral units
   //
   /* neutral units */
-  public ArrayList<UnitObject> getNeutralPlayersUnit(Unit.NonStructure.Neutral u){
+  public ArrayList<UnitObject> getNeutralPlayersUnit(Unit u){
     return neutralPlayersUnits.get(u.getNumValue());
   }
 
-  /* terran units */
-  public ArrayList<UnitObject> getNeutralPlayersUnit(Unit.NonStructure.Terran u){
-    return neutralPlayersUnits.get(u.getNumValue());
+  /**
+   * This method determines if a unit type is a structure.
+   * This one takes in a Unit and makes a call to is
+   * @param type - Unit is passed in and a call to isStructure(int type) is done.
+   * @return
+   * @see isStructure(int type)
+   */
+  public boolean isStructure(Unit type){
+    return isStructure(type.getNumValue());
+  }
+  
+  /**
+   * This method determines if a unit type is a structure.
+   * This takes an integer and determines of that int is a Unit that is a structure.
+   * @param type
+   * @return
+   */
+  public boolean isStructure(int type){
+
+      Unit key = Unit.getUnit(type);
+
+      switch(key) {
+        case Terran_Command_Center:
+        case Terran_Comsat_Station:
+        case Terran_Nuclear_Silo:
+        case Terran_Supply_Depot:
+        case Terran_Refinery:
+        case Terran_Barracks:
+        case Terran_Academy:
+        case Terran_Factory:
+        case Terran_Starport:
+        case Terran_Control_Tower:
+        case Terran_Science_Facility:
+        case Terran_Covert_Ops:
+        case Terran_Physics_Lab:
+        case Terran_Machine_Shop:
+        case Terran_Engineering_Bay:
+        case Terran_Armory:
+        case Terran_Missile_Turret:
+        case Terran_Bunker:
+
+        case Zerg_Infested_Command_Center:
+        case Zerg_Hatchery:
+        case Zerg_Lair:
+        case Zerg_Hive:
+        case Zerg_Nydus_Canal:
+        case Zerg_Hydralisk_Den:
+        case Zerg_Defiler_Mound:
+        case Zerg_Greater_Spire:
+        case Zerg_Queen_s_Nest:
+        case Zerg_Evolution_Chamber:
+        case Zerg_Ultralisk_Cavern:
+        case Zerg_Spire:
+        case Zerg_Spawning_Pool:
+        case Zerg_Creep_Colony:
+        case Zerg_Spore_Colony:
+        case Zerg_Sunken_Colony:
+        case Zerg_Extractor:
+
+        case Protoss_Nexus:
+        case Protoss_Robotics_Facility:
+        case Protoss_Pylon:
+        case Protoss_Assimilator:
+        case Protoss_Observatory:
+        case Protoss_Gateway:
+        case Protoss_Photon_Cannon:
+        case Protoss_Citadel_of_Adun:
+        case Protoss_Cybernetics_Core:
+        case Protoss_Templar_Archives:
+        case Protoss_Forge:
+        case Protoss_Stargate:
+        case Protoss_Fleet_Beacon:
+        case Protoss_Arbiter_Tribunal:
+        case Protoss_Robotics_Support_Bay:
+        case Protoss_Shield_Battery:
+          return true;
+        default:
+          return false;
+
+    }
   }
 
-  /* terran structures */
-  public ArrayList<UnitObject> getNeutralPlayersUnit(Unit.Structure.Terran u){
-    return neutralPlayersUnits.get(u.getNumValue());
-  }
-
-  /* zerg units */
-  public ArrayList<UnitObject> getNeutralPlayersUnit(Unit.NonStructure.Zerg u){
-    return neutralPlayersUnits.get(u.getNumValue());
-  }
-
-  /* zerg structures */
-  public ArrayList<UnitObject> getNeutralPlayersUnit(Unit.Structure.Zerg u){
-    return neutralPlayersUnits.get(u.getNumValue());
-  }
-
-  /* protoss units */
-  public ArrayList<UnitObject> getNeutralPlayersUnit(Unit.NonStructure.Protoss u){
-    return neutralPlayersUnits.get(u.getNumValue());
-  }
-
-  /* protoss structures */
-  public ArrayList<UnitObject> getNeutralPlayersUnit(Unit.Structure.Protoss u){
-    return neutralPlayersUnits.get(u.getNumValue());
-  }
 }
