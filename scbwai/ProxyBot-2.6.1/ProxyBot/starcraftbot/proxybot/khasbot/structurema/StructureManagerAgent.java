@@ -30,27 +30,28 @@ public class StructureManagerAgent extends KhasBotAgent{
 	protected void setup(){
     super.setup();
 
-    StructureManagerAgentRespInfCmd resp_inf_cmd =
-            new StructureManagerAgentRespInfCmd(this,commander_inform_mt);
+    StructureManagerAgentRespInfUnitM resp_inf_unitm =
+            new StructureManagerAgentRespInfUnitM(this,unitm_inform_mt);
     StructureManagerAgentRespFIPAReqUnitM resp_fipa_req_unitm =
             new StructureManagerAgentRespFIPAReqUnitM(this,unitm_fipa_req_mt);
 
-    /* handle ACLMessgae.INFORM responders */
-    addThreadedBehaviour(resp_inf_cmd);
+    resp_inf_unitm.setDataStore(myDS);
+    resp_fipa_req_unitm.setDataStore(myDS);
 
-    /* handle FIPA request responders */
+   
+    addThreadedBehaviour(resp_inf_unitm);
     addThreadedBehaviour(resp_fipa_req_unitm);
 	}
 
-	public void setGameObject(GameObject g)
-	{
-		gameObj = g;
-	}
-
-  public void setGameObjectUpdate(GameObjectUpdate g)
-	{
-		gameObjUp = g;
-	} 
+//	public void setGameObject(GameObject g)
+//	{
+//		gameObj = g;
+//	}
+//
+//  public void setGameObjectUpdate(GameObjectUpdate g)
+//	{
+//		gameObjUp = g;
+//	}
 
   public boolean canBuildNewUnit(){
     return false;

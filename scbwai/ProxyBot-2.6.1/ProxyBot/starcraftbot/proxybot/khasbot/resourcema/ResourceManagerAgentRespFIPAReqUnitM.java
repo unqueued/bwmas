@@ -28,6 +28,8 @@ public class ResourceManagerAgentRespFIPAReqUnitM extends AchieveREResponder {
 
   protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
     ACLMessage reply = request.createReply();
+    System.out.println("Received message from: " + request.getSender().getLocalName());
+    System.out.println("ConverId: " + request.getConversationId());
     //check the conversation id
     if( request.getConversationId().equals(ConverId.ResM.EnoughResourcesToBuild.getConId()) ){
       agent.canEnoughResourcesToBuild();

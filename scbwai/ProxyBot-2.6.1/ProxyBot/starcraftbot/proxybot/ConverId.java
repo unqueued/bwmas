@@ -149,6 +149,10 @@ public class ConverId{
 
   /* conversation id's that are focused around the building manager */
   public enum UnitM{
+    /* services/data that will be provided for MapM */
+    NeedGameObject("Need-Game-Object"),
+    NeedStartLocation("Need-Start-Location"),
+    
     NewStructureToBuild("New-Structure-To-Build"),
     NeedWorker("Need-Worker"),
     SmallUnitGroup("Small-Unit-Group"),   //we will have to define this size

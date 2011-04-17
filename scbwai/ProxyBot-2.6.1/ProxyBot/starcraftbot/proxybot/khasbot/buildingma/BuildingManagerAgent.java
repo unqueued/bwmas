@@ -27,30 +27,31 @@ import starcraftbot.proxybot.khasbot.KhasBotAgent;
 @SuppressWarnings("serial")
 public class BuildingManagerAgent extends KhasBotAgent {
 
+  @Override
   protected void setup(){
     super.setup();
     
-    BuildingManagerAgentRespInfCmd resp_inf_cmd = 
-            new BuildingManagerAgentRespInfCmd(this,commander_inform_mt);
+    BuildingManagerAgentRespInfUnitM resp_inf_unitm =
+            new BuildingManagerAgentRespInfUnitM(this,unitm_inform_mt);
     BuildingManagerAgentRespFIPAReqUnitM resp_fipa_req_unitm =
             new BuildingManagerAgentRespFIPAReqUnitM(this,unitm_fipa_req_mt);
 
-    resp_fipa_req_unitm.setDataStore(resp_inf_cmd.getDataStore());
+    resp_fipa_req_unitm.setDataStore(myDS);
 
-    addThreadedBehaviour(resp_inf_cmd);
+    addThreadedBehaviour(resp_inf_unitm);
     addThreadedBehaviour(resp_fipa_req_unitm);
 
 	}//end setup
 	
-	public void setGameObject(GameObject g)
-	{
-		gameObj = g;
-	}
+//	public void setGameObject(GameObject g)
+//	{
+//		gameObj = g;
+//	}
   
-  public void setGameObjectUpdate(GameObjectUpdate g)
-	{
-		gameObjUp = g;
-	}
+//  public void setGameObjectUpdate(GameObjectUpdate g)
+//	{
+//		gameObjUp = g;
+//	}
 
 }//end BuildingManagerAgent
 

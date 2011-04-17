@@ -75,10 +75,14 @@ public class GameCommand implements Serializable {
 	/** the third argument */
 	private int arg2;
 
+  public GameCommand(){
+    
+  }
 	/**
 	 * Creates a command
 	 * 
-	 * @param command
+   * @param cmdId
+   * @param command
 	 * @param unit_id
 	 * @param arg_0
 	 * @param arg_1
@@ -144,7 +148,7 @@ public class GameCommand implements Serializable {
 	 * 
 	 * // virtual bool rightClick(Unit* target) = 0;
 	 */
-	public static GameCommand rightClick(int unitID, int targetID) {
+	public static GameCommand rightClickUnit(int unitID, int targetID) {
     return new GameCommand(CommandId.StarCraftCommand.rightClickUnit, unitID, targetID, 0, 0);
 	}
 
