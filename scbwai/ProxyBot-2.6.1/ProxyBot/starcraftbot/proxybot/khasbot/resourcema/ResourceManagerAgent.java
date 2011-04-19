@@ -30,7 +30,8 @@ import starcraftbot.proxybot.khasbot.unitma.Units;
 public class ResourceManagerAgent extends KhasBotAgent{
 
 
-  ResourceManagerAgentActionGatherResources gather_res = null;
+  ResourceManagerAgentActionGatherMinerals gather_minerals = null;
+  ResourceManagerAgentActionGatherGas gather_gas = null;
 
   @Override
   protected void setup(){
@@ -43,12 +44,8 @@ public class ResourceManagerAgent extends KhasBotAgent{
 
     /* initialize the some, not all the elements of the datastore */
     myDS.put("gameObj",null);
-//    myDS.put("RequestWorker",false);
     myDS.put("RequestMinerals",false);
-//    myDS.put("my_units",new ArrayList<UnitObject>());
-//    myDS.put("minerals",new ArrayList<UnitObject>());
-//    myDS.put("gas",new ArrayList<UnitObject>());
-//    myDS.put("commandsToDo",new GameCommandQueue());
+    myDS.put("RequestGas",false);
 
     ResourceManagerAgentRespInfUnitM resp_inf_unitm =
             new ResourceManagerAgentRespInfUnitM(this, unitm_inform_mt);
@@ -56,12 +53,12 @@ public class ResourceManagerAgent extends KhasBotAgent{
             new ResourceManagerAgentRespFIPAReqUnitM(this, unitm_fipa_req_mt);
     ResourceManagerAgentRespFIPAReqMapM resp_fipa_req_mapm =
             new ResourceManagerAgentRespFIPAReqMapM(this, mapm_fipa_req_mt);
-    gather_res = new ResourceManagerAgentActionGatherResources(this);
+    gather_minerals = new ResourceManagerAgentActionGatherMinerals(this);
 
     resp_inf_unitm.setDataStore(myDS);
     resp_fipa_req_unitm.setDataStore(myDS);
     resp_fipa_req_mapm.setDataStore(myDS);
-    gather_res.setDataStore(myDS);
+    gather_minerals.setDataStore(myDS);
 
     /* handle ACLMessgae.INFORM responders */
     addThreadedBehaviour(resp_inf_unitm);
@@ -69,7 +66,7 @@ public class ResourceManagerAgent extends KhasBotAgent{
     /* handle FIPA request responders */
     addThreadedBehaviour(resp_fipa_req_unitm);
     addThreadedBehaviour(resp_fipa_req_mapm);
-    addThreadedBehaviour(gather_res);
+    addThreadedBehaviour(gather_minerals);
 
   }
 
@@ -98,10 +95,21 @@ public class ResourceManagerAgent extends KhasBotAgent{
   @SuppressWarnings("unchecked")
   public void addWorker(UnitObject worker){
     ArrayList<UnitObject> my_units = (ArrayList<UnitObject>)myDS.get("my_units");
+    boolean found = false;
+
     if( my_units == null)
       my_units = new ArrayList<UnitObject>();
-    if( my_units.contains(worker) ){
-      gather_res.setRequestWorker(false);
+    
+    for(Iterator itr = my_units.iterator(); itr.hasNext(); ){
+      UnitObject u = (UnitObject)itr.next();
+      if(worker.equalTo(u)){
+        found = true;
+        break;
+      }
+    }
+ 
+    if( found ){
+      gather_minerals.setRequestWorker(false);
     }else{
       my_units.add(worker);
       myDS.put("my_units",my_units);
@@ -130,17 +138,18 @@ public class ResourceManagerAgent extends KhasBotAgent{
   @SuppressWarnings("unchecked")
   public void requestWorker(){
     boolean RequestMinerals = ((Boolean)myDS.get("RequestMinerals"));
-    ArrayList<UnitObject> minerals = ((ArrayList<UnitObject>)myDS.get("mineralList"));
+    ArrayList<UnitObject> minerals = ((ArrayList<UnitObject>)myDS.get("minerals"));
 
     if(minerals == null && !RequestMinerals ){
       sendRequestFor(ResMRequests.MineralList, map_manager);
       RequestMinerals = true;
       myDS.put("RequestMinerals", RequestMinerals);
     }
-//    if(gas == null){
+//    if(gas == null && !RequestGas ){
 //      sendRequestFor(ResMRequests.GasList, map_manager);
+//      RequestMinerals = true;
+//      myDS.put("RequestMinerals", RequestMinerals);
 //    }
-
     sendRequestFor(ResMRequests.RequestWorker, unit_manager);
     
   }
@@ -165,8 +174,6 @@ public class ResourceManagerAgent extends KhasBotAgent{
   public void sendRequestFor(ResMRequests request, AID receiver){
     ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
     msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
-
-    //boolean RequestWorker = ((Boolean)myDS.get("RequestWorker")).booleanValue();
     
     if(request == ResMRequests.RequestWorker){
       msg.setConversationId(ConverId.UnitM.NeedWorker.getConId());
@@ -178,13 +185,11 @@ public class ResourceManagerAgent extends KhasBotAgent{
 
     msg.addReceiver(receiver);
     this.send(msg);
-
-
     
     if( request == ResMRequests.RequestWorker ){
       ResourceManagerAgentInitFIPAReqUnitM init_fipa_req_unitm =
               new ResourceManagerAgentInitFIPAReqUnitM(this, msg);
-      gather_res.setRequestWorker(true);
+      gather_minerals.setRequestWorker(true);
       addThreadedBehaviour(init_fipa_req_unitm);
     }
     if( request == ResMRequests.MineralList ){
@@ -193,8 +198,6 @@ public class ResourceManagerAgent extends KhasBotAgent{
       init_fipa_req_mapm.setDataStore(myDS);
       addThreadedBehaviour(init_fipa_req_mapm);
     }
-
-    
     
   }//end sendRequestFor
 }//end ResourceManagerAgent
