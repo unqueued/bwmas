@@ -45,13 +45,11 @@ public class UnitObject implements Serializable, Comparable {
 	private int x; 			
 	private int y;      		
 
-
   private MapLocation destLoc = null;
   
 	public UnitObject(){
     
   }
-
 	
 	/**
 	 * 
@@ -282,7 +280,6 @@ public class UnitObject implements Serializable, Comparable {
 		return y;
 	}
 
-
   /**
 	 *
 	 * @param x
@@ -370,6 +367,30 @@ public class UnitObject implements Serializable, Comparable {
     double dx = getRealX() - destLoc.getX();
     double dy = getRealY() - destLoc.getY();
     return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  public boolean equalTo(UnitObject u){
+    if( u.getID() == updateDataID )//&&
+//        u.getType() == type &&
+//        u.getRealX() == realX &&
+//        u.getRealY() == realY &&
+//        u.getHitPoints() == hitPoints &&
+//        u.getShields() == shields &&
+//        u.getEnergy() == energy &&
+//        u.getBuildTimer() == buildTimer &&
+//        u.getTrainTimer() == trainTimer &&
+//        u.getResearchTimer() == researchTimer &&
+//        u.getUpgradeTimer() == upgradeTimer &&
+//        u.getOrderTimer() == orderTimer &&
+//        u.getOrder() == order &&
+//        u.getResources() == resources &&
+//        u.getAddonID() == addonID &&
+//        u.getMineCount() == mineCount &&
+//        u.getX() == x &&
+//        u.getY() == y )
+      return true;
+    else
+      return false;
   }
 
   @Override

@@ -52,7 +52,7 @@ public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
         UnitObject worker = (UnitObject) inform.getContentObject();
         agent.addWorker(worker);
         //set this to false, so that I can ask again
-        agent.gather_res.setRequestWorker(false);
+        agent.gather_minerals.setRequestWorker(false);
       }catch(UnreadableException ex){
         Logger.getLogger(ResourceManagerAgentInitFIPAReqUnitM.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -67,7 +67,7 @@ public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
           refuse.getSender().getLocalName() + " FOR " + refuse.getConversationId());
     if(refuse.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())){
       //set this to false, so that I can ask again
-      agent.gather_res.setRequestWorker(false);
+      agent.gather_minerals.setRequestWorker(false);
     }else{
       System.out.println(agent.getLocalName() + " <<< REFUSE: unknown conversation from " + refuse.getSender());
     }
@@ -77,6 +77,6 @@ public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
   protected void handleFailure(ACLMessage failure){
       System.out.println(agent.getLocalName() + "<  handleFailure < " + ACLMessage.getPerformative(failure.getPerformative()) + " FROM " +
           failure.getSender().getLocalName() + " FOR " + failure.getConversationId());
-      agent.gather_res.setRequestWorker(false);
+      agent.gather_minerals.setRequestWorker(false);
   }
 }

@@ -46,7 +46,6 @@ public class ResourceManagerAgentInitFIPAReqMapM extends AchieveREInitiator{
 
     if(inform.getConversationId().equals(ConverId.MapM.NearestMinerals.getConId())){
       ArrayList<UnitObject> minerals = null;
-
       try{
         minerals = (ArrayList<UnitObject>) inform.getContentObject();
       }catch(UnreadableException ex){

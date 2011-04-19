@@ -10,11 +10,14 @@ import jade.lang.acl.*;
 import jade.proto.*;
 import jade.tools.introspector.gui.MyDialog;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import starcraftbot.proxybot.CommandId;
 import starcraftbot.proxybot.ConverId;
 import starcraftbot.proxybot.command.GameCommand;
 import starcraftbot.proxybot.game.GameObject;
+import starcraftbot.proxybot.khasbot.unitma.Unit;
 import starcraftbot.proxybot.khasbot.unitma.UnitObject;
 import starcraftbot.proxybot.khasbot.unitma.Units;
 
@@ -24,7 +27,7 @@ import starcraftbot.proxybot.khasbot.unitma.Units;
  * up by the garbage collector until the next FIPA-Request is made.
  */
 @SuppressWarnings("serial")
-public class ResourceManagerAgentActionGatherResources extends SimpleBehaviour {
+public class ResourceManagerAgentActionGatherMinerals extends SimpleBehaviour {
 
   ResourceManagerAgent agent = null;
   DataStore ds = null;
@@ -34,7 +37,7 @@ public class ResourceManagerAgentActionGatherResources extends SimpleBehaviour {
 
   final int GameInitWorkers = 4;
 
-  public ResourceManagerAgentActionGatherResources(ResourceManagerAgent a) {
+  public ResourceManagerAgentActionGatherMinerals(ResourceManagerAgent a) {
     super(a);
     agent = a;
     ds = agent.getDS();
@@ -68,13 +71,15 @@ public class ResourceManagerAgentActionGatherResources extends SimpleBehaviour {
       ArrayList<GameCommand> lcommandsToDo = new  ArrayList<GameCommand>();
 
       if(minerals != null && my_units != null){
-//        for(UnitObject mineralPatch : minerals){
-          for (UnitObject u : my_units) {
+//        if(!minerals.isEmpty() && !my_units.isEmpty()){
+          //for(UnitObject mineralPatch : minerals){
             UnitObject mineralPatch = minerals.get(0);
-//            UnitObject u = my_units.get(0);
-            lcommandsToDo.add(GameCommand.rightClickUnit(u.getID(),mineralPatch.getID()));
-          }
-//        }
+
+            for(UnitObject u : my_units){
+              //assign only 3 workers per mineral patch
+              lcommandsToDo.add(GameCommand.rightClickUnit(u.getID(),mineralPatch.getID()));
+            }
+        //}
         agent.requestCommandsExe(lcommandsToDo);
       }
     }
