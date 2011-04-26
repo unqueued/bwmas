@@ -1,7 +1,7 @@
 /**
  * 
  */
-package starcraftbot.proxybot.khasbot.resourcema;
+package starcraftbot.proxybot.khasbot.unitma;
 
 import jade.core.*;
 import jade.core.behaviours.DataStore;
@@ -22,13 +22,13 @@ import starcraftbot.proxybot.khasbot.unitma.UnitObject;
  * up by the garbage collector until the next FIPA-Request is made.
  */
 @SuppressWarnings("serial")
-public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
+public class UnitManagerAgentInitFIPAReqStructM extends AchieveREInitiator{
 
-  ResourceManagerAgent agent = null;
+  UnitManagerAgent agent = null;
   DataStore ds = null;
   ACLMessage msg = null;
 
-  public ResourceManagerAgentInitFIPAReqUnitM(ResourceManagerAgent a, ACLMessage msg){
+  public UnitManagerAgentInitFIPAReqStructM(UnitManagerAgent a, ACLMessage msg){
     super(a, msg);
     this.msg = msg;
     this.agent = a;
@@ -38,26 +38,19 @@ public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
 
   @Override
   protected void handleAgree(ACLMessage agree){
-//    System.out.println(agent.getLocalName() + "<  handleAgree < " + ACLMessage.getPerformative(agree.getPerformative()) + " FROM "
-//            + agree.getSender().getLocalName() + " FOR " + agree.getConversationId());
+    System.out.println(agent.getLocalName() + "<  handleAgree < " + ACLMessage.getPerformative(agree.getPerformative()) + " FROM "
+            + agree.getSender().getLocalName() + " FOR " + agree.getConversationId());
   }
 
   /* This is the inform INFORM letting us know that the request was completed */
   @Override
   protected void handleInform(ACLMessage inform){
-//      System.out.println(agent.getLocalName() + "<  handleInform < " + ACLMessage.getPerformative(inform.getPerformative()) + " FROM " +
-//          inform.getSender().getLocalName() + " FOR " + inform.getConversationId());
-    if(inform.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())){
-      try{
-        UnitObject worker = (UnitObject) inform.getContentObject();
-        agent.addWorker(worker);
-        //set this to false, so that I can ask again
-        agent.gather_minerals.setRequestWorker(false);
-      }catch(UnreadableException ex){
-        Logger.getLogger(ResourceManagerAgentInitFIPAReqUnitM.class.getName()).log(Level.SEVERE, null, ex);
-      }
+      System.out.println(agent.getLocalName() + "<  handleInform < " + ACLMessage.getPerformative(inform.getPerformative()) + " FROM " +
+          inform.getSender().getLocalName() + " FOR " + inform.getConversationId());
+    if(inform.getConversationId().equals(ConverId.StructM.TrainNewUnit.getConId())){
+
     }else{
-      System.out.println(agent.getLocalName() + " <<< INFORM: unknown conversation " + inform.getConversationId() + " from " + inform.getSender());
+      System.out.println(agent.getLocalName() + " < INFORM < unknown conversation OF: " + inform.getConversationId() + " FROM: " + inform.getSender().getLocalName());
     }
   }
 
@@ -67,9 +60,9 @@ public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
 //          refuse.getSender().getLocalName() + " FOR " + refuse.getConversationId());
     if(refuse.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())){
       //set this to false, so that I can ask again
-      agent.gather_minerals.setRequestWorker(false);
+      
     }else{
-      System.out.println(agent.getLocalName() + " <<< REFUSE: unknown conversation from " + refuse.getSender());
+      System.out.println(agent.getLocalName() + " < REFUSE < unknown conversation OF: " + refuse.getConversationId() + " FROM: " + refuse.getSender().getLocalName());
     }
   }
 
@@ -77,6 +70,6 @@ public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
   protected void handleFailure(ACLMessage failure){
       System.out.println(agent.getLocalName() + "<  handleFailure < " + ACLMessage.getPerformative(failure.getPerformative()) + " FROM " +
           failure.getSender().getLocalName() + " FOR " + failure.getConversationId());
-      agent.gather_minerals.setRequestWorker(false);
+      
   }
 }

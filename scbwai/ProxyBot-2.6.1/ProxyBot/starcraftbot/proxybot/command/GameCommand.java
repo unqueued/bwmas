@@ -19,7 +19,8 @@ import starcraftbot.proxybot.CommandId;
  * virtual bool buildAddon(UnitType type) = 0; 
  * virtual bool research(TechType tech) = 0; 
  * virtual bool upgrade(UpgradeType upgrade) = 0; 
- * virtual bool stop() = 0; virtual bool holdPosition() = 0; 
+ * virtual bool stop() = 0;
+ * virtual bool holdPosition() = 0;
  * virtual bool patrol(Position position) = 0; 
  * virtual bool follow(Unit* target) = 0; 
  * virtual bool setRallyPosition(Position target) = 0; 
@@ -82,7 +83,6 @@ public class GameCommand implements Serializable {
 	 * Creates a command
 	 * 
    * @param cmdId
-   * @param command
 	 * @param unit_id
 	 * @param arg_0
 	 * @param arg_1
@@ -96,6 +96,14 @@ public class GameCommand implements Serializable {
 		arg2 = arg_2;
 	}
 
+//  public GameCommand(CommandId.StarCraftCommand cmdId, int unit_id, int arg_0, int arg_1, int arg_2) {
+//		command = cmdId;
+//		unitID = unit_id;
+//		arg0 = arg_0;
+//		arg1 = arg_1;
+//		arg2 = arg_2;
+//	}
+//
 	public boolean equals(GameCommand o) {
 		return command == o.command && unitID == o.unitID && arg0 == o.arg0 && arg1 == o.arg1 && arg2 == o.arg2;
 	}
@@ -112,6 +120,20 @@ public class GameCommand implements Serializable {
   /**********************************************************
 	 * GameCommands
 	 *********************************************************/
+  /**
+	 * Tells the unit to attack move the specific location (in tile
+	 * coordinates).
+	 *
+	 * // virtual bool attackMove(Position position) = 0;
+	 */
+//	public static GameCommand groupCommand(int... unitIDs, GameCommand cmd){
+//    String units = "";
+//    for( int id : unitIDs ){
+//      units += id + ",";
+//    }
+//    units = units.substring(0, units.length()-1);
+//    return new GameCommand(CommandId.StarCraftCommand.groupCommand, units, cmd);
+//	}
 
 	/**
 	 * Tells the unit to attack move the specific location (in tile
