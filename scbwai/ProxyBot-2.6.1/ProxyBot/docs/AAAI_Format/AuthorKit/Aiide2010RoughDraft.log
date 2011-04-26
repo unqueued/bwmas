@@ -1,23 +1,16 @@
-This is pdfTeX, Version 3.1415926-1.40.11 (MiKTeX 2.9) (preloaded format=pdflatex 2011.4.16)  25 APR 2011 02:41
+This is pdfTeX, Version 3.1415926-1.40.10 (MiKTeX 2.8) (preloaded format=pdflatex 2010.4.15)  26 APR 2011 16:48
 entering extended mode
-**Aiide2010RoughDraft.tex
+**C:/Users/ajcb/Desktop/MAS_CLASS/bwmas/scbwai/ProxyBot-2.6.1/ProxyBot/docs/AAA
+I_Format/AuthorKit/Aiide2010RoughDraft.tex
 
-("C:\Program Files (x86)\Starcraft\bmas\scbwai\ProxyBot-2.6.1\ProxyBot\docs\AAA
-I_Format\AuthorKit\Aiide2010RoughDraft.tex"
+(C:/Users/ajcb/Desktop/MAS_CLASS/bwmas/scbwai/ProxyBot-2.6.1/ProxyBot/docs/AAAI
+_Format/AuthorKit/Aiide2010RoughDraft.tex
 LaTeX2e <2009/09/24>
-Babel <v3.8l> and hyphenation patterns for english, afrikaans, ancientgreek, ar
-abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
-croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, ga
-lician, german, german-x-2009-06-19, greek, gujarati, hindi, hungarian, iceland
-ic, indonesian, interlingua, irish, italian, kannada, kurmanji, lao, latin, lat
-vian, lithuanian, malayalam, marathi, mongolian, mongolianlmc, monogreek, ngerm
-an, ngerman-x-2009-06-19, nynorsk, oriya, panjabi, pinyin, polish, portuguese, 
-romanian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swis
-sgerman, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, u
-senglishmax, welsh, loaded.
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\article.cls"
+Babel <v3.8l> and hyphenation patterns for english, dumylang, nohyphenation, ge
+rman, ngerman, german-x-2009-06-19, ngerman-x-2009-06-19, french, loaded.
+("C:\Program Files (x86)\MiKTeX\tex\latex\base\article.cls"
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\size10.clo"
+("C:\Program Files (x86)\MiKTeX\tex\latex\base\size10.clo"
 File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
@@ -32,25 +25,25 @@ File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-("C:\Program Files (x86)\Starcraft\bmas\scbwai\ProxyBot-2.6.1\ProxyBot\docs\AAA
-I_Format\AuthorKit\aaai.sty"
+(C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\ProxyBot-2.6.1\ProxyBot\docs\AAAI
+_Format\AuthorKit\aaai.sty
 Conference Style for AAAI for LaTeX 2e -- version of 7 January 2011
 \titlebox=\skip43
-) ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\times.sty"
+) ("C:\Program Files (x86)\MiKTeX\tex\latex\psnfss\times.sty"
 Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
 )
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\helvet.sty"
+("C:\Program Files (x86)\MiKTeX\tex\latex\psnfss\helvet.sty"
 Package: helvet 2005/04/12 PSNFSS-v9.2a (WaS) 
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
+("C:\Program Files (x86)\MiKTeX\tex\latex\graphics\keyval.sty"
 Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \KV@toks@=\toks14
 ))
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\courier.sty"
+("C:\Program Files (x86)\MiKTeX\tex\latex\psnfss\courier.sty"
 Package: courier 2005/04/12 PSNFSS-v9.2a (WaS) 
 )
-("C:\Program Files (x86)\Starcraft\bmas\scbwai\ProxyBot-2.6.1\ProxyBot\docs\AAA
-I_Format\AuthorKit\Aiide2010RoughDraft.aux")
+(C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\ProxyBot-2.6.1\ProxyBot\docs\AAAI
+_Format\AuthorKit\Aiide2010RoughDraft.aux)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
 LaTeX Font Info:    ... okay on input line 13.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
@@ -65,7 +58,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
 LaTeX Font Info:    ... okay on input line 13.
 LaTeX Font Info:    Try loading font information for OT1+ptm on input line 13.
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ot1ptm.fd"
+("C:\Program Files (x86)\MiKTeX\tex\latex\psnfss\ot1ptm.fd"
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
@@ -78,41 +71,44 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 28.
 LaTeX Font Info:    Try loading font information for OMS+ptm on input line 28.
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\omsptm.fd"
+("C:\Program Files (x86)\MiKTeX\tex\latex\psnfss\omsptm.fd"
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <9> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 28.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 29.
+
+Underfull \vbox (badness 1389) has occurred while \output is active []
+
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 41.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 43.
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 46.
- [1{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 48.
+ [1{C:/Users/ajcb/AppData/Local/MiKTeX/2.8/pdftex/config/pdftex.map}
 
 
 
 ] [2] [3
 
 ]
-("C:\Program Files (x86)\Starcraft\bmas\scbwai\ProxyBot-2.6.1\ProxyBot\docs\AAA
-I_Format\AuthorKit\Aiide2010RoughDraft.aux") ) 
+(C:\Users\ajcb\Desktop\MAS_CLASS\bwmas\scbwai\ProxyBot-2.6.1\ProxyBot\docs\AAAI
+_Format\AuthorKit\Aiide2010RoughDraft.aux) ) 
 Here is how much of TeX's memory you used:
- 364 strings out of 494053
- 5578 string characters out of 3146191
- 59349 words of memory out of 3000000
- 3703 multiletter control sequences out of 15000+200000
+ 364 strings out of 495285
+ 5506 string characters out of 3180225
+ 57755 words of memory out of 3000000
+ 3614 multiletter control sequences out of 15000+200000
  17852 words of font info for 33 fonts, out of 3000000 for 9000
- 715 hyphenation exceptions out of 8191
- 23i,10n,19p,1376b,242s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files (x86)/MiKTeX 2.
-9/fonts/enc/dvips/fontname/8r.enc}<C:/Program Files (x86)/MiKTeX 2.9/fonts/type
-1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/
-public/amsfonts/cm/cmsy9.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw
-/times/utmb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmr
-8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on Aiide2010RoughDraft.pdf (3 pages, 69487 bytes).
+ 14 hyphenation exceptions out of 8191
+ 23i,10n,19p,1797b,242s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Program Files (x86)/MiKTeX/font
+s/enc/dvips/fontname/8r.enc}<C:/Program Files (x86)/MiKTeX/fonts/type1/public/a
+msfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/public/amsfont
+s/cm/cmsy9.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/urw/times/utmb8a.pfb>
+<C:/Program Files (x86)/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Program Fil
+es (x86)/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Aiide2010RoughDraft.pdf (3 pages, 70639 bytes).
 PDF statistics:
  33 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
