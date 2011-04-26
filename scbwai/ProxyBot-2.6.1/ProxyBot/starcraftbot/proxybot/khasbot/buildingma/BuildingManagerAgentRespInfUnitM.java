@@ -7,6 +7,7 @@ import java.util.logging.*;
 import starcraftbot.proxybot.game.GameObject;
 import starcraftbot.proxybot.game.GameObjectUpdate;
 import starcraftbot.proxybot.ConverId;
+import starcraftbot.proxybot.khasbot.unitma.UnitObject;
 
 /**
  * This class/behaviour is responsible for handling all the GameObj
@@ -23,22 +24,31 @@ public class BuildingManagerAgentRespInfUnitM extends CyclicBehaviour{
     this.mt=mt;
   }
 
+  @Override
   public void action(){
     ACLMessage msg = agent.receive(mt);
     if (msg != null){
-//      if(msg.getConversationId().equals(ConverId.Game.InitGameObj.getConId())){
-//        try {
-//          agent.setGameObject((GameObject) msg.getContentObject());
-//        } catch (UnreadableException ex) {
-//          Logger.getLogger(BuildingManagerAgentRespInfCmd.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//      }else if(msg.getConversationId().equals(ConverId.Game.GameObjUpdate.getConId())){
+      if(msg.getConversationId().equals(ConverId.Game.InitGameObj.getConId())){
+        try {
+          agent.setGameObject((GameObject) msg.getContentObject());
+        } catch (UnreadableException ex) {
+          Logger.getLogger(BuildingManagerAgentRespInfUnitM.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      }
+//      else if(msg.getConversationId().equals(ConverId.Game.GameObjUpdate.getConId())){
 //        try {
 //          agent.setGameObjectUpdate((GameObjectUpdate) msg.getContentObject());
 //        } catch (UnreadableException ex) {
-//          Logger.getLogger(BuildingManagerAgentRespInfCmd.class.getName()).log(Level.SEVERE, null, ex);
+//          Logger.getLogger(BuildingManagerAgentRespInfUnitM.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //      }
+      if(msg.getConversationId().equals(ConverId.UnitM.SendWorker.getConId())){
+        try {
+          agent.addWorker((UnitObject) msg.getContentObject());
+        } catch (UnreadableException ex) {
+          Logger.getLogger(BuildingManagerAgentRespInfUnitM.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      }
     } else {
       block();
     }

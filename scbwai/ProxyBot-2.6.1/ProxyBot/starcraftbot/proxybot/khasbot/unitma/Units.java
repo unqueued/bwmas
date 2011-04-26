@@ -6,6 +6,7 @@
 package starcraftbot.proxybot.khasbot.unitma;
 
 import java.io.Serializable;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -44,10 +45,11 @@ public class Units implements Serializable {
    * This list will be my players units.
 	 *
 	 * @param update
-	 * @param game
+   * @param myPlayerID
+   * @param game
 	 * @return newList
 	 */
-	public void parseUpdateUnits(String update, int myPlayerID)	{
+	public void parseUpdateUnits(String update, int myPlayerID, int enemyPlayerID)	{
 		String[] unitDatas = update.split(":");
 		boolean first = true;
 
@@ -102,6 +104,24 @@ public class Units implements Serializable {
       unit.setX(unit.getRealX() / 32);
 			unit.setY(unit.getRealY() / 32);
 
+      /* now test for Minerals and Gas and assign them to the Neutral player */
+      if(Unit.getUnit(unit_type) == Unit.Resource_Mineral_Field ||
+         Unit.getUnit(unit_type) == Unit.Resource_Vespene_Geyser ){
+        if(neutralPlayersUnits.containsKey((int)unit_type)) {
+          //key exits so get the ArrayList and add the new UnitObject
+          unit_list = (ArrayList<UnitObject>)neutralPlayersUnits.remove(unit_type);
+          //this insert must be done to avoid adding duplicate unit ids for the same unit
+          unit_list = unitInsertIntoUnits(unit_list,unit);
+          //unit_list.trimToSize();
+          neutralPlayersUnits.put(unit_type, unit_list);
+        }else{
+          //key doesn't exits so we create the ArrayList and add the new UnitObject
+          unit_list = new ArrayList<UnitObject>();
+          unit_list.add(unit);
+          //unit_list.trimToSize();
+          neutralPlayersUnits.put(unit_type,unit_list);
+        }
+      }
       /* I will only put units into my map that belong to me. All the other ones will go into
        * netural.
        * BUG: the playerID of neutral is not coming in properly, so i'm going to set it here
@@ -126,25 +146,24 @@ public class Units implements Serializable {
           //unit_list.trimToSize();
           myPlayersUnits.put(unit_type,unit_list);
         }
-      }
-      /* now test for Minerals and Gas and assign them to the Neutral player */
-      if(Unit.getUnit(unit_type) == Unit.Resource_Mineral_Field ||
-         Unit.getUnit(unit_type) == Unit.Resource_Vespene_Geyser ){
-        if(neutralPlayersUnits.containsKey((int)unit_type)) {
+      } else if(pID == enemyPlayerID){
+        /* since hashmap is dynamically generated, we must check for the key */
+        if(enemyPlayersUnits.containsKey((int)unit_type)) {
           //key exits so get the ArrayList and add the new UnitObject
-          unit_list = (ArrayList<UnitObject>)neutralPlayersUnits.remove(unit_type);
+          unit_list = (ArrayList<UnitObject>)enemyPlayersUnits.remove(unit_type);
           //this insert must be done to avoid adding duplicate unit ids for the same unit
           unit_list = unitInsertIntoUnits(unit_list,unit);
           //unit_list.trimToSize();
-          neutralPlayersUnits.put(unit_type, unit_list);
+          enemyPlayersUnits.put(unit_type, unit_list);
         }else{
           //key doesn't exits so we create the ArrayList and add the new UnitObject
           unit_list = new ArrayList<UnitObject>();
           unit_list.add(unit);
           //unit_list.trimToSize();
-          neutralPlayersUnits.put(unit_type,unit_list);
+          enemyPlayersUnits.put(unit_type,unit_list);
         }
       }
+      
 		}//end for 
 		
 		
@@ -206,12 +225,13 @@ public class Units implements Serializable {
   }
 
   /* get only structures from the unit list */
-  public HashMap<Integer,ArrayList<UnitObject>> getMyPlayersStructureUnits(){
+  @SuppressWarnings("unchecked")
+  public HashMap<Integer,ArrayDeque<UnitObject>> getMyPlayersStructureUnits(){
 
     /**
      *  Integer: enum of Unit | ArrayList<UnitObject> of # of Units of that type
      */
-    HashMap<Integer,ArrayList<UnitObject>> structures = new HashMap<Integer, ArrayList<UnitObject>>();
+    HashMap<Integer,ArrayDeque<UnitObject>> structures = new HashMap<Integer, ArrayDeque<UnitObject>>();
 
     //get only the keys in the hashmap
     for(Iterator itr = myPlayersUnits.keySet().iterator(); itr.hasNext(); ){
@@ -271,7 +291,7 @@ public class Units implements Serializable {
         case Protoss_Arbiter_Tribunal:
         case Protoss_Robotics_Support_Bay:
         case Protoss_Shield_Battery:
-          structures.put(key.getNumValue(), myPlayersUnits.get(key.getNumValue()));
+          structures.put(key.getNumValue(), new ArrayDeque(myPlayersUnits.get(key.getNumValue())));
       }
     }
 

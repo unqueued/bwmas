@@ -27,18 +27,9 @@ public class UnitManagerAgentRespFIPAReqStructM extends AchieveREResponder {
   protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
     ACLMessage reply = request.createReply();
     //check the conversation id
-    if( request.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId()) ){
-      UnitObject unit_id = agent.WorkerAvailable();
-      if( unit_id != null ) {
-        reply.setPerformative(ACLMessage.INFORM);
-        try {
-          reply.setContentObject(unit_id);
-        } catch (IOException ex) {
-          Logger.getLogger(UnitManagerAgentRespFIPAReqResM.class.getName()).log(Level.SEVERE, null, ex);
-        }
-      }else{
-        reply.setPerformative(ACLMessage.REFUSE);
-      }
+    if( request.getConversationId().equals(ConverId.StructM.TrainNewUnit.getConId()) ){
+      //
+      
     }
     return reply;
   }//end handleRequest

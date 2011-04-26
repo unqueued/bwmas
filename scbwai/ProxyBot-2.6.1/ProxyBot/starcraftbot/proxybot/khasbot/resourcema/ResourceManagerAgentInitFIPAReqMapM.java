@@ -49,12 +49,21 @@ public class ResourceManagerAgentInitFIPAReqMapM extends AchieveREInitiator{
       try{
         minerals = (ArrayList<UnitObject>) inform.getContentObject();
       }catch(UnreadableException ex){
-        Logger.getLogger(ResourceManagerAgentInitFIPAReqUnitM.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(ResourceManagerAgentInitFIPAReqMapM.class.getName()).log(Level.SEVERE, null, ex);
       }
       ds.put("minerals", minerals);
       ds.put("RequestMinerals", true);
+    }else if(inform.getConversationId().equals(ConverId.MapM.NearestGas.getConId())){
+      ArrayList<UnitObject> gas = null;
+      try{
+        gas = (ArrayList<UnitObject>) inform.getContentObject();
+      }catch(UnreadableException ex){
+        Logger.getLogger(ResourceManagerAgentInitFIPAReqMapM.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      ds.put("gas", gas);
+      ds.put("RequestGas", true);
     }else{
-      System.out.println(this.agent.getLocalName() + " <<< INFORM: unknown conversation");
+      System.out.println(agent.getLocalName() + " <<< INFORM: unknown conversation " + inform.getConversationId() + " from " + inform.getSender());
     }
   }
 

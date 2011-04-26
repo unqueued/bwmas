@@ -16,6 +16,7 @@
   <property name="dist-khasbot"  location="khasbot${file.separator}dist"/>
 -->
   <property name="src-khasbot" location="${src-proxybot}${file.separator}khasbot${file.separator}"/>
+  <property name="src-graphs" location="${src-proxybot}${file.separator}graphs"/>
   <property name="build-khasbot" location="${build-proxybot}"/>
   <property name="dist-khasbot"  location="${dist-proxybot}"/>
 
@@ -24,6 +25,27 @@
 
   <!-- ensure Ant uses the CLASSPATH defined in the environment -->
   <property environment="env"/>
+
+  <!-- build the various graphs for the project -->
+  <target name="build-graphs" > <!-- depends="one" description="build graphs"> -->
+    <exec executable="dot" dir="${src-graphs}" spawn="true" >
+      <arg value="-Tpng"/>
+      <arg value="khasbot_overview.dot"/>
+      <arg value="-o"/>
+      <arg value="images${file.separator}khasbot_overview.png"/>
+    </exec>
+  </target>
+  <!--  
+  <target name="one">
+    <exec executable="dot" dir="${src-graphs}" spawn="true" >
+      <arg value="-Tpng"/>
+      <arg value="buildm-req-worker.dot"/>
+      <arg value="-o"/>
+      <arg value="buildm-req-worker.png"/>
+    </exec>
+  </target>
+  -->
+
 
   <!-- clean up the build files -->
   <target name="clean" description="clean up" >

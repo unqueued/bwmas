@@ -88,6 +88,7 @@ public enum Unit implements Serializable {
   Spell_Dark_Swarm(202),
   None(228),
   Unknown(229),
+  Garbage(-1), //user-defined: this marks a nothing unit or garbage unit for 
 
   /* Terran Structures */
   Terran_Command_Center(106),

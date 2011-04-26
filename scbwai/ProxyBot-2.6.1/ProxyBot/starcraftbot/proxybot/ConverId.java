@@ -87,8 +87,7 @@ public class ConverId{
   /* conversation id's that are focused around the building manager */
   public enum BuildM{
 
-    //fix below
-    NewBuilding("New-Building");
+    BuildStructure("Build-Structure");
 
     String conversation_id;
 
@@ -133,7 +132,7 @@ public class ConverId{
 
    /* conversation id's that are focused around the map manager */
   public enum StructM{
-    BuildNewUnit("Build-New-Unit"),
+    TrainNewUnit("Train-New-Unit"),
     UpgradeTechLevel("Upgrade-Tech-Level"),
     ResearchTechLevel("Research-Tech-Level");
 
@@ -151,6 +150,8 @@ public class ConverId{
   public enum UnitM{
     /* services/data that will be provided for MapM */
     NeedGameObject("Need-Game-Object"),
+    NeedGameObjectUpdate("Need-Game-Object-Update"),
+    NeedPlayerObject("Need-Player-Object"),
     NeedStartLocation("Need-Start-Location"),
     
     NewStructureToBuild("New-Structure-To-Build"),
@@ -160,7 +161,16 @@ public class ConverId{
     LargeUnitGroup("Large-Unit-Group"),   //we will have to define this size
     UnitsLost("Units-Lost"),
     NewUnit("New-Unit"), //a request for a new unit to be built, say from battle manager
-    NewCommands("New-Commands"); //new commands to be added to gamecommand queue  
+    NewCommands("New-Commands"), //new commands to be added to gamecommand queue
+
+    //requests that UnitM can make to others
+    RequestWorker("Request-Worker"),
+    MineralList("Mineral-List"),
+    GasList("Gas-List"),
+
+    //data that UnitM sends to others
+    SendWorker("Send-Worker");
+
     
 
     

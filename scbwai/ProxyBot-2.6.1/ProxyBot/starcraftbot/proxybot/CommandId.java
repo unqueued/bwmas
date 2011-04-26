@@ -221,6 +221,7 @@ public class CommandId {
     Fatal(188), 
     None(189), 
     Unknown(190);
+    
 
     int orderId;
 
@@ -292,7 +293,8 @@ public class CommandId {
 		color(51),
 		leaveGame(52),
 		sayHello(53),
-		sayGG(54);
+		sayGG(54),
+    groupCommand(191); //user-defined control group behaviour;
   
     int starcraftCommandId;
 

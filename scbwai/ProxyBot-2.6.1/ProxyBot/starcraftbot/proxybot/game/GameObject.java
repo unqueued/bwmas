@@ -22,7 +22,10 @@ import starcraftbot.proxybot.khasbot.unitma.Units;
 public class GameObject implements Serializable {
 
   private PlayerObject myPlayer = null;
+  private PlayerObject enemyPlayer = null;
+
   private int myPlayerId = -10;
+  private int enemyPlayerId = -10;
 
   /** all players */
   private ArrayList<PlayerObject> playersInGame = null;
@@ -61,14 +64,21 @@ public class GameObject implements Serializable {
     playersInGame = PlayerObject.parsePlayersData(playersData);
     
     String[] playerDatas = playersData.split(":");
+    
     myPlayerId = Integer.parseInt(playerDatas[0].split(";")[1]);
+    if( myPlayerId == 0 )
+      enemyPlayerId = 1;
+    else
+      enemyPlayerId = 0;
 
     //set myPlayer from the players on our list
-    for(PlayerObject tmp : playersInGame) {
-      if(tmp.getPlayerID() == myPlayerId) {
+    for(PlayerObject tmp : playersInGame){
+      if(tmp.getPlayerID() == myPlayerId){
         myPlayer = tmp;
-        break;
-      } 
+      }
+      else if(tmp.getPlayerID() == enemyPlayerId){
+        enemyPlayer = tmp;
+      }
     }
 
     unitsInGame = new Units();
@@ -95,19 +105,15 @@ public class GameObject implements Serializable {
     /* may have to change, not sure, just don't like the args of array elements, will fix later */
     myPlayer.updateAttributes(parsed_update[1],parsed_update[2],parsed_update[3],parsed_update[4],parsed_update[5],parsed_update[6]);
 
-//    System.out.println("myPlayer ID> " + myPlayer.getPlayerID());
-    
-//    unitsInGame = UnitsObject.parseUpdateUnits(update, this);
-    unitsInGame.parseUpdateUnits(update,myPlayer.getPlayerID());
-    
-    //DEBUG
-    //System.out.println("myPlayer> " + myPlayer);
-
+    unitsInGame.parseUpdateUnits(update,myPlayer.getPlayerID(),enemyPlayer.getPlayerID());
 	}
 
   public PlayerObject getMyPlayer() {
-	// TODO Auto-generated method stub
     return myPlayer;
+  }
+
+  public PlayerObject getEnemyPlayer() {
+    return enemyPlayer;
   }
 
   public Units getUnitsInGame() {
@@ -118,6 +124,7 @@ public class GameObject implements Serializable {
     return playersInGame;
   }
   
+  @Override
   public String toString()
   {
 	  String s = "GameObject: my Player->#"+myPlayerId+":"+myPlayer.getPlayerName()+":"+myPlayer.getPlayerRace()+"| map: "+ map.toString();

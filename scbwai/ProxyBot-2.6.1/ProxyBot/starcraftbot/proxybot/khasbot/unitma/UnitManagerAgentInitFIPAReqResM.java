@@ -1,7 +1,7 @@
 /**
  * 
  */
-package starcraftbot.proxybot.khasbot.resourcema;
+package starcraftbot.proxybot.khasbot.unitma;
 
 import jade.core.*;
 import jade.core.behaviours.DataStore;
@@ -22,13 +22,13 @@ import starcraftbot.proxybot.khasbot.unitma.UnitObject;
  * up by the garbage collector until the next FIPA-Request is made.
  */
 @SuppressWarnings("serial")
-public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
+public class UnitManagerAgentInitFIPAReqResM extends AchieveREInitiator{
 
-  ResourceManagerAgent agent = null;
+  UnitManagerAgent agent = null;
   DataStore ds = null;
   ACLMessage msg = null;
 
-  public ResourceManagerAgentInitFIPAReqUnitM(ResourceManagerAgent a, ACLMessage msg){
+  public UnitManagerAgentInitFIPAReqResM(UnitManagerAgent a, ACLMessage msg){
     super(a, msg);
     this.msg = msg;
     this.agent = a;
@@ -48,16 +48,15 @@ public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
 //      System.out.println(agent.getLocalName() + "<  handleInform < " + ACLMessage.getPerformative(inform.getPerformative()) + " FROM " +
 //          inform.getSender().getLocalName() + " FOR " + inform.getConversationId());
     if(inform.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())){
+      //process the worker we get from ResourceManager
       try{
         UnitObject worker = (UnitObject) inform.getContentObject();
-        agent.addWorker(worker);
-        //set this to false, so that I can ask again
-        agent.gather_minerals.setRequestWorker(false);
+        agent.sendWorker(worker);
       }catch(UnreadableException ex){
-        Logger.getLogger(ResourceManagerAgentInitFIPAReqUnitM.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(UnitManagerAgentInitFIPAReqResM.class.getName()).log(Level.SEVERE, null, ex);
       }
     }else{
-      System.out.println(agent.getLocalName() + " <<< INFORM: unknown conversation " + inform.getConversationId() + " from " + inform.getSender());
+      System.out.println(agent.getLocalName() + " <<< INFORM: unknown conversation: " + inform.getConversationId() + " from : " + inform.getSender().getLocalName());
     }
   }
 
@@ -67,9 +66,9 @@ public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
 //          refuse.getSender().getLocalName() + " FOR " + refuse.getConversationId());
     if(refuse.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())){
       //set this to false, so that I can ask again
-      agent.gather_minerals.setRequestWorker(false);
+      
     }else{
-      System.out.println(agent.getLocalName() + " <<< REFUSE: unknown conversation from " + refuse.getSender());
+      System.out.println(agent.getLocalName() + " <<< REFUSE: unknown conversation from " + refuse.getConversationId() + " from : " + refuse.getSender().getLocalName());
     }
   }
 
@@ -77,6 +76,6 @@ public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
   protected void handleFailure(ACLMessage failure){
       System.out.println(agent.getLocalName() + "<  handleFailure < " + ACLMessage.getPerformative(failure.getPerformative()) + " FROM " +
           failure.getSender().getLocalName() + " FOR " + failure.getConversationId());
-      agent.gather_minerals.setRequestWorker(false);
+      
   }
 }

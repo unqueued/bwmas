@@ -24,19 +24,20 @@ public class StructureManagerAgentRespInfUnitM extends CyclicBehaviour{
   public void action() {
     ACLMessage msg = agent.receive(mt);
     if (msg != null) {
-//      if(msg.getConversationId().equals(ConverId.Game.InitGameObj.getConId())){
-//        try {
-//          agent.setGameObject((GameObject) msg.getContentObject());
-//        } catch (UnreadableException ex) {
-//          Logger.getLogger(StructureManagerAgentRespInfUnitM.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//      }else if(msg.getConversationId().equals(ConverId.Game.GameObjUpdate.getConId())){
-//        try {
-//          agent.setGameObjectUpdate((GameObjectUpdate) msg.getContentObject());
-//        } catch (UnreadableException ex) {
-//          Logger.getLogger(StructureManagerAgentRespInfUnitM.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//      }
+      if(msg.getConversationId().equals(ConverId.UnitM.NeedGameObject.getConId())){
+        try {
+          agent.setGameObject((GameObject) msg.getContentObject());
+        } catch (UnreadableException ex) {
+          Logger.getLogger(StructureManagerAgentRespInfUnitM.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      }
+        else if(msg.getConversationId().equals(ConverId.UnitM.NeedGameObjectUpdate.getConId())){
+        try {
+          agent.setGameObjectUpdate((GameObjectUpdate) msg.getContentObject());
+        } catch (UnreadableException ex) {
+          Logger.getLogger(StructureManagerAgentRespInfUnitM.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      }
     } else {
       block();
     }

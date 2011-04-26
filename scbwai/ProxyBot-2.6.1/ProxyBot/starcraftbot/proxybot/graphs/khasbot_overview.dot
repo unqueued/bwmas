@@ -1,0 +1,35 @@
+
+digraph Overview {
+  StarCraft[shape=box];
+  ProxyBot[shape=box]; 
+  ProxyBotAgent[shape=box];
+  CommanderAgent[shape=box];
+  BuildingManagerAgent[shape=box];
+  UnitManagerAgent[shape=box];
+  StructureManagerAgent[shape=box];
+  BattleManagerAgent[shape=box];
+  ResourceManagerAgent[shape=box];
+  MapManagerAgent[shape=box];
+
+  StarCraft -> ProxyBot;
+  ProxyBot -> StarCraft;
+  ProxyBotAgent -> ProxyBot;
+  ProxyBot -> ProxyBotAgent;
+  ProxyBotAgent -> CommanderAgent;
+  CommanderAgent -> ProxyBotAgent;
+  UnitManagerAgent -> CommanderAgent;
+  CommanderAgent -> UnitManagerAgent;
+  UnitManagerAgent -> BuildingManagerAgent;
+  UnitManagerAgent -> StructureManagerAgent;
+  UnitManagerAgent -> BattleManagerAgent;
+  UnitManagerAgent -> ResourceManagerAgent;
+  UnitManagerAgent -> MapManagerAgent;
+  subgraph FIPAmapm2resm {
+    MapManagerAgent -> ResourceManagerAgent[label="Requests Sorted Mineral/Gas List"];
+    ResourceManagerAgent -> MapManagerAgent;
+  }
+  
+}
+
+
+

@@ -21,7 +21,8 @@ import starcraftbot.proxybot.khasbot.unitma.Units;
 public class GameObjectUpdate implements Serializable {
 
   private PlayerObject myPlayer = null;
-  
+  private PlayerObject enemyPlayer = null;
+
   /** all players */
   private ArrayList<PlayerObject> playersInGame;
   
@@ -29,9 +30,11 @@ public class GameObjectUpdate implements Serializable {
 
   /**
    * Default Constructor. Does nothing.
+   * @param game
    */
   public GameObjectUpdate (GameObject game) {
     myPlayer = game.getMyPlayer();
+    enemyPlayer = game.getEnemyPlayer();
     playersInGame = game.getPlayersInGame();
     unitsInGame = new Units();
   }
@@ -49,18 +52,10 @@ public class GameObjectUpdate implements Serializable {
     /* may have to change, not sure, just don't like the args of array elements, will fix later */
     myPlayer.updateAttributes(parsed_update[1],parsed_update[2],parsed_update[3],parsed_update[4],parsed_update[5],parsed_update[6]);
 
-//    System.out.println("myPlayer ID> " + myPlayer.getPlayerID());
-    
-//    unitsInGame = UnitsObject.parseUpdateUnits(update, this);
-    unitsInGame.parseUpdateUnits(update,myPlayer.getPlayerID());
-    
-    //DEBUG
-    //System.out.println("myPlayer> " + myPlayer);
-
+    unitsInGame.parseUpdateUnits(update,myPlayer.getPlayerID(),enemyPlayer.getPlayerID());
 	}
 
   public PlayerObject getMyPlayer() {
-	// TODO Auto-generated method stub
     return myPlayer;
   }
 
