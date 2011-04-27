@@ -57,11 +57,11 @@ With these objects, another object \emph{AIModule.cpp} is made as a \emph{dll} w
 The basic flow of how BWAPI works is as follows, when the actual game begins BWAPI will call upon the \emph{onStart()} method from the \emph{AIModule} which will setup all the above objects with the begining of the game information.  After this, an \emph{onFrame()} method is called every frame of the game.  This is the looping method which holds all the reasoning and computational information of the actual AI.  The \emph{AIModule} returns orders to the StarCraft game via \emph{UnitCommand}s.  By giving various Units in control of the AI player, such as build, attack, research, and upgrade , the game can progress towards a conflict where either player can obtain victory.  The victory condition occurs when the AI player has eliminated the enemy force from the map.
 
 \subsection{Agent-Oriented Programming}
-Agent-Orient Programming is a Programming Paradigm started back in the 1990s.  The basis is to on the concept of 'agents' as opposed objects.  By doing this, one can focus more readily on the reasoning processes and communication paths of a system, rather than method calls.  Aside from communication, Agents can have a focused goal or set of goals to accomplish.
+Agent-Orient Programming is a Programming Paradigm started back in the 1990s.  The basis is to on the concept of 'agents' as opposed objects.  By doing this, one can focus more readily on the reasoning processes and communication paths of a system, rather than method calls\cite{AOP}.  Aside from communication, Agents can have a focused goal or set of goals to accomplish.
 
 The basic flow of Agent-Oriented Programming, which our KhasBot is designed upon, is that Agents hold a set of beliefs and then based off changes (or additions) to them, the agents belief set will change, causing a possible reaction or change in the behaviour, or attempted actions, of said Agent.
 
-For this particular framework, we used JADE (Java Agent DEvelopment Framework) to model our agents.  JADE is a Java middleware framework designed to handle and run agents developed from a package given by JADE.  JADE also handles running the agents platform along with all the communication.
+For this particular framework, we used JADE (Java Agent DEvelopment Framework) to model our agents.  JADE is a Java middleware framework designed to handle and run agents developed from a package given by JADE.  JADE also handles running the agents platform along with all the communication\cite{JADEbook}.
 
 [[We need to go ALOT more in depth about JADE because later on, stuff is referenced that is never mentioned here.]]
 
@@ -100,5 +100,8 @@ Initial tests have been positive.  The message passing between agents have resul
 We have found that building StarCraft AI is viable using an Agent-Oriented Programming Framework.  The comunication structure established by JADE allowed us to create agents capable of specific goals and relaying imformation based on those goals to other agents and to StarCraft[[this sentence is remarkably vague while sounding not]].  Splitting the computation needed in an AI among agents provides another avenue for creating StarCraft AI and ultimately video-game, military, or management AI.
 
 In the future, we will continue to refine KhasBot with more build orders and potential decisions for those build orders.  We will also look into generalizing KhasBot for all three races, as our Build Order parser will allow for that.
+
+\bibliography{bibliography}{}
+\bibliographystyle{aaai}
 
 \end{document}
