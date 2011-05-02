@@ -4,6 +4,7 @@
 \usepackage{times}
 \usepackage{helvet}
 \usepackage{courier}
+\usepackage{url}
 \frenchspacing
 \pdfinfo{
 /Title (Multi-Agent System Framework for Real-Time Strategy AI)
@@ -28,28 +29,33 @@ New Mexico State University \\ Department of Computer Science \\ Box 30001 MSC C
 \maketitle
 \begin{abstract}
 \begin{quote}
-We present a Multi-Agent System Framework, KhasBot, to handle the Artificial Intelligence in a Real-Time Strategy Game StarCraft: BroodWar.  This Framework will be tested in the SC AI 2011 competition.  In this paper we will discuss our reasoning for selecting JADE as our AI backbone, our design strategy, and our creation process in creating KhasBot.
+In video game development, one of the many challenges for the developers is to create a challenging AI for the user.  Failure to create effect AI can cause the popularity of a game to decrease.  This can be particularly noticeable in Real-Time Strategy(RTS) games, where AI can either be too challenging or too predictable.  To address this problem, we present a Multi-Agent System Framework, KhasBot, to handle the Artificial Intelligence in a specific RTS Game, StarCraft: BroodWar.  By approaching the AI model as a subset of individual Agents capable of solving the common AI problems found in RTS games, for example, path-finding, resource allocation, task management and reactive planning.  This Framework will be tested in the SC AI 2011 competition.  In this paper we will discuss our reasoning for selecting JADE as our AI backbone, our design strategy, and our creation process in creating KhasBot.
 %Results
 \end{quote}
 \end{abstract}
 
 \section{Introduction}
-Real-Time Strategy(RTS) Games are an area of interest in Artificial Intelligence(AI) Systems for many reasons.  They must adapt quickly to changing environments, make decisions on non-complete information, and involve multiple complex AI issues in general (for example, reactive planning, path-finding, and resource scheduling).  StarCraft, a RTS created by Blizzard in 1998, involves three different alien races in a battle for resources and superiority on a large variety of maps.  A human player of this game must keep track of many things at once, for example, resources, map locations, building placements and army units, including enemy player actions and locations.  The role of the player is to command their force of units and structures through mouse and keyboard; or in the case of our AI, the Broodwar API. Some players even operate at a level of 200-300 actions, or commands, per minute(APM) at very high levels of play. Our AI player will be designed to emulate high level players in the manner of unit control and strategy.
+Real-Time Strategy(RTS) Games are an area of interest in Artificial Intelligence(AI) Systems for many reasons.  They must adapt quickly to changing environments, make decisions on non-complete information, and involve multiple complex AI issues in general (for example, reactive planning, path-finding, and resource scheduling).  StarCraft, a RTS created by Blizzard in 1998, involves three different alien races in a battle for resources and superiority on a large variety of maps.  A human player of this game must keep track of many things at once, for example, resources, map locations, building placements and army units, including enemy player actions and locations.  The role of the player is to command their force of units and structures through mouse and keyboard; or in the case of our AI, the Broodwar API(BWAPI). Some players even operate at a level of 200-300 actions, or commands, per minute(APM) at very high levels of play. Our AI player will be designed to emulate high level players in the manner of unit control and strategy.
 
 Controlling these units and structures throughout the game creates a dynamic and complex environment that poses a great challenge in creating an AI that can compete at expert levels.  For our AI, we selected one race to operate, the Protoss.  To get our AI functioning we will load it with pre-set build orders, a particular battle plan, and the means to execute those orders and plans.  Based on the enemy's race selection and map layout, our AI will proceed with one of the appropriate build orders.  As the game progresses, based on scouting information and enemy actions, we will change our build order accordingly in an effort to find the most effective way to defeat our opponent.  KhasBot, the name of our AI, at this stage, is being built for one-on-one battles.
 %Outline Paragraph
 For the remainder of the paper, we will discuss the some background of the BWAPI, JADE and RTS games, our design strategy and implementation, and finally our results.  We also mention some related and future work.
 
 \section{Background}
-What we do in this project is combine two different areas together, BWAPI (BroodWar API) and JADE (Java Agent DEvelopment Framework).  StarCraft does not have any officially released AI API, so the BWAPI is injected into StarCraft at runtime, and through the used of a specially designed Proxy AI, the JADE Framework can interact externally with the game.  BWAPI and JADE are described in further detail below.
+What we do in this project is combine two different areas together, BWAPI  and Java Agent DEvelopment Framework(JADE).  StarCraft does not have any officially released AI API, so the BWAPI is injected into StarCraft at runtime, and through the used of a specially designed Proxy AI, the JADE Framework can interact externally with the game.  BWAPI and JADE are described in further detail below.
 
 %Fill out
-\subsection{Real-Time Strategy}
+\subsection{Real-Time Strategy} %For Example in StarCraft
+%What Real-Time is
 Real-time strategy(RTS) games normally involve players commanding an army of units to build structures, collect resources and attack enemy players.%cont
+%How the player does this
+%Resource and unit management > node and map
+%Strategy and Tactics
+%Winning conditions
+
 
 \subsection{BWAPI}
-%Rewrite
-<BWAPI is an open-source Application Programming Interface (API) that enables AI creators [code injection] into Starcraft: Broodwar.>  It was developed in C++, but many extensions have allowed access to other languages such as Python, C\#, and Java.  For the purposes of KhasBot, Java has been used.
+An issue with community development of AI for RTS games, and many games in general, is that many of them are closed source.  Users cannot directly program logic into the game and must use external tools to accomplish this.  For StarCraft, community members developed the BWAPI for directly injecting the logic into the game.  The BWAPI\footnote{\url{http://code.google.com/p/bwapi}} is an open-source Application Programming Interface (API) that enables AI creation for Starcraft: Broodwar.  It was developed in C++, but many extensions have allowed access to other languages such as Python, C\#, and Java.  For the purposes of KhasBot, Java has been used.
 
 The BWAPI breaks down the StarCraft game into 5 basic objects: 
 \begin{itemize}
@@ -71,17 +77,23 @@ The basic flow of Agent-Oriented Programming, which our KhasBot is designed upon
 
 For this particular framework, we used JADE (Java Agent DEvelopment Framework) to model our agents.  JADE is a Java middleware framework designed to handle and run agents developed from a package given by JADE.  JADE also handles running the agents platform along with all the communication\cite{JADEbook}.
 
-\subsubsection{JADE}
+%Must be added in for May 17th version
+%\subsubsection{JADE}
 %Agents, Behaviours, Platform and Messaging Protocols
 
 \section{Related Work}
 %Agent based papers, others, Overmind
+We found that other researchers have approached this problem using other frameworks, some not explicitly agent based, to develop their AI.  The authors of \cite{TheCrapPaper}, used the BWSAL\footnote{\url{linkhere}} to implement a simple strategy with an agent minded outset.
+
+%BenWebers paper
+%Overmind or other AI asides
+At the time of this writing, we have not found any papers discussing the use of JADE in creating an AI for StarCraft: BroodWar.  More so, we have not found any using JADE for the development of AI Frameworks in video games.  This presents an opportunity for more future research.
 
 \section{Design}
 \subsection{Motivation}
-%Our Motivation
-%Agents as problem solvers 
+In order to accomplish the task of creating an AI for StarCraft, we decided to approach by having each important task in the game represented by an Agent concerned with solving that task.  While an intuitive approach would be to represent each unit and structure as an agent, we quickly abandoned this due to many issues that design would entail such as coordination and cooperation of the units,  hardware allocation of that many threads at once, and actually being able to effectively communicate with BWAPI.
 
+Instead, we conceptualized what the problem sets would potentially be and we came up with the following tasks: path-finding, resource management, placing buildings, controlling military units, and managing upgrades.  On top of these tasks, we also knew a few more agents would be needed to maintain and combine these problem sets to the goal of the current game.  Based on the idea that Agents are focused on one or two tasks, this lead to our current organization.   
 
 \subsection{Organization}
 % AI Motivation : Competing against high level players, knowledge of map, special properties, race match-ups, build orders of their opponent
