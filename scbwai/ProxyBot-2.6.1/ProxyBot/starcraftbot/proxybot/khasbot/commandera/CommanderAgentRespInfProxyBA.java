@@ -5,14 +5,14 @@ import jade.core.behaviours.*;
 import jade.lang.acl.*;
 
 import starcraftbot.proxybot.ConverId;
-
+import starcraftbot.proxybot.game.*;
 @SuppressWarnings("serial")
 public class CommanderAgentRespInfProxyBA extends CyclicBehaviour{
-	Agent agent=null;	
+	CommanderAgent agent=null;	
   MessageTemplate mt = null;
   AID unit_manager = null;
 
-  public CommanderAgentRespInfProxyBA(Agent a,
+  public CommanderAgentRespInfProxyBA(CommanderAgent a,
                                       MessageTemplate mt,
                                       AID unit_m) {
     super(a);
@@ -32,6 +32,7 @@ public class CommanderAgentRespInfProxyBA extends CyclicBehaviour{
         msg_gameObj.setConversationId(ConverId.Game.InitGameObj.getConId());
         try{
           msg_gameObj.setContentObject(msg.getContentObject());
+          agent.extractBuildOrders((GameObject)msg.getContentObject());
         }catch(Exception e){
           System.out.println("Failed to serialize the GameObject: " + e.toString());
         }
@@ -42,6 +43,7 @@ public class CommanderAgentRespInfProxyBA extends CyclicBehaviour{
         msg_gameObjUp.setConversationId(ConverId.Game.GameObjUpdate.getConId());
         try{
           msg_gameObjUp.setContentObject(msg.getContentObject());
+          agent.updatedBuildOrders((GameObjectUpdate)msg.getContentObject());
         }catch(Exception e){
           System.out.println("Failed to serialize the GameObjectUpdate: " + e.toString());
         }

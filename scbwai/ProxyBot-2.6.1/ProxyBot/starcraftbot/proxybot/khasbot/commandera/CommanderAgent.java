@@ -7,16 +7,21 @@ import jade.domain.JADEAgentManagement.*;
 import jade.lang.acl.*;
 
 import java.lang.reflect.*;
+import java.util.*;
 
 import starcraftbot.proxybot.khasbot.KhasBotAgent;
-
+import starcraftbot.proxybot.khasbot.unitma.Unit;
+import starcraftbot.proxybot.khasbot.unitma.UnitObject;
+import starcraftbot.proxybot.game.*;
+import starcraftbot.proxybot.buildorders.*;
 public class CommanderAgent extends KhasBotAgent {
 
-
+  private BuildLoader BList = null;
+  private int lastUnitCount = 0;
   @Override
   public void setup() {
     super.setup();
-
+    BList = new BuildLoader("starcraftbot\\proxybot\\buildorder.xml");
     //an array of strings will be used to store the agent names and paths
     //the values will be split via a ;
     String [] khasbot_agents = null; // this stores> agent_name;class_name
@@ -79,7 +84,7 @@ public class CommanderAgent extends KhasBotAgent {
     /*
      * This section consists of the ACLMessage.INFORM templates
      */
-
+    
     pba_inform_mt = MessageTemplate.and(
                                         MessageTemplate.MatchPerformative(ACLMessage.INFORM),
                                         MessageTemplate.MatchSender(proxybotagent)
@@ -103,7 +108,44 @@ public class CommanderAgent extends KhasBotAgent {
     addThreadedBehaviour(resp_inf_unitm);
 
   }//end setup
-
+  public void extractBuildOrders(GameObject g){
+	  if(g==null)
+		  return;
+	  BuildList orders = BList.getOrders(g);
+	  //Idea: get Structures! and send them to map manager to ready their positions.
+	  
+	  
+  }
+  public void updatedBuildOrders(GameObjectUpdate g){
+	 if(g==null)
+		  return;
+	 BuildList orders = BList.getUpdatedOrders(g); 
+	 if(orders!=null){
+		int totalUnitCount = 0;
+		Collection<ArrayList<UnitObject>> allUnits = g.getUnitsInGame().getMyPlayersNonStructureUnits().values();
+		Collection<ArrayDeque<UnitObject>> allStructures = g.getUnitsInGame().getMyPlayersStructureUnits().values();
+		
+		for( ArrayList<UnitObject> x : allUnits)
+			totalUnitCount += x.size();
+		for( ArrayDeque<UnitObject> x : allStructures)
+			totalUnitCount += x.size();
+		
+		if(lastUnitCount!=totalUnitCount ){
+			 if(orders.getSupply()==0){
+				 System.out.println("Todo: "+orders.getLength());
+			 }else
+			 if(orders.getSupply()==1){
+				 System.out.println("Make: a probe");
+			 }else
+			 if(orders.getSupply()>0){
+				 System.out.println("New List Length: "+orders.getLength());
+			 }
+			 lastUnitCount = totalUnitCount;
+	 	 }
+	 }else{
+		 
+	 }
+  }
 //  @Override
 //  protected void setGameObject(GameObject g) {
 //    //does not store gameObj
