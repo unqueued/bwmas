@@ -24,20 +24,32 @@ public class UnitManagerAgentRespFIPAReqStructM extends AchieveREResponder {
 
   }
 
+  @Override
   protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
     ACLMessage reply = request.createReply();
-    //check the conversation id
-    if( request.getConversationId().equals(ConverId.StructM.TrainNewUnit.getConId()) ){
-      //
-      
+    if(request != null && request.getConversationId() != null){
+      System.out.println(agent.getLocalName() + ">  handleRequest > " + ACLMessage.getPerformative(request.getPerformative()) + " FROM "
+              + request.getSender().getLocalName() + " FOR " + request.getConversationId());
+//      if( request.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId()) ){
+//
+//      }
     }
     return reply;
   }//end handleRequest
 
+  @Override
   protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) throws FailureException {
-    System.out.println("Agent "+ agent.getLocalName() + ": Action successfully performed");
     ACLMessage inform = request.createReply();
-    inform.setPerformative(ACLMessage.INFORM);
+    if(request.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())){
+//      System.out.println(agent.getLocalName() + ">  prepareResultNotification > " + ACLMessage.getPerformative(response.getPerformative()) + " FROM "
+//        + response.getSender().getLocalName() + " FOR " + response.getConversationId());
+//      if(response.getPerformative() == ACLMessage.AGREE){
+//
+//      }else{
+//
+//      }
+
+    }
     return inform;
 	}//end prepareResultNotification
 

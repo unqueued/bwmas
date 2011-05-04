@@ -44,7 +44,8 @@ abstract public class KhasBotAgent extends Agent {
   protected MessageTemplate mapm_fipa_req_mt = null;
   protected MessageTemplate buildm_fipa_req_mt = null;
   protected MessageTemplate structm_fipa_req_mt = null;
-  protected MessageTemplate resm_fipa_req_mt = null;
+  protected MessageTemplate resm_fipa_unitm_mt = null;
+  protected MessageTemplate resm_fipa_mapm_mt = null;
   protected MessageTemplate battm_fipa_req_mt = null;
 
 
@@ -104,14 +105,30 @@ abstract public class KhasBotAgent extends Agent {
                                               )
                                             );
 
-    resm_fipa_req_mt = MessageTemplate.and(
-                                             MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
-                                             MessageTemplate.and(
-                                                MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
+    AID [] rx = new AID[1];
+    rx[0] = unit_manager;
+//    resm_fipa_unitm_mt = MessageTemplate.and(
+//                                            // MessageTemplate.and(
+//                                                MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
+//                                          //      MessageTemplate.MatchPerformative(ACLMessage.REQUEST)
+//                                             //),
+//                                            // MessageTemplate.and(
+//                                           //     MessageTemplate.MatchReceiver(rx),
+//                                                MessageTemplate.MatchSender(resource_manager)
+//                                           //  )
+//                                           );
+   rx[0] = map_manager;
+   resm_fipa_mapm_mt = MessageTemplate.and(
+//                                             MessageTemplate.and(
+                                                MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
+//                                                MessageTemplate.MatchPerformative(ACLMessage.REQUEST)
+//                                             ),
+//                                             MessageTemplate.and(
+//                                                MessageTemplate.MatchReceiver(rx),
                                                 MessageTemplate.MatchSender(resource_manager)
-                                             )
+//                                             )
                                            );
-
+   
     battm_fipa_req_mt = MessageTemplate.and(
                                              MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST),
                                              MessageTemplate.and(
@@ -128,11 +145,8 @@ abstract public class KhasBotAgent extends Agent {
                                             )
                                           );
     inform_commands_mt = MessageTemplate.and(
-                                            MessageTemplate.not(MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST)),
-                                               MessageTemplate.and(
-                                                 MessageTemplate.MatchPerformative(ACLMessage.INFORM),
-                                                 MessageTemplate.MatchConversationId(ConverId.UnitM.NewCommands.getConId())
-                                                 )
+                                             MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+                                             MessageTemplate.MatchConversationId(ConverId.UnitM.NewCommands.getConId())
                                             );
 
   }

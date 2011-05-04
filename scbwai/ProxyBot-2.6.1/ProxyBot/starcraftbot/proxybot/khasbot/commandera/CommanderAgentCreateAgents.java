@@ -55,9 +55,11 @@ public class CommanderAgentCreateAgents {
       try {
         commander.getContentManager().fillContent(request, actExpr);
         commander.addBehaviour(new AchieveREInitiator(commander, request) {
+          @Override
           protected void handleInform(ACLMessage inform) {
             //System.out.println(commander.getAID().getLocalName() + ": Agent successfully created");
           }
+          @Override
           protected void handleFailure(ACLMessage failure) {
             System.out.println("Error creating agent.");
           }

@@ -19,7 +19,8 @@ public class BuildLoader {
 	private DocumentBuilderFactory factory = null;
 	private DocumentBuilder loader = null;
 	private Document document = null;
-	private Hashtable<String,LinkedList<LinkedList<BuildList>>> raceOrders = null;
+	//private Hashtable<String,LinkedList<LinkedList<BuildList>>> raceOrders = null;
+  private HashMap<String,LinkedList<LinkedList<BuildList>>> raceOrders = null;
 	private LinkedList<BuildList> gameRaceOrders = null;
 	private LinkedList<BuildList> gamePreCheck = null;
 	private String currentRace = null;
@@ -27,12 +28,6 @@ public class BuildLoader {
 	private int lastUnitCount = 0;
 	private int lastStructureCount = 0;
 	private MapLocation playerMain = null;
-	
-	
-	
-	
-	
-	
 	
 	public BuildLoader(String xmlFile){
 		try{
@@ -43,7 +38,7 @@ public class BuildLoader {
 			NodeList steps = null;
 			
 			gamePreCheck = new LinkedList<BuildList>();
-			raceOrders = new Hashtable< String,  LinkedList<LinkedList<BuildList>> >();
+			raceOrders = new HashMap< String,  LinkedList<LinkedList<BuildList>> >();
 			
 			
 			factory = DocumentBuilderFactory.newInstance();
@@ -133,6 +128,8 @@ public class BuildLoader {
 			handleError(ex);
 		}
 	}
+
+  @SuppressWarnings("unchecked")
 	private BuildList precheck(GameObjectUpdate gameObj){
 		if(gamePreCheck.size()==0)
 			return null;
@@ -255,7 +252,14 @@ public class BuildLoader {
 			}
 		}
 		//Send all buildings out here for BuildingManager to position and build.
-		return gameRaceOrders.get(0);
+    if(gameRaceOrders.get(0).getSupply()>lastSupply){
+      BuildList tmp = new BuildList();
+      tmp.addOrder((BuildOrder)new BuildUnit(Unit.valueOf("Protoss_Probe").getNumValue()));
+      return tmp;
+    }else{
+      return gameRaceOrders.get(0);
+    }
+    //return gameRaceOrders.get(0);
 	} 
 	private static final void handleError(Throwable ex) {
 		// ... handle error here...

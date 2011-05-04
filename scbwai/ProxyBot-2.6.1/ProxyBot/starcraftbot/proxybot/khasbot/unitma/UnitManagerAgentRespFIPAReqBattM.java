@@ -25,15 +25,17 @@ public class UnitManagerAgentRespFIPAReqBattM extends AchieveREResponder {
   protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
     ACLMessage reply = request.createReply();
     //check the conversation id
-    if( request.getConversationId().equals(ConverId.UnitM.SmallUnitGroup.getConId()) ){
-      agent.SmallUnitGroup();
-      reply.setPerformative(ACLMessage.AGREE);
-    }else if( request.getConversationId().equals(ConverId.UnitM.MediumUnitGroup.getConId()) ){
-      agent.MediumUnitGroup();
-      reply.setPerformative(ACLMessage.AGREE);
-    }else if( request.getConversationId().equals(ConverId.UnitM.LargeUnitGroup.getConId()) ){
-      agent.LargeUnitGroup();
-      reply.setPerformative(ACLMessage.AGREE);
+    if(request != null && request.getConversationId() != null){
+      if( request.getConversationId().equals(ConverId.UnitM.SmallUnitGroup.getConId()) ){
+        agent.SmallUnitGroup();
+        reply.setPerformative(ACLMessage.AGREE);
+      }else if( request.getConversationId().equals(ConverId.UnitM.MediumUnitGroup.getConId()) ){
+        agent.MediumUnitGroup();
+        reply.setPerformative(ACLMessage.AGREE);
+      }else if( request.getConversationId().equals(ConverId.UnitM.LargeUnitGroup.getConId()) ){
+        agent.LargeUnitGroup();
+        reply.setPerformative(ACLMessage.AGREE);
+      }
     }
     return reply; 
   }//end handleRequest

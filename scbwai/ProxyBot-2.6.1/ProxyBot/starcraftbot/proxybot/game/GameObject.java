@@ -4,6 +4,7 @@ import java.util.*;
 import java.io.*;
 
 import starcraftbot.proxybot.command.GameCommand;
+import starcraftbot.proxybot.khasbot.mapma.MapLocation;
 import starcraftbot.proxybot.khasbot.mapma.MapObject;
 import starcraftbot.proxybot.khasbot.unitma.Units;
 
@@ -34,6 +35,8 @@ public class GameObject implements Serializable {
 
   /** map information */
   private MapObject map = null;
+
+  private MapLocation myStartLocation = null;
 
   /**
    * Default Constructor. Does nothing.
@@ -85,6 +88,8 @@ public class GameObject implements Serializable {
 
     map = new MapObject(startingLocationsData, mapData);
 
+    
+
     //future work for the MapObject to incorporate AI
     //map = new MapObject(startingLocationsData, mapData, baseLocationsData, chokepointsData, regionsData);
   
@@ -106,6 +111,8 @@ public class GameObject implements Serializable {
     myPlayer.updateAttributes(parsed_update[1],parsed_update[2],parsed_update[3],parsed_update[4],parsed_update[5],parsed_update[6]);
 
     unitsInGame.parseUpdateUnits(update,myPlayer.getPlayerID(),enemyPlayer.getPlayerID());
+
+    myStartLocation = map.getStartLocation(myPlayer.getPlayerID());
 	}
 
   public PlayerObject getMyPlayer() {
@@ -134,6 +141,10 @@ public class GameObject implements Serializable {
 
   public MapObject getMapObj(){
     return map;
+  }
+
+  public MapLocation getMyStartLocation(){
+    return myStartLocation;
   }
 
 }//end GameObject

@@ -24,12 +24,14 @@ public class MapManagerAgentRespFIPAReqUnitM extends AchieveREResponder {
   protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
     ACLMessage reply = request.createReply();
     //check the conversation id
-    if( request.getConversationId().equals(ConverId.MapM.PathToChokePoint.getConId()) ){
-      agent.PathToChokePoint();
-      reply.setPerformative(ACLMessage.AGREE);
-    }else if( request.getConversationId().equals(ConverId.MapM.PathToNewBuilding.getConId()) ){
-      agent.PathToNewBuilding();
-      reply.setPerformative(ACLMessage.AGREE);
+    if(request != null && request.getConversationId() != null){
+      if( request.getConversationId().equals(ConverId.MapM.PathToChokePoint.getConId()) ){
+        agent.PathToChokePoint();
+        reply.setPerformative(ACLMessage.AGREE);
+      }else if( request.getConversationId().equals(ConverId.MapM.PathToNewBuilding.getConId()) ){
+        agent.PathToNewBuilding();
+        reply.setPerformative(ACLMessage.AGREE);
+      }
     }
     return reply;  
 

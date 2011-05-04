@@ -2,16 +2,16 @@
 <build>
 	<race name="Protoss">
 		<versus race="default">
-			<step supply="5">
-				<structure name="Pylon" location="" />
-			</step>
 			<step supply="7">
-				<structure name="Gateway" location="" />
+				<structure name="Pylon" location="0,-5" />
 			</step>
 			<step supply="8">
 				<structure name="Gateway" location="" />
 			</step>
-			<step supply="9">
+			<step supply="10">
+				<structure name="Gateway" location="" />
+			</step>
+			<step supply="11">
 				<structure name="Pylon" location="" />
 			</step>
 		</versus>
