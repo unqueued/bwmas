@@ -38,8 +38,8 @@ public class CommanderAgentRespInfUnitM extends CyclicBehaviour{
 //      System.out.println(agent.getLocalName() + "> ??? > " + ACLMessage.getPerformative(msg.getPerformative()) + " FROM " +
 //          msg.getSender().getLocalName() + " FOR " + msg.getConversationId());
       if(msg.getConversationId().equals(ConverId.Commands.ExecuteCommand.getConId())){
-        System.out.println(agent.getLocalName() + "> ExecuteCommand > " + ACLMessage.getPerformative(msg.getPerformative()) + " FROM " +
-          msg.getSender().getLocalName() + " FOR " + msg.getConversationId());
+//        System.out.println(agent.getLocalName() + "> ExecuteCommand > " + ACLMessage.getPerformative(msg.getPerformative()) + " FROM " +
+//          msg.getSender().getLocalName() + " FOR " + msg.getConversationId());
         
         //OPTIONAL
         //I might want to override it or change it, depending on my overall view of how

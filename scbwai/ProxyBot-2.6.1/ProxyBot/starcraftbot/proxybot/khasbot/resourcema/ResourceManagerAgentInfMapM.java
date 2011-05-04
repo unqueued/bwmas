@@ -3,10 +3,11 @@
  */
 package starcraftbot.proxybot.khasbot.resourcema;
 
+import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.DataStore;
 import jade.lang.acl.*;
-import jade.proto.*;
-import java.util.*;
+import java.util.ArrayList;
+
 import java.util.logging.*;
 
 import starcraftbot.proxybot.ConverId;
@@ -18,26 +19,70 @@ import starcraftbot.proxybot.khasbot.unitma.UnitObject;
  * up by the garbage collector until the next FIPA-Request is made.
  */
 @SuppressWarnings("serial")
-public class ResourceManagerAgentInitFIPAReqMapM extends AchieveREInitiator{
+public class ResourceManagerAgentInfMapM extends CyclicBehaviour{
 
   ResourceManagerAgent agent = null;
-  ACLMessage msg = null;
+  MessageTemplate mt = null;
   DataStore ds = null;
 
-  public ResourceManagerAgentInitFIPAReqMapM(ResourceManagerAgent a, ACLMessage msg){
-    super(a, msg);
-    this.msg = msg;
-    agent = a;
-    ds = agent.getDS();
+  public ResourceManagerAgentInfMapM(ResourceManagerAgent in_a, MessageTemplate in_mt, DataStore in_ds){
+    super(in_a);
+    mt = in_mt;
+    agent = in_a;
+    ds = in_ds;
   }
 
+  @Override
+  @SuppressWarnings("unchecked")
+  public void action(){
+    ACLMessage msg = agent.receive(mt);
+    if(msg != null){
+      if(msg.getConversationId().equals(ConverId.MapM.NearestMineralsSuccess.getConId())){
+//        System.out.println("Adding a mineral list");
+        ArrayList<UnitObject> minerals = null;
+        try{
+          minerals = (ArrayList<UnitObject>) msg.getContentObject();
+        }catch(UnreadableException ex){
+          Logger.getLogger(ResourceManagerAgentInitFIPAReqMapM.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ds.put("minerals", minerals);
+      }else if(msg.getConversationId().equals(ConverId.MapM.NearestMineralsFailure.getConId())){
+        System.out.println("NULL mineral list received");
+      }
+      /*
+      else if(msg.getConversationId().equals(ConverId.MapM.NearestMineralsFailure.getConId())){
+        ArrayList<UnitObject> gas = null;
+        try{
+          gas = (ArrayList<UnitObject>) msg.getContentObject();
+        }catch(UnreadableException ex){
+          Logger.getLogger(ResourceManagerAgentInitFIPAReqMapM.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ds.put("gas", gas);
+      }else if(msg.getConversationId().equals(ConverId.MapM.NearestMineralsFailure.getConId())){
+        ArrayList<UnitObject> gas = null;
+        try{
+          gas = (ArrayList<UnitObject>) msg.getContentObject();
+        }catch(UnreadableException ex){
+          Logger.getLogger(ResourceManagerAgentInitFIPAReqMapM.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ds.put("gas", gas);
+      }
+       * 
+       */
+    }else{
+      block();
+    }
+  }//end action
+
+
+  /*
   @Override
   protected void handleAgree(ACLMessage agree){
 //    System.out.println(agent.getLocalName() + "<  handleAgree < " + ACLMessage.getPerformative(agree.getPerformative()) + " FROM " +
 //              agree.getSender().getLocalName() + " FOR " + agree.getConversationId());
   }
 
-  /* This is the inform INFORM letting us know that the request was completed */
+  
   @SuppressWarnings("unchecked")
   @Override
   protected void handleInform(ACLMessage inform){
@@ -87,4 +132,5 @@ public class ResourceManagerAgentInitFIPAReqMapM extends AchieveREInitiator{
 //          failure.getSender().getLocalName() + " FOR " + failure.getConversationId());
     System.out.println(agent.getLocalName() + " <<< FAILURE: from " + failure.getSender());
   }
+  */
 }

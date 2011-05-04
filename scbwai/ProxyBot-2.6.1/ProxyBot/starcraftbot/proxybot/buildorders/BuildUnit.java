@@ -1,8 +1,9 @@
 package starcraftbot.proxybot.buildorders;
 
+import java.io.Serializable;
 import starcraftbot.proxybot.khasbot.unitma.Unit;
 
-public class BuildUnit implements BuildOrder{
+public class BuildUnit implements BuildOrder, Serializable{
 	private int _uid;
 	
 	public BuildUnit(int uid){

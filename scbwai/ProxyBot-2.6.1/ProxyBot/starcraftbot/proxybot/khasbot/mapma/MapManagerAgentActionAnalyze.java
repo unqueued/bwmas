@@ -45,16 +45,20 @@ public class MapManagerAgentActionAnalyze extends Behaviour {
     //sort the minerals
     UnitObject.heapSort(minerals);
 
+    System.out.println("Mineral List:");
+    for(UnitObject obj: minerals)
+      System.out.println("\tID: " + obj.getID() + " dist: " + obj.distance());
+
     //for distance calculation I am going to assume that the map distance is no
     //greater than 500 diagonally across
-    for( int i =0; i < gas.size(); i++){
-      temp = gas.get(i);
-      temp.setLoc(loc);
-      gas.set(i, temp);
-    }
-    
-    //sort the minerals
-    UnitObject.heapSort(gas);
+//    for( int i =0; i < gas.size(); i++){
+//      temp = gas.get(i);
+//      temp.setLoc(loc);
+//      gas.set(i, temp);
+//    }
+//
+//    //sort the minerals
+//    UnitObject.heapSort(gas);
   }
 
   @Override

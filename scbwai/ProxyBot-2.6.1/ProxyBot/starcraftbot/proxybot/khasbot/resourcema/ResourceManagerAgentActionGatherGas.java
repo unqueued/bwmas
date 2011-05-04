@@ -51,9 +51,9 @@ public class ResourceManagerAgentActionGatherGas extends SimpleBehaviour {
     GameObject lgameObj = (GameObject)ds.get("gameObj");
   
     if( lgameObj != null ){
-      if(!RequestWorker) {
-        agent.requestWorker();
-      }
+//      if(!RequestWorker) {
+//        agent.requestWorker();
+//      }
     }
   }
 

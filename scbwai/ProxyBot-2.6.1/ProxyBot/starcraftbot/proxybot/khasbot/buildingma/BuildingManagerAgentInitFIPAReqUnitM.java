@@ -1,7 +1,7 @@
 /**
  * 
  */
-package starcraftbot.proxybot.khasbot.resourcema;
+package starcraftbot.proxybot.khasbot.buildingma;
 
 import jade.core.behaviours.DataStore;
 import jade.lang.acl.*;
@@ -18,13 +18,13 @@ import starcraftbot.proxybot.khasbot.unitma.UnitObject;
  * up by the garbage collector until the next FIPA-Request is made.
  */
 @SuppressWarnings("serial")
-public class ResourceManagerAgentInitFIPAReqMapM extends AchieveREInitiator{
+public class BuildingManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
 
-  ResourceManagerAgent agent = null;
+  BuildingManagerAgent agent = null;
   ACLMessage msg = null;
   DataStore ds = null;
 
-  public ResourceManagerAgentInitFIPAReqMapM(ResourceManagerAgent a, ACLMessage msg){
+  public BuildingManagerAgentInitFIPAReqUnitM(BuildingManagerAgent a, ACLMessage msg){
     super(a, msg);
     this.msg = msg;
     agent = a;
@@ -34,48 +34,38 @@ public class ResourceManagerAgentInitFIPAReqMapM extends AchieveREInitiator{
   @Override
   protected void handleAgree(ACLMessage agree){
 //    System.out.println(agent.getLocalName() + "<  handleAgree < " + ACLMessage.getPerformative(agree.getPerformative()) + " FROM " +
-//              agree.getSender().getLocalName() + " FOR " + agree.getConversationId());
+//      agree.getSender().getLocalName() + " FOR " + agree.getConversationId());
   }
 
   /* This is the inform INFORM letting us know that the request was completed */
   @SuppressWarnings("unchecked")
   @Override
   protected void handleInform(ACLMessage inform){
-//      System.out.println(agent.getLocalName() + "<  handleInform < " + ACLMessage.getPerformative(inform.getPerformative()) + " FROM " +
-//          inform.getSender().getLocalName() + " FOR " + inform.getConversationId());
-
-    if(inform.getConversationId().equals(ConverId.MapM.NearestMinerals.getConId())){
-      ArrayList<UnitObject> minerals = null;
+//    System.out.println(agent.getLocalName() + " < handleInform < " + ACLMessage.getPerformative(inform.getPerformative()) + " FROM " +
+//      inform.getSender().getLocalName() + " FOR " + inform.getConversationId());
+    if(inform.getConversationId().equals(ConverId.BuildM.NeedWorker.getConId())){
+      UnitObject unit = null;
       try{
-        minerals = (ArrayList<UnitObject>) inform.getContentObject();
+        unit = (UnitObject)inform.getContentObject();
       }catch(UnreadableException ex){
-        Logger.getLogger(ResourceManagerAgentInitFIPAReqMapM.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(BuildingManagerAgentInitFIPAReqUnitM.class.getName()).log(Level.SEVERE, null, ex);
       }
-      ds.put("minerals", minerals);
-      ds.put("RequestMinerals", true);
-    }else if(inform.getConversationId().equals(ConverId.MapM.NearestGas.getConId())){
-      ArrayList<UnitObject> gas = null;
-      try{
-        gas = (ArrayList<UnitObject>) inform.getContentObject();
-      }catch(UnreadableException ex){
-        Logger.getLogger(ResourceManagerAgentInitFIPAReqMapM.class.getName()).log(Level.SEVERE, null, ex);
-      }
-      ds.put("gas", gas);
-      ds.put("RequestGas", true);
+      System.out.println("Unit received was: " + unit.getType().toString() + " ID: " + unit.getID());
+      ds.put("worker",unit);
+      ds.put("workerRequested",true);
     }else{
-      System.out.println(agent.getLocalName() + " <<< INFORM: unknown conversation: " + inform.getConversationId()
-        + " FROM " + inform.getSender().getLocalName());
+      System.out.println(agent.getLocalName() + " <<< INFORM: unknown conversation " + inform.getConversationId() + " from " + inform.getSender());
     }
   }
 
   @Override
   protected void handleRefuse(ACLMessage refuse){
-//      System.out.println(agent.getLocalName() + "<  handleRefuse < " + ACLMessage.getPerformative(refuse.getPerformative()) + " FROM " +
+//      System.out.println(agent.getLocalName() + " < handleRefuse < " + ACLMessage.getPerformative(refuse.getPerformative()) + " FROM " +
 //          refuse.getSender().getLocalName() + " FOR " + refuse.getConversationId());
     if(refuse.getConversationId().equals(ConverId.MapM.NearestMinerals.getConId())){
       System.out.println(agent.getLocalName() + " <<< REFUSE: request for a " + ConverId.MapM.NearestMinerals.getConId());
       //ask again
-      ds.put("RequestMinerals", false);
+
     }else{
       System.out.println(agent.getLocalName() + " <<< REFUSE: unknown conversation from " + refuse.getSender());
     }
