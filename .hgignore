@@ -1,0 +1,14 @@
+syntax: glob
+*APDescription.txt
+*MTPs-Main-Container.txt
+*.log
+*.classpath
+*.class
+*.swp
+*.bak
+*.orig
+*.old
+*~ 
+*log.txt
+documentation/**
+
