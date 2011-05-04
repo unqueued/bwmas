@@ -37,8 +37,8 @@ public class GameCommandQueue{
 		synchronized (cmdQueue) {
       int commandsAdded = 0;
 
-      if( cmdQueue.isEmpty()){
-        commandData.append("");
+      if(cmdQueue.isEmpty()){
+        commandData.append(":");
       }else{
         //send as many commands as we can fit in the buffer
         while (cmdQueue.size() > 0 && commandsAdded < maxCommandsPerMessage) {

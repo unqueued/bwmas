@@ -1,6 +1,6 @@
 package starcraftbot.proxybot.buildorders;
 
-public interface BuildOrder {
+public interface BuildOrder{
 	int getID();
 	String toString();
 }

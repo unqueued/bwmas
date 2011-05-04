@@ -46,7 +46,8 @@ public class ConverId{
     EndGamePhaseOne("End-Game-Phase-One"), //PhaseOne is the opening phase of the game
     StartGamePhaseTwo("Start-Game-Phase-Two"),
     EndGamePhaseTwo("End-Game-Phase-Two"),
-    StartGamePhaseThree("Start-Game-Phase-Three");
+    StartGamePhaseThree("Start-Game-Phase-Three"),
+    BuildOrders("Build-Orders");
 
     String conversation_id;
 
@@ -84,10 +85,16 @@ public class ConverId{
     }
   }
 
-  /* conversation id's that are focused around the building manager */
+  /**
+   * conversation id's that are focused around the building manager
+   * The payload of the msg.setContent(String PAYLOAD) is defined next to each conversation.
+   */
   public enum BuildM{
 
-    BuildStructure("Build-Structure");
+    NeedWorker("Need-Worker"), //PAYLOAD> unitId:count
+    ReturningWorker("Returning-Worker"), //PAYLOAD> unitId
+    BuildStructure("Build-Structure"); //PAYLOAD> unitId:count
+
 
     String conversation_id;
 
@@ -104,7 +111,11 @@ public class ConverId{
     PathToNewBuilding("Path-To-New-Building"),
     PathToChokePoint("Path-To-Choke-Point"),
     NearestMinerals("Nearest-Minerals"),
-    NearestGas("Nearest-Gas");
+    NearestMineralsSuccess("Nearest-Minerals-Success"),
+    NearestMineralsFailure("Nearest-Minerals-Failure"),
+    NearestGas("Nearest-Gas"),
+    NearestGasSuccess("Nearest-Gas-Success"),
+    NearestGasFailure("Nearest-Gas-Failure");
 
     String conversation_id;
 
@@ -118,6 +129,7 @@ public class ConverId{
 
    /* conversation id's that are focused around the map manager */
   public enum ResM{
+    NeedWorker("Need-Worker"),
     EnoughResourcesToBuild("Nearest-Gas");
 
     String conversation_id;
@@ -130,9 +142,12 @@ public class ConverId{
     }
   }
 
-   /* conversation id's that are focused around the map manager */
+   /**
+    * conversation id's that are focused around the map manager
+    * The payload of the msg.setContent(String PAYLOAD) is defined next to each conversation.
+    */
   public enum StructM{
-    TrainNewUnit("Train-New-Unit"),
+    TrainNewUnit("Train-New-Unit"), //PAYLOAD> unitId:count
     UpgradeTechLevel("Upgrade-Tech-Level"),
     ResearchTechLevel("Research-Tech-Level");
 
@@ -156,23 +171,23 @@ public class ConverId{
     
     NewStructureToBuild("New-Structure-To-Build"),
     NeedWorker("Need-Worker"),
+    RetaskWorker("Retask-Worker"),
     SmallUnitGroup("Small-Unit-Group"),   //we will have to define this size
     MediumUnitGroup("Medium-Unit-Group"), //we will have to define this size
     LargeUnitGroup("Large-Unit-Group"),   //we will have to define this size
     UnitsLost("Units-Lost"),
     NewUnit("New-Unit"), //a request for a new unit to be built, say from battle manager
     NewCommands("New-Commands"), //new commands to be added to gamecommand queue
+    SendCommandsToCommander("Send-Commands-To-Commander"),
+    UnitLastCommand("Unit-Last-Command"),
 
     //requests that UnitM can make to others
-    RequestWorker("Request-Worker"),
     MineralList("Mineral-List"),
     GasList("Gas-List"),
 
     //data that UnitM sends to others
+    SendWorkerToMine("Send-Worker-To-Mine"),
     SendWorker("Send-Worker");
-
-    
-
     
     String conversation_id;
 

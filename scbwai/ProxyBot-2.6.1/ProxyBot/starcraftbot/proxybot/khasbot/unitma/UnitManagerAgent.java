@@ -35,6 +35,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import starcraftbot.proxybot.ConverId;
+import starcraftbot.proxybot.buildorders.BuildList;
+import starcraftbot.proxybot.buildorders.BuildOrder;
+import starcraftbot.proxybot.buildorders.BuildUnit;
 import starcraftbot.proxybot.command.GameCommand;
 import starcraftbot.proxybot.game.GameObject;
 import starcraftbot.proxybot.game.GameObjectUpdate;
@@ -48,16 +51,18 @@ public class UnitManagerAgent extends KhasBotAgent{
   UnitManagerAgentInitCmdsToCommander sendCommandsToCommander = null;
 
   /* JUST TEST flags will be removed once BuildOrder is merged */
-  boolean trainProbe = false;
-  boolean buildPylon = false;
+  
+  BuildList buildOrders = null;
 
+  LinkedList<BuildOrder> oldList = null;
+  
   @Override
   protected void setup(){
     super.setup();
 
     this.codec = new SLCodec();
     this.getContentManager().registerLanguage(this.codec);
-    this.ontology=JADEManagementOntology.getInstance();
+    this.ontology = JADEManagementOntology.getInstance();
     this.getContentManager().registerOntology(this.ontology);
 
     //non structure units i get from the game objects that belong
@@ -69,7 +74,6 @@ public class UnitManagerAgent extends KhasBotAgent{
      *   this HashMap will use <k,v> as <unit id num,UnitObject>
      */
 //    HashMap<Integer,ArrayList<UnitObject>> structures = null;
-
     /**
      *this will maintain a list of worker units
      *index 0 - will be idle workers, not assigned to any task
@@ -104,66 +108,90 @@ public class UnitManagerAgent extends KhasBotAgent{
 
     UnitManagerAgentRespInfCmd resp_inf_cmd =
             new UnitManagerAgentRespInfCmd(this, commander_inform_mt);
-    UnitManagerAgentRespFIPAReqBuildM resp_fipa_req_buildm =
-            new UnitManagerAgentRespFIPAReqBuildM(this, buildm_fipa_req_mt);
-    UnitManagerAgentRespFIPAReqResM resp_fipa_req_resm =
-            new UnitManagerAgentRespFIPAReqResM(this, resm_fipa_req_mt);
-    UnitManagerAgentRespFIPAReqBattM resp_fipa_req_battm =
-            new UnitManagerAgentRespFIPAReqBattM(this, battm_fipa_req_mt);
-    UnitManagerAgentRespFIPAReqStructM resp_fipa_req_structm =
-            new UnitManagerAgentRespFIPAReqStructM(this, structm_fipa_req_mt);
-    UnitManagerAgentRespFIPAReqMapM resp_fipa_req_mapm =
-            new UnitManagerAgentRespFIPAReqMapM(this, mapm_fipa_req_mt);
-    UnitManagerAgentRespFIPAReqCmd resp_fipa_req_cmd =
-            new UnitManagerAgentRespFIPAReqCmd(this, cmd_fipa_req_mt);
-    UnitManagerAgentRespInfCommands resp_inf_commands =
-            new UnitManagerAgentRespInfCommands(this, inform_commands_mt);
+//    UnitManagerAgentRespFIPAReqBuildM resp_fipa_req_buildm =
+//            new UnitManagerAgentRespFIPAReqBuildM(this, buildm_fipa_req_mt);
+//    UnitManagerAgentRespFIPAReqResM resp_fipa_req_resm =
+//            new UnitManagerAgentRespFIPAReqResM(this, resm_fipa_unitm_mt);
+//    UnitManagerAgentRespFIPAReqBattM resp_fipa_req_battm =
+//            new UnitManagerAgentRespFIPAReqBattM(this, battm_fipa_req_mt);
+//    UnitManagerAgentRespFIPAReqStructM resp_fipa_req_structm =
+//            new UnitManagerAgentRespFIPAReqStructM(this, structm_fipa_req_mt);
+//    UnitManagerAgentRespFIPAReqMapM resp_fipa_req_mapm =
+//            new UnitManagerAgentRespFIPAReqMapM(this, mapm_fipa_req_mt);
+//    UnitManagerAgentRespFIPAReqCmd resp_fipa_req_cmd =
+//            new UnitManagerAgentRespFIPAReqCmd(this, cmd_fipa_req_mt);
+    MessageTemplate inf_FromUnitmToCommander_mt = MessageTemplate.and(
+                                             MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+                                             MessageTemplate.MatchConversationId(ConverId.UnitM.SendCommandsToCommander.getConId())
+                                            );
+
+    MessageTemplate inf_ResmToUnitm_mt = MessageTemplate.and(
+                                                              MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+                                                              MessageTemplate.MatchSender(resource_manager)
+                                                             );
+    MessageTemplate inf_BuildmToUnitm_mt = MessageTemplate.and(
+                                                              MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+                                                              MessageTemplate.MatchSender(building_manager)
+                                                             );
+
+    UnitManagerAgentInfResm inf_resm =
+            new UnitManagerAgentInfResm(this, inf_ResmToUnitm_mt, myDS);
+    UnitManagerAgentInfBuildm inf_buildm =
+            new UnitManagerAgentInfBuildm(this, inf_BuildmToUnitm_mt, myDS);
+
+    UnitManagerAgentInfCommander inf_commander =
+            new UnitManagerAgentInfCommander(this, inf_FromUnitmToCommander_mt, myDS, commander);
 
     resp_inf_cmd.setDataStore(myDS);
-    resp_fipa_req_buildm.setDataStore(myDS);
-    resp_fipa_req_resm.setDataStore(myDS);
-    resp_fipa_req_battm.setDataStore(myDS);
-    resp_fipa_req_structm.setDataStore(myDS);
-    resp_fipa_req_mapm.setDataStore(myDS);
-    resp_fipa_req_cmd.setDataStore(myDS);
-    resp_inf_commands.setDataStore(myDS);
+//    resp_fipa_req_buildm.setDataStore(myDS);
+//    resp_fipa_req_resm.setDataStore(myDS);
+//    resp_fipa_req_battm.setDataStore(myDS);
+//    resp_fipa_req_structm.setDataStore(myDS);
+//    resp_fipa_req_mapm.setDataStore(myDS);
+//    resp_fipa_req_cmd.setDataStore(myDS);
+//    resp_inf_commands.setDataStore(myDS);
 
     /* handle ACLMessgae.INFORM responders */
     addThreadedBehaviour(resp_inf_cmd);
 
     /* handle FIPA request responders */
-    addThreadedBehaviour(resp_fipa_req_buildm);
-    addThreadedBehaviour(resp_fipa_req_resm);
-    addThreadedBehaviour(resp_fipa_req_battm);
-    addThreadedBehaviour(resp_fipa_req_structm);
-    addThreadedBehaviour(resp_fipa_req_mapm);
-    addThreadedBehaviour(resp_fipa_req_cmd);
-    addThreadedBehaviour(resp_inf_commands);
+//    addThreadedBehaviour(resp_fipa_req_buildm);
+//    addThreadedBehaviour(resp_fipa_req_resm);
+//    addThreadedBehaviour(resp_fipa_req_battm);
+//    addThreadedBehaviour(resp_fipa_req_structm);
+//    addThreadedBehaviour(resp_fipa_req_mapm);
+//    addThreadedBehaviour(resp_fipa_req_cmd);
+//    addThreadedBehaviour(resp_inf_commands);
+
+    addThreadedBehaviour(inf_resm);
+    addThreadedBehaviour(inf_buildm);
+    addThreadedBehaviour(inf_commander);
 
     sendCommandsToCommander = new UnitManagerAgentInitCmdsToCommander(this, commander);
     sendCommandsToCommander.setDataStore(myDS);
+    addThreadedBehaviour(sendCommandsToCommander);
   }
 
   public void processCmdsReceived(ArrayList<GameCommand> cmds){
+    //if( cmds.size() > 0){
+      System.out.println("Processing commands");
+      sendCommandsToCommander.cmdToSend(cmds);
 
-    sendCommandsToCommander.cmdToSend(cmds);
-
-    addThreadedBehaviour(sendCommandsToCommander);
-
-    /*
-     * Done last.
-     * once the command has been processed reset
-     * the behaviour so that it can be scheduled again
-     */
-    sendCommandsToCommander.reset();
+      /*
+       * Done last.
+       * once the command has been processed reset
+       * the behaviour so that it can be scheduled again
+       */
+      sendCommandsToCommander.reset();
+//    }
   }
 
-  public void setGameObject(GameObject g){   
+  public void setGameObject(GameObject g){
     GameObject lgameObj = g;
     PlayerObject myPlayer = null;
 
-    assert g == null: "Incoming GameObject g cannot be null";
-    assert lgameObj == null: "LocalGameObject lgameObj cannot be null";
+    assert g == null : "Incoming GameObject g cannot be null";
+    assert lgameObj == null : "LocalGameObject lgameObj cannot be null";
 
     //System.out.println("Sending game object to MapManager");
     /* sent the GameObject to MapManager so that he can start to analyze the map info */
@@ -172,17 +200,17 @@ public class UnitManagerAgent extends KhasBotAgent{
     msg.setConversationId(ConverId.UnitM.NeedGameObject.getConId());
     msg.addReceiver(map_manager);
     try{
-        msg.setContentObject(lgameObj);
+      msg.setContentObject(lgameObj);
     }catch(Exception e){
       System.out.println("Failed to set message object: " + e.toString());
     }
-    
+
     send(msg);
 
     msg.clearAllReceiver();
     msg.addReceiver(resource_manager);
     try{
-        msg.setContentObject(lgameObj);
+      msg.setContentObject(lgameObj);
     }catch(Exception e){
       System.out.println("Failed to set message object: " + e.toString());
     }
@@ -192,38 +220,46 @@ public class UnitManagerAgent extends KhasBotAgent{
     msg.clearAllReceiver();
     msg.addReceiver(structure_manager);
     try{
-        msg.setContentObject(lgameObj);
+      msg.setContentObject(lgameObj);
+    }catch(Exception e){
+      System.out.println("Failed to set message object: " + e.toString());
+    }
+    send(msg);
+
+    msg.clearAllReceiver();
+    msg.addReceiver(building_manager);
+    try{
+      msg.setContentObject(lgameObj);
     }catch(Exception e){
       System.out.println("Failed to set message object: " + e.toString());
     }
     send(msg);
 
     myDS.put("gameObj", lgameObj);
-    
+
     myPlayer = lgameObj.getMyPlayer();
 
     myDS.put("myPlayer", myPlayer);
 
-    assert lgameObj.getUnitsInGame() == null: "LocalGameObject lgameObj -> Units unitsInGame cannot be null";
-    assert lgameObj.getUnitsInGame().getMyPlayersNonStructureUnits() == null: "LocalGameObject lgameObj -> Units unitsInGame  ->  HashMap<Integer,ArrayList<UnitObject>> getMyPlayersNonStructureUnits cannot be null";
+    assert lgameObj.getUnitsInGame() == null : "LocalGameObject lgameObj -> Units unitsInGame cannot be null";
+    assert lgameObj.getUnitsInGame().getMyPlayersNonStructureUnits() == null : "LocalGameObject lgameObj -> Units unitsInGame  ->  HashMap<Integer,ArrayList<UnitObject>> getMyPlayersNonStructureUnits cannot be null";
 
     extractUnits(lgameObj.getUnitsInGame().getMyPlayersNonStructureUnits());
-    //myDS.put("structures",lgameObj.getUnitsInGame().getMyPlayersStructureUnits());
 
     //build our first probe
-    if(!trainProbe){
-      System.out.println("Method call for new probe");
-      trainProbe = true;
-      sendRequestFor(ConverId.StructM.TrainNewUnit.getConId(), structure_manager, Unit.Protoss_Probe);
-    }
+//    if(!trainProbe){
+//      System.out.println("### Building probe >>> ");
+//      trainProbe = true;
+//      trainWorker(Unit.Protoss_Probe);
+//    }
   }
 
   public void setGameObjectUpdate(GameObjectUpdate g){
     GameObjectUpdate lgameObjUp = g;
     PlayerObject myPlayer = null;
 
-    assert g == null: "Incoming GameObjectUpdate g cannot be null";
-    assert lgameObjUp == null: "LocalGameObjectUpdate lgameObjUp cannot be null";
+    assert g == null : "Incoming GameObjectUpdate g cannot be null";
+    assert lgameObjUp == null : "LocalGameObjectUpdate lgameObjUp cannot be null";
 
     //myDS.put("gameObj", lgameObjUp);
 
@@ -231,8 +267,8 @@ public class UnitManagerAgent extends KhasBotAgent{
 
     myDS.put("myPlayer", myPlayer);
 
-    assert lgameObjUp.getUnitsInGame() == null: "LocalGameObjectUpdate lgameObjUp -> Units unitsInGame cannot be null";
-    assert lgameObjUp.getUnitsInGame().getMyPlayersNonStructureUnits() == null: "LocalGameObjectUpdate lgameObjUp -> Units unitsInGame  ->  HashMap<Integer,ArrayList<UnitObject>> getMyPlayersNonStructureUnits cannot be null";
+    assert lgameObjUp.getUnitsInGame() == null : "LocalGameObjectUpdate lgameObjUp -> Units unitsInGame cannot be null";
+    assert lgameObjUp.getUnitsInGame().getMyPlayersNonStructureUnits() == null : "LocalGameObjectUpdate lgameObjUp -> Units unitsInGame  ->  HashMap<Integer,ArrayList<UnitObject>> getMyPlayersNonStructureUnits cannot be null";
 
 
     /* MUST FIX THIS CRAP */
@@ -241,7 +277,7 @@ public class UnitManagerAgent extends KhasBotAgent{
 
     msg.addReceiver(structure_manager);
     try{
-        msg.setContentObject(lgameObjUp);
+      msg.setContentObject(lgameObjUp);
     }catch(Exception e){
       System.out.println("Failed to set message object: " + e.toString());
     }
@@ -249,13 +285,12 @@ public class UnitManagerAgent extends KhasBotAgent{
     send(msg);
 
     extractUnits(lgameObjUp.getUnitsInGame().getMyPlayersNonStructureUnits());
-    //myDS.put("structures",lgameObjUp.getUnitsInGame().getMyPlayersStructureUnits());
 
-//    if( myPlayer.getResources().getMinerals() > 100 && !buildPylon ){
+//    if(myPlayer.getResources().getMinerals() > 100 && !buildPylon){
+//      System.out.println("### Building pylon >>> ");
 //      buildPylon = true;
-//      sendRequestFor(ConverId.BuildM.BuildStructure.getConId(), building_manager, Unit.Protoss_Pylon);
+//      buildStructure(Unit.Protoss_Pylon);
 //    }
-
   }
 
   /**
@@ -279,11 +314,11 @@ public class UnitManagerAgent extends KhasBotAgent{
         UnitObject u = workerUnitsIdle.remove(0);
         //System.out.println(getLocalName() + "> Assigning an Available Worker...");
         workerUnitsWorking.add(u);
-        
+
         workerUnits.set(0, workerUnitsIdle);
         workerUnits.set(1, workerUnitsWorking);
         myDS.put("workerUnits", workerUnits);
-        
+
         return u;
 
       }else{
@@ -318,7 +353,7 @@ public class UnitManagerAgent extends KhasBotAgent{
      *  units set up like:
      *  	Integer: enum of Unit | ArrayList<UnitObject> of # of Units of that type
      */
-    PlayerObject my_player = (PlayerObject)myDS.get("myPlayer");
+    PlayerObject my_player = (PlayerObject) myDS.get("myPlayer");
     List<ArrayList<UnitObject>> workerUnits = (List<ArrayList<UnitObject>>) myDS.get("workerUnits");
 
     Unit workerType;
@@ -352,37 +387,126 @@ public class UnitManagerAgent extends KhasBotAgent{
 
   }
 
-  
-
-  public void requestWorker(){
-    sendRequestFor(ConverId.UnitM.RequestWorker.getConId(), resource_manager);
+  /**
+   * This method is used to send an inform to Resource manager(for now) that it will lose one
+   * worker, since it is being retasked.
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public boolean retaskWorker(){
+    int unitId = 0;
+    List<ArrayList<UnitObject>> workerUnits = (List<ArrayList<UnitObject>>) myDS.get("workerUnits");
+    System.out.println("Retasking a worker....");
+    //first check to see if there are any idle workers
+    if(workerUnits.get(0).size() > 0){
+      System.out.println("found an idle worker");
+      unitId = workerUnits.get(0).get(0).getID();
+      sendInformFor(ConverId.UnitM.RetaskWorker.getConId(), resource_manager, unitId);
+      UnitObject unit = workerUnits.get(0).remove(0);
+      System.out.println("Retasked: workerID " + unitId + " type: " + unit.getType().toString());
+      myDS.put("workerUnits",workerUnits);
+      myDS.put("retaskWorker",unit);
+      return true;
+    //else get a worker from the working list
+    }else if(workerUnits.get(1).size() > 0){
+      System.out.println("found a working worker");
+      unitId = workerUnits.get(1).get(0).getID();
+      sendInformFor(ConverId.UnitM.RetaskWorker.getConId(), resource_manager, unitId);
+      UnitObject unit = workerUnits.get(1).remove(0);
+      System.out.println("Retasked: workerID " + unitId + " type: " + unit.getType().toString());
+      myDS.put("workerUnits",workerUnits);
+      myDS.put("retaskWorker",unit);
+      return true;
+    //there are no workers available
+    }else{
+      //here we may put a trigger to create a new one
+      return false;
+    }
   }
 
-  public void sendWorker(UnitObject worker ){
+//  public void requestWorker(){
+//    sendRequestFor(ConverId.UnitM.NeedWorker.getConId(), resource_manager);
+//  }
+
+  public void sendWorker(UnitObject worker){
     sendDataTo(ConverId.UnitM.SendWorker.getConId(), building_manager, worker);
   }
+
+  public void trainWorker(Unit worker){
+    sendInformFor(ConverId.StructM.TrainNewUnit.getConId(), structure_manager, worker.getNumValue(),1);
+  }
+
+  public void buildStructure(Unit structure){
+    sendInformFor(ConverId.BuildM.BuildStructure.getConId(), building_manager, structure.getNumValue(),1);
+    //sendRequestFor(ConverId.BuildM.BuildStructure.getConId(), building_manager, Unit.Protoss_Pylon);
+  }
+
+  public void sendInformFor(String request, AID receiver, int unitId){
+    sendInformFor(request, receiver, unitId,-1);
+  }
+
+  public void sendInformFor(String request, AID receiver, int unitId, int count){
+    ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+
+    //An invalid count is given, so it applies only to special cases
+    if(count < 0 ){
+//      if(request.equals(ConverId.UnitM.NeedWorker.getConId())){
+//        msg.setConversationId(ConverId.UnitM.NeedWorker.getConId());
+//        msg.setContent(count+"");
+//      }
+      if(request.equals(ConverId.UnitM.RetaskWorker.getConId())){
+        msg.setConversationId(ConverId.UnitM.RetaskWorker.getConId());
+        msg.setContent(unitId+"");
+      }
+    }else{
+//    if(request.equals(ConverId.UnitM.RetaskWorker.getConId())){
+//      System.out.println("Sending retaskWorker Inform to ResourceM");
+//      msg.setConversationId(ConverId.UnitM.RetaskWorker.getConId());
+//      try{
+//        msg.setContentObject(unitId);
+//      }catch(IOException ex){
+//        Logger.getLogger(UnitManagerAgent.class.getName()).log(Level.SEVERE, null, ex);
+//      }
+//    }else
+      if(request.equals(ConverId.StructM.TrainNewUnit.getConId())){
+        msg.setConversationId(ConverId.StructM.TrainNewUnit.getConId());
+        msg.setContent(unitId+":1");
+      }else if(request.equals(ConverId.BuildM.BuildStructure.getConId())){
+        msg.setConversationId(ConverId.BuildM.BuildStructure.getConId());
+        msg.setContent(unitId+":1");
+      }
+    }
+    msg.addReceiver(receiver);
+    send(msg);
+  }
+
+  /* message processing methods */
+  public void sendRequestFor(String request, AID receiver){
+    sendRequestFor(request, receiver, Unit.Garbage);
+  }//end sendRequestFor
 
   public void sendRequestFor(String request, AID receiver, Unit unitId){
     ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
     msg.setProtocol(FIPANames.InteractionProtocol.FIPA_REQUEST);
 
-
     //An invalid Unit id is given, so ignore it
     if(unitId.equals(Unit.Garbage)){
-      if(request.equals(ConverId.UnitM.RequestWorker.getConId())){
-        msg.setConversationId(ConverId.UnitM.NeedWorker.getConId());
-        msg.setContent(ConverId.UnitM.NeedWorker.getConId());
+      if(request.equals(ConverId.UnitM.RetaskWorker.getConId())){
+        msg.setConversationId(ConverId.UnitM.RetaskWorker.getConId());
+        msg.setContent(ConverId.UnitM.RetaskWorker.getConId());
       }
-
+      
+      msg.clearAllReceiver();
       msg.addReceiver(receiver);
       this.send(msg);
 
-      if( request.equals(ConverId.UnitM.RequestWorker.getConId())){
+      if( request.equals(ConverId.UnitM.RetaskWorker.getConId()) ){
         UnitManagerAgentInitFIPAReqResM init_fipa_req_resm =
-                new UnitManagerAgentInitFIPAReqResM(this, msg);
+                new UnitManagerAgentInitFIPAReqResM(this, (ACLMessage)msg.clone());
+        init_fipa_req_resm.setDataStore(myDS);
         addThreadedBehaviour(init_fipa_req_resm);
       }
-    //Unit ID is specified, so use it as the message payload
+      //Unit ID is specified, so use it as the message payload
     }else{
       if(request.equals(ConverId.BuildM.BuildStructure.getConId())){
         msg.setConversationId(ConverId.BuildM.BuildStructure.getConId());
@@ -392,8 +516,8 @@ public class UnitManagerAgent extends KhasBotAgent{
           Logger.getLogger(UnitManagerAgent.class.getName()).log(Level.SEVERE, null, ex);
         }
       }else if(request.equals(ConverId.StructM.TrainNewUnit.getConId())){
-
         msg.setConversationId(ConverId.StructM.TrainNewUnit.getConId());
+        msg.setReplyWith(ConverId.StructM.TrainNewUnit.getConId() + ":" + unitId.toString());
         try{
           msg.setContentObject(unitId);
         }catch(IOException ex){
@@ -401,28 +525,25 @@ public class UnitManagerAgent extends KhasBotAgent{
         }
       }
 
+      msg.clearAllReceiver();
       msg.addReceiver(receiver);
-      System.out.println("### Sending message: " + msg.getConversationId());
       send(msg);
 
-      if( request.equals(ConverId.BuildM.BuildStructure.getConId())){
+      if(request.equals(ConverId.BuildM.BuildStructure.getConId())){
         UnitManagerAgentInitFIPAReqBuildM init_fipa_req_buildm =
                 new UnitManagerAgentInitFIPAReqBuildM(this, msg);
+        init_fipa_req_buildm.setDataStore(myDS);
         addThreadedBehaviour(init_fipa_req_buildm);
-      }else if( request.equals(ConverId.StructM.TrainNewUnit.getConId())){
-
+      }else if(request.equals(ConverId.StructM.TrainNewUnit.getConId())){
         UnitManagerAgentInitFIPAReqStructM init_fipa_req_structm =
                 new UnitManagerAgentInitFIPAReqStructM(this, msg);
+        init_fipa_req_structm.setDataStore(myDS);
         addThreadedBehaviour(init_fipa_req_structm);
       }
     }
+    msg = null;
   }
-
-  /* message processing methods */
-  public void sendRequestFor(String request, AID receiver){
-    sendRequestFor(request,receiver,Unit.Garbage);
-  }//end sendRequestFor
-
+  
   /* message processing methods */
   public void sendDataTo(String data, AID receiver, UnitObject worker){
     ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
@@ -441,6 +562,57 @@ public class UnitManagerAgent extends KhasBotAgent{
 
   }//end sendDataTo
 
+  public void setBuildOrders(BuildList in_buildOrders){
+    //System.out.println("Printing BuildList that was received");
+    buildOrders = in_buildOrders;
+    LinkedList<BuildOrder> list = buildOrders.getList();
+  
+    Unit unit = null;
+    String location = "";
+
+    for(Iterator itr= list.iterator(); itr.hasNext();){      
+      unit = Unit.getUnit((list.iterator().next()).getID());
+      location = (list.iterator().next()).toString();
+      break;
+    }
+    System.out.println("Location: " + location);
+
+    if(unit != null){
+
+      System.out.println(">>> Request to build: " + unit.toString());
+        if( unit.equals(Unit.Protoss_Probe))
+          trainWorker(unit);
+        else 
+          buildStructure(unit);
+      
+        System.out.println("### building: " + unit.toString());
+        /*
+      if(oldList == null){
+        System.out.println(">>> oldList is NULL");
+        oldList = list;
+
+        System.out.println(">>> Request to build: " + unit.toString());
+        if( unit.equals(Unit.Protoss_Probe))
+          trainWorker(unit);
+        else if( unit.equals(Unit.Protoss_Pylon))
+          buildStructure(unit);
+        System.out.println("### building: " + unit.toString());
+      }else if(!oldList.equals(list)){
+        System.out.println(">>> oldList is not equal to list");
+        oldList = list;
+
+        System.out.println(">>> Request to build: " + unit.toString());
+        if( unit.equals(Unit.Protoss_Probe))
+          trainWorker(unit);
+        else if( unit.equals(Unit.Protoss_Pylon))
+          buildStructure(unit);
+        System.out.println("### building: " + unit.toString());
+      }
+         * 
+         */
+    }
+
+  }
 
   /**
    * DefaultActions will, inside UnitManager, get stuff to mine and make new drones.

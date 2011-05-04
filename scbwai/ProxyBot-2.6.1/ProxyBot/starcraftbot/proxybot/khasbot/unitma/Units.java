@@ -46,12 +46,28 @@ public class Units implements Serializable {
 	 *
 	 * @param update
    * @param myPlayerID
+   * @param enemyPlayerID
    * @param game
 	 * @return newList
 	 */
 	public void parseUpdateUnits(String update, int myPlayerID, int enemyPlayerID)	{
 		String[] unitDatas = update.split(":");
 		boolean first = true;
+
+//    for(Iterator itr = myPlayersUnits.keySet().iterator(); itr.hasNext(); ){
+//      Unit key = Unit.getUnit(Integer.parseInt(itr.next().toString()));
+//      myPlayersUnits.get(key).clear();
+//    }
+//
+//    for(Iterator itr = enemyPlayersUnits.keySet().iterator(); itr.hasNext(); ){
+//      Unit key = Unit.getUnit(Integer.parseInt(itr.next().toString()));
+//      enemyPlayersUnits.get(key).clear();
+//    }
+//
+//    for(Iterator itr = neutralPlayersUnits.keySet().iterator(); itr.hasNext(); ){
+//      Unit key = Unit.getUnit(Integer.parseInt(itr.next().toString()));
+//      neutralPlayersUnits.get(key).clear();
+//    }
 
 		for (String data : unitDatas) {
 			if (first) {
@@ -146,7 +162,7 @@ public class Units implements Serializable {
           //unit_list.trimToSize();
           myPlayersUnits.put(unit_type,unit_list);
         }
-      } else if(pID == enemyPlayerID){
+      }else if(pID == enemyPlayerID){
         /* since hashmap is dynamically generated, we must check for the key */
         if(enemyPlayersUnits.containsKey((int)unit_type)) {
           //key exits so get the ArrayList and add the new UnitObject

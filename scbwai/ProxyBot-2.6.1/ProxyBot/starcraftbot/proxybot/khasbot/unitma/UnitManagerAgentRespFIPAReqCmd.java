@@ -26,7 +26,6 @@ public class UnitManagerAgentRespFIPAReqCmd extends AchieveREResponder {
   protected ACLMessage handleRequest(ACLMessage request) throws NotUnderstoodException, RefuseException {
     ACLMessage reply = request.createReply();
     //check the conversation id
-
     if(request != null && request.getConversationId() != null){
 //      System.out.println(agent.getLocalName() + ">  handleRequest > " + ACLMessage.getPerformative(request.getPerformative()) + " FROM " +
 //          request.getSender().getLocalName() + " FOR " + request.getConversationId());

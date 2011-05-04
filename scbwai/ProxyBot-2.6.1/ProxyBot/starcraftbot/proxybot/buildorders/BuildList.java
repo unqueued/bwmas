@@ -1,9 +1,11 @@
 package starcraftbot.proxybot.buildorders;
+
+import java.io.*;
 import java.util.*;
 
 
 
-public class BuildList {
+public class BuildList implements Serializable{
 	private int supply;
 	private LinkedList<BuildOrder> orders = null;
 	private String versus = null;

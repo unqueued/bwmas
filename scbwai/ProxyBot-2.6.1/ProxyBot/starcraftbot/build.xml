@@ -59,7 +59,7 @@
   </target>
 
   <!-- proxybot -->
-  <target name="proxybot-init" >
+  <target name="proxybot-init" depends="clean">
     <!-- Create the time stamp -->
     <tstamp/>
     <!-- Create the build directory structure used by compile -->

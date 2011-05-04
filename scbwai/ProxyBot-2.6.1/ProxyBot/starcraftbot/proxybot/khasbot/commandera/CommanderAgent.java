@@ -18,6 +18,8 @@ public class CommanderAgent extends KhasBotAgent {
 
   private BuildLoader BList = null;
   private int lastUnitCount = 0;
+  private BuildList orders = null;
+
   @Override
   public void setup() {
     super.setup();
@@ -108,18 +110,22 @@ public class CommanderAgent extends KhasBotAgent {
     addThreadedBehaviour(resp_inf_unitm);
 
   }//end setup
+
+  public BuildList getBuildOrders(){
+    return orders;
+  }
+
   public void extractBuildOrders(GameObject g){
 	  if(g==null)
 		  return;
-	  BuildList orders = BList.getOrders(g);
-	  //Idea: get Structures! and send them to map manager to ready their positions.
-	  
-	  
+	  orders = BList.getOrders(g);
+	  //Idea: get Structures! and send them to map manager to ready their positions.	  
   }
+
   public void updatedBuildOrders(GameObjectUpdate g){
 	 if(g==null)
 		  return;
-	 BuildList orders = BList.getUpdatedOrders(g); 
+	 orders = BList.getUpdatedOrders(g); 
 	 if(orders!=null){
 		int totalUnitCount = 0;
 		Collection<ArrayList<UnitObject>> allUnits = g.getUnitsInGame().getMyPlayersNonStructureUnits().values();
@@ -146,17 +152,6 @@ public class CommanderAgent extends KhasBotAgent {
 		 
 	 }
   }
-//  @Override
-//  protected void setGameObject(GameObject g) {
-//    //does not store gameObj
-//	  //myDS.put("gameObj", g);
-//  }
-
-//  @Override
-//  protected void setGameObjectUpdate(GameObjectUpdate g) {
-//    //does not store gameObjUp
-//	  //myDS.put("gameObjUp", g);
-//  }
 
 }//end CommanderAgent
 

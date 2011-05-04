@@ -32,44 +32,43 @@ public class UnitManagerAgentInitFIPAReqStructM extends AchieveREInitiator{
     super(a, msg);
     this.msg = msg;
     this.agent = a;
-    ds = agent.getDS();
-
+    ds = getDataStore();
   }
 
   @Override
   protected void handleAgree(ACLMessage agree){
-    System.out.println(agent.getLocalName() + "<  handleAgree < " + ACLMessage.getPerformative(agree.getPerformative()) + " FROM "
-            + agree.getSender().getLocalName() + " FOR " + agree.getConversationId());
+    System.out.println(agent.getLocalName() + " < handleAgree < " + ACLMessage.getPerformative(agree.getPerformative()) + " FROM "
+      + agree.getSender().getLocalName() + " FOR " + agree.getConversationId());
   }
 
   /* This is the inform INFORM letting us know that the request was completed */
   @Override
   protected void handleInform(ACLMessage inform){
-      System.out.println(agent.getLocalName() + "<  handleInform < " + ACLMessage.getPerformative(inform.getPerformative()) + " FROM " +
-          inform.getSender().getLocalName() + " FOR " + inform.getConversationId());
-    if(inform.getConversationId().equals(ConverId.StructM.TrainNewUnit.getConId())){
-
-    }else{
-      System.out.println(agent.getLocalName() + " < INFORM < unknown conversation OF: " + inform.getConversationId() + " FROM: " + inform.getSender().getLocalName());
-    }
+    System.out.println(agent.getLocalName() + " < handleInform < " + ACLMessage.getPerformative(inform.getPerformative()) + " FROM " 
+      + inform.getSender().getLocalName() + " FOR " + inform.getConversationId());
+//    if(inform.getConversationId().equals(ConverId.StructM.TrainNewUnit.getConId())){
+//
+//    }else{
+//      System.out.println(agent.getLocalName() + " < INFORM < unknown conversation OF: " + inform.getConversationId() + " FROM: " + inform.getSender().getLocalName());
+//    }
   }
 
   @Override
   protected void handleRefuse(ACLMessage refuse){
-//      System.out.println(agent.getLocalName() + "<  handleRefuse < " + ACLMessage.getPerformative(refuse.getPerformative()) + " FROM " +
-//          refuse.getSender().getLocalName() + " FOR " + refuse.getConversationId());
-    if(refuse.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())){
-      //set this to false, so that I can ask again
-      
-    }else{
-      System.out.println(agent.getLocalName() + " < REFUSE < unknown conversation OF: " + refuse.getConversationId() + " FROM: " + refuse.getSender().getLocalName());
-    }
+      System.out.println(agent.getLocalName() + " < handleRefuse < " + ACLMessage.getPerformative(refuse.getPerformative()) + " FROM "
+        + refuse.getSender().getLocalName() + " FOR " + refuse.getConversationId());
+//    if(refuse.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())){
+//      //set this to false, so that I can ask again
+//
+//    }else{
+//      System.out.println(agent.getLocalName() + " < REFUSE < unknown conversation OF: " + refuse.getConversationId() + " FROM: " + refuse.getSender().getLocalName());
+//    }
   }
 
   @Override
   protected void handleFailure(ACLMessage failure){
-      System.out.println(agent.getLocalName() + "<  handleFailure < " + ACLMessage.getPerformative(failure.getPerformative()) + " FROM " +
-          failure.getSender().getLocalName() + " FOR " + failure.getConversationId());
+    System.out.println(agent.getLocalName() + "<  handleFailure < " + ACLMessage.getPerformative(failure.getPerformative()) + " FROM " 
+      + failure.getSender().getLocalName() + " FOR " + failure.getConversationId());
       
   }
 }

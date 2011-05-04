@@ -55,6 +55,16 @@ public class UnitManagerAgentInitFIPAReqResM extends AchieveREInitiator{
       }catch(UnreadableException ex){
         Logger.getLogger(UnitManagerAgentInitFIPAReqResM.class.getName()).log(Level.SEVERE, null, ex);
       }
+    }else if(inform.getConversationId().equals(ConverId.UnitM.RetaskWorker.getConId())){
+      //process the worker we get from ResourceManager
+      try{
+        UnitObject worker = (UnitObject) inform.getContentObject();
+        ds.put("retaskWorker", worker);
+
+
+      }catch(UnreadableException ex){
+        Logger.getLogger(UnitManagerAgentInitFIPAReqResM.class.getName()).log(Level.SEVERE, null, ex);
+      }
     }else{
       System.out.println(agent.getLocalName() + " <<< INFORM: unknown conversation: " + inform.getConversationId() + " from : " + inform.getSender().getLocalName());
     }

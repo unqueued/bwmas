@@ -38,45 +38,48 @@ public class ResourceManagerAgentInitFIPAReqUnitM extends AchieveREInitiator{
 
   @Override
   protected void handleAgree(ACLMessage agree){
-//    System.out.println(agent.getLocalName() + "<  handleAgree < " + ACLMessage.getPerformative(agree.getPerformative()) + " FROM "
-//            + agree.getSender().getLocalName() + " FOR " + agree.getConversationId());
+    System.out.println(agent.getLocalName() + "< handleAgree < " + ACLMessage.getPerformative(agree.getPerformative()) + " FROM "
+            + agree.getSender().getLocalName() + " FOR " + agree.getConversationId());
   }
 
   /* This is the inform INFORM letting us know that the request was completed */
   @Override
+  @SuppressWarnings("unchecked")
   protected void handleInform(ACLMessage inform){
-//      System.out.println(agent.getLocalName() + "<  handleInform < " + ACLMessage.getPerformative(inform.getPerformative()) + " FROM " +
+//      System.out.println(agent.getLocalName() + "< handleInform < " + ACLMessage.getPerformative(inform.getPerformative()) + " FROM " +
 //          inform.getSender().getLocalName() + " FOR " + inform.getConversationId());
-    if(inform.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())){
-      try{
-        UnitObject worker = (UnitObject) inform.getContentObject();
-        agent.addWorker(worker);
-        //set this to false, so that I can ask again
-        agent.gather_minerals.setRequestWorker(false);
-      }catch(UnreadableException ex){
-        Logger.getLogger(ResourceManagerAgentInitFIPAReqUnitM.class.getName()).log(Level.SEVERE, null, ex);
-      }
-    }else{
-      System.out.println(agent.getLocalName() + " <<< INFORM: unknown conversation " + inform.getConversationId() + " from " + inform.getSender());
-    }
+//    if(inform.getConversationId().equals(ConverId.ResM.NeedWorker.getConId())){
+//      try{
+//        UnitObject worker = (UnitObject) inform.getContentObject();
+//        agent.addWorker(worker);
+//        //set this to false, so that I can ask again
+//        agent.gather_minerals.setRequestWorker(false);
+//      }catch(UnreadableException ex){
+//        Logger.getLogger(ResourceManagerAgentInitFIPAReqUnitM.class.getName()).log(Level.SEVERE, null, ex);
+//      }
+//    }else{
+//      System.out.println(agent.getLocalName() + " <<< INFORM: unknown conversation " + inform.getConversationId() + " from " + inform.getSender());
+//    }
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   protected void handleRefuse(ACLMessage refuse){
-//      System.out.println(agent.getLocalName() + "<  handleRefuse < " + ACLMessage.getPerformative(refuse.getPerformative()) + " FROM " +
+//      System.out.println(agent.getLocalName() + "< handleRefuse < " + ACLMessage.getPerformative(refuse.getPerformative()) + " FROM " +
 //          refuse.getSender().getLocalName() + " FOR " + refuse.getConversationId());
-    if(refuse.getConversationId().equals(ConverId.UnitM.NeedWorker.getConId())){
-      //set this to false, so that I can ask again
-      agent.gather_minerals.setRequestWorker(false);
-    }else{
-      System.out.println(agent.getLocalName() + " <<< REFUSE: unknown conversation from " + refuse.getSender());
-    }
+//    if(refuse.getConversationId().equals(ConverId.ResM.NeedWorker.getConId())){
+//      //set this to false, so that I can ask again
+//      agent.gather_minerals.setRequestWorker(false);
+//    }else{
+//      System.out.println(agent.getLocalName() + " <<< REFUSE: unknown conversation from " + refuse.getSender());
+//    }
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   protected void handleFailure(ACLMessage failure){
-      System.out.println(agent.getLocalName() + "<  handleFailure < " + ACLMessage.getPerformative(failure.getPerformative()) + " FROM " +
-          failure.getSender().getLocalName() + " FOR " + failure.getConversationId());
-      agent.gather_minerals.setRequestWorker(false);
+//      System.out.println(agent.getLocalName() + "< handleFailure < " + ACLMessage.getPerformative(failure.getPerformative()) + " FROM " +
+//          failure.getSender().getLocalName() + " FOR " + failure.getConversationId());
+//      agent.gather_minerals.setRequestWorker(false);
   }
 }
