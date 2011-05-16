@@ -18,14 +18,14 @@
 %
 \title{Agent-Oriented Programming Framework Design for Real-Time Strategy AI}
 
-\author{Antonio Arredondo, Daniel Jaramillo, Frank Natividad \and Ben Wright\\
-New Mexico State University \\ Department of Computer Science \\ Box 30001 MSC CS \\ Las Cruces, NM 88003-8001
-}
+%\author{Antonio Arredondo, Daniel Jaramillo, Frank Natividad \and Ben Wright\\
+%New Mexico State University \\ Department of Computer Science \\ Box 30001 MSC CS \\ Las Cruces, NM 88003-8001
+%}
 
 %%Blank authors for Double Blind Review
-%\author{XXXXXX \and XXXXXXX \and XXXXXXX \and XXXXXXX \\
-%123 Alphabet Lane \\  Somewheresville, NotYourState 11111-2222
-%}
+\author{XXXXXX \and XXXXXXX \and XXXXXXX \and XXXXXXX \\
+123 Alphabet Lane \\  Somewheresville, NotYourState 11111-2222
+}
 
 
 \maketitle
@@ -40,14 +40,14 @@ In video game development, one of the many challenges for the developers is to c
 \end{abstract}
 
 \section{Introduction}
-Real-Time Strategy(RTS) Games are an area of interest in Artificial Intelligence(AI) Systems for many reasons.  They must adapt quickly to changing environments, make decisions on non-complete information, and involve multiple complex AI issues in general (for example, reactive planning, path-finding, and resource scheduling).  StarCraft, a RTS created by Blizzard in 1998, involves three different alien races in a battle for resources and superiority on a large variety of maps.  A human player of this game must keep track of many things at once, for example, resources, map locations, building placements and army units, including enemy player actions and locations.  The role of the player is to command their force of units and structures through mouse and keyboard; or in the case of our AI, the Broodwar API(BWAPI). Some players even operate at a level of 200-300 actions, or commands, per minute(APM) at very high levels of play. Our AI player will be designed to emulate high level players in the manner of unit control and strategy.
+Real-Time Strategy(RTS) Games are an area of interest in Artificial Intelligence(AI) for many reasons.  They must adapt quickly to changing environments, make decisions on non-complete information, and involve multiple complex AI issues in general (for example, reactive planning, path-finding, and resource scheduling).  StarCraft, a RTS created by Blizzard in 1998, involves three different alien races in a battle for resources and superiority on a large variety of maps.  A human player of this game must keep track of many things at once, for example, resources, map locations, building placements and army units, including enemy player actions and locations.  The role of the player is to command their force of units and structures through mouse and keyboard; or in the case of our AI, the Broodwar API(BWAPI). Some players even operate at a level of 200-300 actions, or commands, per minute(APM) at very high levels of play. Our AI player will be designed to emulate high level players in the manner of unit control and strategy.
 
 Controlling these units and structures throughout the game creates a dynamic and complex environment that poses a great challenge in creating an AI that can compete at expert levels.  For our AI, we selected one race to operate, the Protoss.  To get our AI functioning we will load it with pre-set build orders, a particular battle plan, and the means to execute those orders and plans.  Based on the enemy's race selection and map layout, our AI will proceed with one of the appropriate build orders.  As the game progresses, based on scouting information and enemy actions, we will change our build order accordingly in an effort to find the most effective way to defeat our opponent.  KhasBot, the name of our AI, at this stage, is being built for one-on-one battles.
 %Outline Paragraph
 For the remainder of the paper, we will discuss the some background of the BWAPI, JADE and RTS games, our design strategy and implementation, and finally our results.  We also mention some related and future work.
 
 \section{Background}
-What we do in this project is combine two different areas together, BWAPI  and Java Agent DEvelopment Framework(JADE).  StarCraft does not have any officially released AI API, so the BWAPI is injected into StarCraft at runtime, and through the used of a specially designed Proxy AI, the JADE Framework can interact externally with the game.  BWAPI and JADE are described in further detail below.
+What we do in this project is combine two different areas together, BWAPI  and the Java Agent DEvelopment Framework(JADE) for use in Real-Time Stratey games.  StarCraft does not officially have a released AI API, so the BWAPI is injected into StarCraft at runtime and, through the use of a specially designed Proxy Client, JADE can interact externally with the game.  BWAPI and JADE are described in further detail below.
 
 %Fill out
 \subsection{Real-Time Strategy} %For Example in StarCraft
@@ -72,7 +72,7 @@ The BWAPI breaks down the StarCraft game into 5 basic objects:
 \item \emph{Force}: Represents a collection of players attempting a singular objective.  This is similar to a co-operative description, where some players may be on the same team.
 \end{itemize}
 
-In addition to the game objects, a game control module \emph{AIModule.cpp} is injected as a \emph{dll} into the core StarCraft code.  This module contains the behaviours needed to process and execute commands in StarCraft.  This module can also use sockets to communicate outside of the game with other AI. For example, KhasBot is an external Java program running along with StarCraft, and our AI communicates through ProxyBot, which then relays our information to the AIModule.  An analogy to this can be that BWAPI is a tool-box, and the AIModule is a untrained worker on location with a radio, which is the ProxyBot.  Communicating through this radio is KhasBot, giving orders to the worker on how to operate the tools.
+In addition to the game objects, a game control module \emph{AIModule.cpp} is injected as a \emph{dll} into the core StarCraft code.  This module contains the reasoning needed to process and execute commands in StarCraft.  This module can also use sockets to communicate outside of the game with other AI. For example, KhasBot is an external Java program running along with StarCraft, and our AI communicates through ProxyBot, which then relays our information to the AIModule.  An analogy to this can be that BWAPI is a tool-box, and the AIModule is a untrained worker on location with a radio, which is the ProxyBot.  Communicating through this radio is KhasBot, giving orders to the worker on how to operate the tools.
 
 The basic flow of how BWAPI works is as follows, when the actual game begins BWAPI will call upon the \emph{onStart()} method from the \emph{AIModule} which will setup all the above objects with the beginning of the game information.  After this, an \emph{onFrame()} method is called every frame of the game.  This is the looping method which holds all the reasoning and computational information of the actual AI.  The \emph{AIModule} returns orders to the StarCraft game via \emph{UnitCommand}s.  By giving Units in control of the AI player various actions or commands, (such as building, attacking, researching, and upgrading) the game can progress towards a conflict where either player can obtain victory. Victory is achieved when the AI player has eliminated the enemy force from the map.
 
@@ -80,23 +80,23 @@ The basic flow of how BWAPI works is as follows, when the actual game begins BWA
 
 
 \subsection{Agent-Oriented Programming}
-Agent-Orient Programming is a Programming Paradigm started back in the 1990s.  The basis is to on the concept of 'agents' as opposed objects.  By doing this, one can focus more readily on the reasoning processes and communication paths of a system, rather than method calls\cite{AOP}.  Aside from communication, Agents can have a focused goal or set of goals to accomplish.
+Agent-Orient Programming is a Programming Paradigm started back in the 1990s.  The basic premise it to focus on the concept of 'agents' as opposed objects in Object-Oriented Programming.  By doing this, one can focus more readily on the reasoning processes and communication paths of a system, rather than method calls\cite{AOP}.  Aside from communication, Agents can have a focused goal or set of goals to accomplish.
 
-The basic flow of Agent-Oriented Programming, which our KhasBot is designed upon, is that Agents hold a set of beliefs and then based off changes (or additions) to them, the agents belief set will change, causing a possible reaction or change in the behaviour, or attempted actions, of said Agent.
+The basic flow of Agent-Oriented Programming, which our KhasBot is designed upon, is that Agents hold a set of beliefs and then based off changes to them, the agents belief set will change, causing a possible reaction or change in the execution, or attempted actions, of said Agent.
 
 For this particular framework, we used JADE (Java Agent DEvelopment Framework) to model our agents.  JADE is a Java middle-ware framework designed to handle and run agents developed from a package given by JADE.  JADE also handles running the agents platform along with all the communication\cite{JADEbook}.
 
 %Must be added in for May 17th version
-\subsubsection{JADE}
+\subsection{JADE}
 %Agents, Behaviours, Platform and Messaging Protocols
 
 JADE is a Java based software middle-ware that provides program independent functionality in an agent paradigm for distributed applications \cite{JADEbook}.
 
-The basic setup of JADE is that all applications are an Agent, and as such extends the Agent class.  These Agents perform actions based on their behaviours, which is another JADE class \emph{Behaviours}\footnote{As the JADE Framework uses the UK spelling for behaviour, we will use that version as well for continuity.}.
+The basic setup of JADE is that all applications are an Agent, and as such extends the \emph{Agent} class.  These Agents perform actions based on their behaviours, which is another JADE class \emph{Behaviours}\footnote{As the JADE Framework uses the UK spelling for behaviour, we will use that version as well for continuity.}.
 
 Behaviours can be several different things, some behaviours only happen once, others happen over a peroid of time and while others happen at certain intervals.  These are expressed through the three JADE Behaviour classes \emph{OneShotBehaviour}, \emph{CyclicBehaviour}, and \emph{TickerBehaviour}.
 
-On top of having a behaviour though, most Agents actually have multiple behaviours.  How do multiple behaviours work together?  JADE is, by default, non-preemptive.  That is, while one behaviour is executing, the others will wait for that one to complete.  In order to achieve more complicated behaviours, JADE offers some additional behaviour classes.  These combine the simple behaviours in various ways such as doing a List of behaviours, having a State Machine of behaviours, doing the behaviours all at the same time, or having the behaviours be individual threads.  The last is what we use in Khasbot, which is the \emph{ThreadedBehaviours} class.
+On top of having a behaviour though, most Agents actually have multiple behaviours.  How do multiple behaviours work together?  JADE is, by default, non-preemptive.  That is, while one behaviour is executing, the others will wait for that one to complete.  In order to achieve more complicated behaviours, JADE offers some additional behaviour classes.  These combine the simple behaviours in various ways such as doing a list of behaviours, having a state machine of behaviours, doing the behaviours all at the same time, or having the behaviours be individual threads.  The last is what we use in Khasbot, which is the \emph{ThreadedBehaviours} class.
 
 Now that there are multiple behaviours going though, how does JADE keep all the information in each, possibly threaded, behaviour the same?  JADE has an object called \emph{DataStore} which works just as it sounds, each agent as a \emph{DataStore} that works like a hashtable to store information as it runs.  By making all the behaviours use the same \emph{DataStore} we can keep everything up to date.
 
@@ -104,12 +104,20 @@ One last thing Agents have the ability to do is talk to other Agents.  JADE acco
 
 The API for JADE can be found here\footnote{\url{http://jade.tilab.com/doc/api/index.html}}
 
+\begin{figure*}[htp]
+\begin{center}
+\includegraphics[scale=0.4]{AgentDesignFigure.jpg}
+\caption{Overall System Design for \emph{KhasBot}}
+\label{fig:System}
+\end{center}
+\end{figure*}
+
 \section{Related Work}
 %Agent based papers, others, Overmind
 We found that other researchers have approached this problem using other frameworks, some not explicitly agent based, to develop their AI.  A group of AI writers\cite{CrapPaper} used the BWSAL\footnote{\url{http://code.google.com/p/bwsal}} to implement a simple strategy with an agent minded outset.  We feel that, although they had modeled a sound agent system, they had a very limited test scope.
 
 %McCoy Paper
-A management design similar to ours (detailed later) build an agent framework for use in Open Source RTS\cite{McCoy}.  They implement their agent system using ABL in Wargus and have encouraging results.  They, however, only test their agent system against two scripted strategies and focus on different tasks than our own system.  
+A management design similar to ours (detailed later) built an agent framework for use in Open Source RTS\cite{McCoy}.  They implement their agent system using ABL in Wargus and have encouraging results.  They, however, only test their agent system against two scripted strategies and focus on different tasks than our own system.  
 
 %BenWebers paper
 Another implementation using ABL\cite{Weber} focused on reasoning to reactively change strategies.  They had positive results against the built-in AI, but less than positive against human players.  While they have a strong reasoning system, our system will be focused more on creating a modular framework.
@@ -120,15 +128,15 @@ At the time of this writing, we have not found any papers discussing the use of 
 
 \begin{figure*}[htp]
 \begin{center}
-\includegraphics[scale=0.4]{AgentDesignFigure.jpg}
-\caption{Overall System Design for KhasBot}
-\label{fig:System}
+\includegraphics[scale=0.4]{ProtocolDiagramBWMAS.jpg}
+\caption{Various Protocol Paths used in \emph{Khasbot}}
+\label{fig:Protocol-diagram}
 \end{center}
 \end{figure*}
 
 \section{Design}
 \subsection{Motivation}
-In order to accomplish the task of creating an AI for StarCraft, we decided to approach by having each important task in the game represented by an Agent concerned with solving that task.  While an intuitive approach would be to represent each unit and structure as an agent, we quickly abandoned this due to many issues that design would entail such as coordination and cooperation of the units,  hardware allocation of that many threads at once, and actually being able to effectively communicate with BWAPI.
+In order to accomplish the task of creating an AI for StarCraft, we decided to approach it by having each important task in the game represented by an Agent concerned with solving that task.  While an intuitive approach would be to represent each unit and structure as an agent, we quickly abandoned this due to many issues that design would entail such as coordination and cooperation of the units,  hardware allocation of that many threads at once, and actually being able to effectively communicate with BWAPI.
 
 Instead, we conceptualized what the problem sets would potentially be and we came up with the following tasks: path-finding, resource management, placing buildings, controlling military units, and managing upgrades.  On top of these tasks, we also knew a few more agents would be needed to maintain and combine these problem sets to the goal of the current game.  Based on the idea that Agents are focused on one or two tasks, this lead to our current organization.   
 
@@ -146,7 +154,7 @@ Initially, our first design was based on the RTS AI framework, BWSAL.  However, 
 \item \emph{Unit Manager Agent} : Concerned with maintaining unity between all the pieces used by the other Manager Agents and merging together unit commands for the Commander Agent.
 \end{itemize}
 
-In addition to the above agents, we also developed the \emph{Proxy Bot Agent}, that was in charge of interfacing with the BWAPI and getting the socket information from the StarCraft game and converting that information into messages the Agent System could understand.  It also converted messages from the Agent System to something the BWAPI and socket information understand.
+In addition to the above agents, we also developed the \emph{Proxy Bot Agent}, that was in charge of interfacing with the BWAPI and getting the socket information from the StarCraft game and converting that information into messages the Agent System could understand.  It also converted messages from the Agent System to something the BWAPI and socket information could understand.
 
 Most of our Manager Agents follow a similar behavior to each other. Due to this, we were able to create a superclass \emph{KhasBotAgent} that took care of most of the repetitive tasks.  With many agents working on separate areas, the key here is organizing their communication with each other.  Luckily, all of our protocols exhibit a request/inform type flow, which is a core design structure of the JADE Framework.  Game updates are sent to the \emph{Unit Manager Agent} by the \emph{Commander Agent} and all other managing agents are updated by the \emph{Unit Manager Agent} when relevant information changes to their goal.
 
@@ -158,13 +166,13 @@ The basic idea that each Manager Agent follows is they are each an agent inside 
 
 Due to the multiple behaviours at once, each agent heavily uses the DataStore ability from JADE, a central data location on the platform, to keep its information consistent with the other behaviours.
 
-The main implementation of our Manager Agents can be found in our abstract class \emph{KhasBot Agent}. All other Manager Agents take this as a superclass. \emph{KhasBot} works on the following idea: all information for that Agent is stored in its own JADE DataStore, which is setup to be used by all behaviours of the agent. Since each agent has different behaviours, this is something that has to be overridden in their own \emph{setup()} method. All behaviours for the agents are \emph{ThreadedBehaviours} due to the fact that most of our behaviours are protocols between each Managing Agent and each protocol should not wait for a different protocol to finish, we found this to be the easiest way to implement non-preemption in JADE.
+The main implementation of our Manager Agents can be found in our abstract class \emph{KhasBot Agent}. All other Manager Agents take this as a superclass. \emph{KhasBot} works on the following idea: all information for that Agent is stored in its own \emph{DataStore}, which is setup to be used by all behaviours of the agent. Since each agent has different behaviours, this is something that has to be overridden in their own \emph{setup()} method. All behaviours for the agents are \emph{ThreadedBehaviours} due to the fact that most of our behaviours are protocols between each Managing Agent and each protocol should not wait for a different protocol to finish, we found this to be the easiest way to implement non-preemption in JADE.
 
 The communication, or protocols, of the Manager Agents falls into two categories, \emph{INFORM}'s or \emph{REQUEST}'s. We will discuss how \emph{Resource Manager Agent} is set up as an example:
 % ANTONIO DOUBLE CHECK ME ON THESE NUMBERS
 ResourceManagerAgent has up to 7 behaviours, 3 work as one-shot requests asking for either workers, minerals, or gas. The other 4 are longer lasting protocols that wait on updates of the game, respond to requests of worker needs or supply queries, and one last one to do the agents 'default' behaviour which is to assign workers to gather resources.
 
-An important aspect of our Framework comes from the protocols between the agents and who can talk to who, \figure(Protocol-diagram} shows the links between all the managing agents.
+An important aspect of our Framework comes from the protocols between the agents and who can talk to who, Figure \ref{fig:Protocol-diagram} shows the links between all the managing agents.
 
 %Agents and Default Behaviours
 %What do the Agents "do" : refer to design bullet points, not focused on actual algorithm as they are interchangeable(ish)
@@ -181,12 +189,14 @@ The XML structure is loaded into an Java Object named \emph{BuildLoader} that wi
 %TODO: This will change as more things are added to KhasBot
 %Refer to other agent paper
 %APM, Win/Loss, Overall Performance
-Initial tests have been positive.  The message passing between agents have resulted in simple build orders being executed.
+Initial tests have been positive.  The message passing between agents have resulted in simple build orders being executed.  As we are more focused on getting the framework set up, we have not fully tested our system against real game scenarios against the Starcraft default AI or a human player.  However, we will be competing in the SC AI 2011 competition.
+
+The real achievement, we believe, of this framework is the adaptability to change out reasoning for various parts of the game, say a more efficient path-finding algorithm, without having to touch or re-debug other parts of the game.
 
 \section{Conclusion and Future Work}
 We have found that building StarCraft AI is viable using an Agent-Oriented Programming Framework.  The communication structure established by JADE allowed us to create agents capable of specific goals and relaying information based on those goals to other agents and to StarCraft
 %Evaluate after paper is close to complete.
-[[this sentence is remarkably vague while sounding not]].  Splitting the computation needed in an AI among agents provides another avenue for creating StarCraft AI and ultimately video-game, military, or management AI.
+.  Splitting the computation needed in an AI among agents provides another avenue for creating StarCraft AI and ultimately video-game, military, or management AI.
 
 In the future, we will continue to refine KhasBot with more build orders and potential decisions for those build orders.  We will also look into generalizing KhasBot for all three races, as our Build Order parser will allow for that.
 
