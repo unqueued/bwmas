@@ -181,10 +181,25 @@ An important aspect of our Framework comes from the protocols between the agents
 %Design related...
 Build Orders are a part of StarCraft strategies that aim to follow a highly optimized, pre-set list of commands for the early part of a game.  These are used to provide a plan of attack to achieve victory.  One of the goals of our AI is to select or adjust the build-order on demand, based on map and scouting information.  In order to aid in lowering the complexity of our Agent Framework, we decided to implement an outside structure to maintain the list of commands the agents needed to complete.  This would allow us to apply different implementations and observe their effects on our AI.  The solution we choose to implement this was an external XML file.  This created an easy to manage medium that allows us to test different ideas within the structure without having to rebuild our framework.
 
-The XML structure is based on the race selected and the in-game situation.  The strategy subsets are based on the supply resource and process the different commands held as sub-items when the required supply count is met.  The sub-items can be {\tt unit}, {\tt structure}, or {\tt action}.  The {\tt unit} item has attributes for the unit name.  The {\tt structure} item has attributes for the structure name and location of placement, which could be either a map location or near another structure.  The {\tt action} item has attributes for the action name, by name of the unit, location to achieve the action and importance.  For more advanced control in different in-game situations, it can maintain a list of commands for different opposing races and for each playable race.
+The XML structure is based on the race selected and the in-game situation. An example is given below. The strategy subsets are based on the supply resource and process the different commands held as sub-items when the required supply count is met.  The sub-item(s) can be {\tt unit}, {\tt structure}, or {\tt action}.  The {\tt unit} item has attributes for the unit name.  The {\tt structure} item has attributes for the structure name and location of placement, which could be either a map location or near another structure.  The {\tt action} item has attributes for the action name, by name of the unit, location to achieve the action and importance.  For more advanced control in different in-game situations, it can maintain a list of commands for different opposing races and for each playable race inside the {\tt versus} tag.
 
-The XML structure is loaded into an Java Object named \emph{BuildLoader} that will contain the list of orders. As the game progresses, the Commander Agent will send the current game information to \emph{BuildLoader}. It will look at the current in-game supply count and read specified list of commands for that condition. Updates for these commands are required before it will continue through the list.  An update will run through the list of commands up to the last supply count which it returned results to make sure everything is still true. These checks are made as the battle situation could change aspects of our build order. Special location constants will be asked from the Unit Manager Agent which will allow \emph{BuildLoader} to check the location of a new structure that will be created in-game and determine if they are close to where a certain structure needs to be built. Unit item commands will notify the Commander Agent to tell the Unit Manager Agent that specified unit needs to be created. Action commands will work the same way by providing an action for a named unit type, for example, scout action to a probe or attack to a group of battle units.
+\begin{verbatim}
+<?xml>
+<build>
+  <race name="Protoss">
+    <versus race="default">
+      <step supply="7">
+        <structure name="Pylon" />
+      </step>
+      <step supply="8">
+        <structure name="Gateway" />
+      </step>
+    </versus>
+  </race>
+</build>
+\end{verbatim}
 
+The XML structure, like the one seen above, is loaded into an Java Object named \emph{BuildLoader} that will contain the list of orders. As the game progresses, the Commander Agent will send the current game information to \emph{BuildLoader}. It will look at the current in-game supply count and read specified list of commands for that condition. Updates for these commands are required before it will continue through the list.  An update will run through the list of commands up to the last supply count which it returned results to make sure everything is still true. These checks are made as the battle situation could change aspects of our build order. Special location constants will be asked from the Unit Manager Agent which will allow \emph{BuildLoader} to check the location of a new structure that will be created in-game and determine if they are close to where a certain structure needs to be built. Unit item commands will notify the Commander Agent to tell the Unit Manager Agent that specified unit needs to be created. Action commands will work the same way by providing an action for a named unit type, for example, scout action to a probe or attack to a group of battle units.
 \section{Results}
 %TODO: This will change as more things are added to KhasBot
 %Refer to other agent paper
