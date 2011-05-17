@@ -1,9 +1,9 @@
 %File: formatting-instruction.tex
 \documentclass[letterpaper]{article}
 \usepackage{aaai}
-\usepackage{times}
-\usepackage{helvet}
-\usepackage{courier}
+%\usepackage{times}
+%\usepackage{helvet}
+%\usepackage{courier}
 \usepackage{url}
 \usepackage{graphicx}
 \frenchspacing
@@ -155,18 +155,35 @@ Most of our manager agents follow a similar behavior to each other. Due to this,
 The actual StarCraft game is mapped to a \emph{GameObject} that the agents use to keep track of what they are doing.  As the game progresses, the Multi Agent System (MAS) continues to get game updates via a \emph{GameUpdateObject}, which is a reduced game object with core information our agents need.  The \emph{GameObject} is broken into player information and Map Information. Map Information includes items like where is it safe to build or walk and what the starting locations are for the map in the game.  Player information handles all units and ways the units can do research or upgrades.  These units include structures, mineral patches, and all other pieces in the game that can change.
 
 \section{Implementation}
-%TODO: Antonio should write some notes on this section and I'll edit it into the report, it would be great to have the agent figure
-The basic idea that each manager agent follows is they are each an agent inside of JADE that have multiple threaded behaviours focusing on different protocols between the various Manager Agents.
+%TODO: Antonio should write some notes on this section and I'll edit it into the report, it would be great to 
+%have the agent figure
+The basic idea that each manager agent follows is they are each an agent inside of JADE that have multiple threaded 
+behaviours focusing on different protocols between the various Manager Agents.
 
-Due to the possibility multiple behaviours at once, each agent uses the DataStore ability from JADE, a central data location on the platform, to keep its information consistent with the other behaviours.
+Due to the possibility multiple behaviours at once, each agent uses the DataStore ability from JADE, a central 
+data location on the platform, to keep its information consistent with the other behaviours. The DataStore is also
+used as a means of passing information from one behaviour to another. Any information that is shared among one or
+more behaviours is placed in the DataStore.
 
-The main implementation of our manager agents can be found in our abstract class \emph{KhasBot Agent}. All other manager agents take this as a superclass. \emph{KhasBot} works on the following idea: all information for that agent is stored in its own \emph{DataStore}, which is setup to be used by all behaviours of the agent. Since each agent has different behaviours, this is something that has to be overridden in their own \emph{setup()} method. All behaviours for the agents are \emph{ThreadedBehaviours} due to the fact that most of our behaviours are protocols between each managing agent and each protocol should not wait for a different protocol to finish, we found this to be the easiest way to implement non-preemption in JADE.
+The main implementation of our manager agents can be found in our abstract class \emph{KhasBot Agent}. All other 
+manager agents take this as a superclass. \emph{KhasBot} works on the following idea: all information for that agent 
+is stored in its own \emph{DataStore}, which is setup to be used by all behaviours of the agent. Since each agent 
+has different behaviours, this is something that has to be overridden in their own \emph{setup()} method. All 
+behaviours for the agents are \emph{ThreadedBehaviours} due to the fact that most of our behaviours are protocols 
+between each managing agent and each protocol should not wait for a different protocol to finish, we found this to 
+be the easiest way to implement non-preemption in JADE.
 
-The communication or protocols of the manager agents falls into two categories, \emph{INFORM}s or \emph{REQUEST}s. We will discuss how \emph{Resource Manager Agent} is set up as an example:
+The communication or protocols of the manager agents falls into two categories, \emph{INFORM}s or \emph{REQUEST}s. 
+We will discuss how \emph{Resource Manager Agent} is set up as an example:
 % ANTONIO DOUBLE CHECK ME ON THESE NUMBERS
-ResourceManagerAgent has up to 7 behaviours. 3 work as one-shot requests asking for either workers, minerals, or gas. The other 4 are longer lasting protocols that wait on updates of the game, respond to requests of worker needs or supply queries, and one last one to do the agents 'default' behaviour which is to assign workers to gather resources.
+ResourceManagerAgent has up to 7 behaviours. 3 work as one-shot requests asking for either workers, minerals, or 
+gas. The other 4 are longer lasting protocols that wait on updates of the game, respond to requests of worker needs 
+or supply queries, and one last one to do the agents 'default' behaviour which is to assign workers to gather 
+resources. \emph{INFORM} messages are used to send information from one agent to another. \emph{REQUEST} messages
+follow the FIPA-Request message framework, where one agent make a request to another agent for resources or information.
 
-An important aspect of our framework comes from the protocols between the agents and who can talk to who.  Figure \ref{fig:Protocol-diagram} shows the links between all the managing agents.
+An important aspect of our framework comes from the protocols between the agents and who can talk to who.  Figure 
+\ref{fig:Protocol-diagram} shows the links between all the managing agents.
 
 %Agents and Default Behaviours
 %What do the Agents "do" : refer to design bullet points, not focused on actual algorithm as they are interchangeable(ish)
