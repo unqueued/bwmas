@@ -1,9 +1,10 @@
-This is pdfTeX, Version 3.1415926-1.40.11 (MiKTeX 2.9) (preloaded format=pdflatex 2011.5.13)  16 MAY 2011 17:35
+This is pdfTeX, Version 3.1415926-1.40.11 (MiKTeX 2.9) (preloaded format=pdflatex 2011.4.16)  16 MAY 2011 20:59
 entering extended mode
-**Aiide2010RoughDraft.tex
+**C:/Program*Files*(x86)/Starcraft/bmas/scbwai/ProxyBot-2.6.1/ProxyBot/docs/AAA
+I_Format/AuthorKit/Aiide2010RoughDraft.tex
 
-(C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\ProxyBot-2.6.1\ProxyBot\docs\AAAI
-_Format\AuthorKit\Aiide2010RoughDraft.tex
+("C:/Program Files (x86)/Starcraft/bmas/scbwai/ProxyBot-2.6.1/ProxyBot/docs/AAA
+I_Format/AuthorKit/Aiide2010RoughDraft.tex"
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -32,8 +33,8 @@ File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-(C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\ProxyBot-2.6.1\ProxyBot\docs\AAAI
-_Format\AuthorKit\aaai.sty
+("C:\Program Files (x86)\Starcraft\bmas\scbwai\ProxyBot-2.6.1\ProxyBot\docs\AAA
+I_Format\AuthorKit\aaai.sty"
 Conference Style for AAAI for LaTeX 2e -- version of 7 January 2011
 \titlebox=\skip43
 ) ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\times.sty"
@@ -68,21 +69,14 @@ File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
 Package graphics Info: Driver file: pdftex.def on input line 91.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\pdftex-def\pdftex.def"
-File: pdftex.def 2011/04/25 v0.06b Graphics/color for pdfTeX
-
-("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
-Package: infwarerr 2010/04/08 v1.3 Providing info/warning/message (HO)
-)
-("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
-Package: ltxcmds 2011/04/18 v1.20 LaTeX kernel commands for general use (HO)
-)
+File: pdftex.def 2011/01/28 v0.05d Graphics/color for pdfTeX
 \Gread@gobject=\count87
 ))
 \Gin@req@height=\dimen103
 \Gin@req@width=\dimen104
 )
-(C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\ProxyBot-2.6.1\ProxyBot\docs\AAAI
-_Format\AuthorKit\Aiide2010RoughDraft.aux)
+("C:\Program Files (x86)\Starcraft\bmas\scbwai\ProxyBot-2.6.1\ProxyBot\docs\AAA
+I_Format\AuthorKit\Aiide2010RoughDraft.aux")
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
 LaTeX Font Info:    ... okay on input line 15.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 15.
@@ -130,74 +124,32 @@ LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <9> not available
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 32.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 53.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 52.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 64.
+(Font)              <9> on input line 63.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 64.
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 64.
+(Font)              <6> on input line 63.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 63.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ot1pcr.fd"
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-) [1{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}
+)
+! I can't write on file `Aiide2010RoughDraft.pdf'.
+Please type another file name for output: 
+! Emergency stop.
+<to be read again> 
+                   \endgroup \set@typeset@protect 
+l.64 
+     
+End of file on the terminal!
 
-
-
-]
-LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 68.
- [2]
-<AgentDesignFigure.jpg, id=14, 788.9475pt x 329.23pt>
-File: AgentDesignFigure.jpg Graphic file (type jpg)
-
-<use AgentDesignFigure.jpg>
-Package pdftex.def Info: AgentDesignFigure.jpg used on input line 109.
-(pdftex.def)             Requested size: 315.5734pt x 131.68965pt.
-
-<ProtocolDiagramBWMAS.jpg, id=15, 687.56876pt x 297.11pt>
-File: ProtocolDiagramBWMAS.jpg Graphic file (type jpg)
-
-<use ProtocolDiagramBWMAS.jpg>
-Package pdftex.def Info: ProtocolDiagramBWMAS.jpg used on input line 131.
-(pdftex.def)             Requested size: 275.02263pt x 118.84189pt.
- [3]
-
-LaTeX Warning: Reference `fig:Protocol-diagram' on page 4 undefined on input li
-ne 175.
-
-[4 <C:/Users/Frank_Jess/Desktop/BWAPI/res/scbwai/ProxyBot-2.6.1/ProxyBot/docs/A
-AAI_Format/AuthorKit/AgentDesignFigure.jpg> <C:/Users/Frank_Jess/Desktop/BWAPI/
-res/scbwai/ProxyBot-2.6.1/ProxyBot/docs/AAAI_Format/AuthorKit/ProtocolDiagramBW
-MAS.jpg>]
-No file Aiide2010RoughDraft.bbl.
-[5]
-(C:\Users\Frank_Jess\Desktop\BWAPI\res\scbwai\ProxyBot-2.6.1\ProxyBot\docs\AAAI
-_Format\AuthorKit\Aiide2010RoughDraft.aux)
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+ 
 Here is how much of TeX's memory you used:
- 1369 strings out of 494053
- 19213 string characters out of 3146170
- 75837 words of memory out of 3000000
- 4660 multiletter control sequences out of 15000+200000
- 23620 words of font info for 46 fonts, out of 3000000 for 9000
+ 1179 strings out of 494053
+ 16114 string characters out of 3146191
+ 72236 words of memory out of 3000000
+ 4498 multiletter control sequences out of 15000+200000
+ 11304 words of font info for 32 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 27i,10n,19p,1238b,242s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C:/Progra
-m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program 
-Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Program Fil
-es (x86)/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files (x86)/
-MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/
-fonts/type1/urw/times/utmr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1
-/urw/times/utmri8a.pfb>
-Output written on Aiide2010RoughDraft.pdf (5 pages, 168587 bytes).
-PDF statistics:
- 45 PDF objects out of 1000 (max. 8388607)
- 0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
-
+ 25i,10n,19p,1167b,242s stack positions out of 5000i,500n,10000p,200000b,50000s
+!  ==> Fatal error occurred, no output PDF file produced!
